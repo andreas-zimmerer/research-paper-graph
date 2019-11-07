@@ -44,33 +44,28 @@ For example, if Paper A quotes both Paper B and Paper C, and if Paper B quotes P
 then this group of three quotes 0 times Paper A, 1 times Paper B, and 2 times Paper C. 
 For this group, Paper C is the most relevant.
 
-### Examples for Filtering and Sorting
+#### Examples for Filtering and Sorting
 - If we filter for papers written between 2015 and 2019, our graphs only present papers from 2015 - 2019.
 - If we sort these papers by newness, then the graph initially only presents papers from this year.
  If we zoom out of the graph by scrolling, it displays more and more papers from earlier years until we reach 2015.   
 
 ### Research Fields
-### Researcher Families
+We give a research area, for example we enter the name "Web Databases" or "Join Optimisation".
+Our Research Paper Graph will display all papers from this area and we can filter and sort these papers by 
+their time, distance, and relevance.
 
-For example, we might be particularly interested in those relatives of our paper B that were created around 2018. 
-After sorting, the Research Paper Graph first shows us only relatives of paper B from 2018. 
-If we zoom out the graph by scrolling over it, it also shows us papers from 2017 and 2019. 
-The more we shrink the graph by scrolling, the more papers we see and the more scattered they are around 2018.
-
-2. A research area is given, for example "Web Databases" or "Join Optimisation". 
-In a Research Paper Graph we will be able to see all the papers from this research area. 
-For this purpose, our Research Paper Analyser records all papers whose keywords contain the name of the research area. 
-The Research Paper Analyser then classifies the papers thus recorded into their respective families. 
-Families that consist of many papers with the research area in their keywords are considered to be relevant.
+Our Research Paper Analyser considers which paper families contain the most papers that have our research area as a buzzword. 
+These families represent our research area. 
 
 ![../img/img_02.png](../img/img_02.png)
 
-3. Given is researcher Bob. 
-We ask ourselves which researchers Bob often communicates with due to a similar background. 
-We give the Research Paper Analyser the name of the researcher -- Bob. 
-The Research Paper Analyser identifies which paper families Bob is involved in and presents the names of the other 
-researchers from those families. 
-So, analogous to the Research Paper Graph, here we create a Researcher Graph. 
+### Researcher Families
+Given is researcher Bob and we ask ourselves with which researchers he has frequent exchange. 
+For this, we pass our Research Paper Analyser the researcher's name -- Bob -- and it presents Bob in a graph of
+researchers that he communicates with.
+
+For this, our Research Paper Analyser observes which paper families Bob is involved in and 
+considers other researchers from these families. 
 
 ## Architecture
 Our Research Paper Analyzer is composed of a scraper, a database, an analyzing backend and a graph-heavy frontend:
