@@ -43,7 +43,6 @@ In a Research Paper Graph we will be able to see all the papers from this resear
 For this purpose, our Research Paper Analyser records all papers whose keywords contain the name of the research area. 
 The Research Paper Analyser then classifies the papers thus recorded into their respective families. 
 Families that consist of many papers with the research area in their keywords are considered to be relevant.
-
 ![../img/img_02.png](../img/img_02.png)
 
 3. Given is researcher Bob. 
@@ -52,3 +51,25 @@ We give the Research Paper Analyser the name of the researcher -- Bob.
 The Research Paper Analyser identifies which paper families Bob is involved in and presents the names of the other 
 researchers from those families. 
 So, analogous to the Research Paper Graph, here we create a Researcher Graph. 
+
+## Architecture
+Our Research Paper Analyzer is composed of a scraper, a database, an analyzing backend and a graph-heavy frontend:
+- The scraper stores the meta information and references of research papers in a database. 
+It reads this data from a research API such as ResearchGate, Clarivate, ArXiv and Google Scholar and it 
+adapts the format of the data to the schema of the underlying database. 
+- The research graphs in the frontend represent firstly families of related research papers, 
+secondly research areas with their respective work, 
+and thirdly families of communicating researchers. 
+The user can filter and sort the graphs according to his research interests. 
+- The Research Paper Analyser acts as a backend. 
+It translates the user's actions into equivalent database queries and 
+passes the resulting data to the frontend in an efficiently usable format. 
+
+## Scope
+- In our project we will primarily read the papers from the ResearchGate API. 
+Reading other papers and information from secondary APIs is optional. 
+- We will primarily present families of papers as graphs, while we will only optionally present research areas and 
+families of communicating researchers.
+- We initially limit our filtering and sorting parameters to time, distance, and relevance.
+
+![../img/img_03.png](../img/img_03.png)
