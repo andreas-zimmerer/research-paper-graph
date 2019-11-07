@@ -2,6 +2,7 @@
 The Research Paper Analyser examines to what extent research work is related to each other, 
 i.e. whether and how often it refers to each other. 
 For example, if paper C is based on paper B and paper B is based on paper A, then papers A, B and C are connected. 
+
 ![../img/img_01.png](../img/img_01.png)
 
 ## Motivation
@@ -24,17 +25,14 @@ The Research Paper Analyser will examine related research papers in such a way t
 papers that build on each other, secondly research areas with their respective papers, and thirdly groups of 
 communicating researchers:
 
-1. Given is a Paper B. 
-In order to find similar papers to B, we pass the Research Paper Analyser our paper B, i.e. 
-we give its name, its DOI, or its author.
+### Paper Families
+Given is a Paper B and we are interested in its related papers. 
+For this, we pass the Research Paper Analyser our paper B, i.e. we give its name, its DOI, or its author.
 The Research Paper Analyser now presents all papers on which our paper B is based, and it presents all papers 
-that are based on our paper B in the form of a graph. 
-Because these are potentially very many papers, we can filter and sort papers according to our interest, e.g.
-we can filter and sort them by time, distance, or relevance.
-When filtering, we can let the Research Paper Analyser only output papers from a certain period of time. 
-Or we can only have it present papers with a certain keyword.
-The Research Paper Analyser can sort papers by time, distance, and relevance. 
-### Parameters for Filtering and Sorting
+that are based on our paper B in the form of a graph.
+Because these are potentially very many papers, we can filter and scale graphs according by time, distance, or relevance: 
+
+#### Parameters for Filtering and Sorting
 - The time of a paper is its year of origin. 
 Example: Paper A was written in 2018. Its time is 2018.
 - The distance of two papers indicates how closely they are related. 
@@ -44,7 +42,15 @@ They have a distance of 3.
 - The relevance of a paper counts its direct quotes. 
 For example, if Paper A quotes both Paper B and Paper C, and if Paper B quotes Paper C, 
 then this group of three quotes 0 times Paper A, 1 times Paper B, and 2 times Paper C. 
-For this group, Paper C is the most relevant. 
+For this group, Paper C is the most relevant.
+
+### Examples for Filtering and Sorting
+- If we filter for papers written between 2015 and 2019, our graphs only present papers from 2015 - 2019.
+- If we sort these papers by newness, then the graph initially only presents papers from this year.
+ If we zoom out of the graph by scrolling, it displays more and more papers from earlier years until we reach 2015.   
+
+### Research Fields
+### Researcher Families
 
 For example, we might be particularly interested in those relatives of our paper B that were created around 2018. 
 After sorting, the Research Paper Graph first shows us only relatives of paper B from 2018. 
@@ -56,6 +62,7 @@ In a Research Paper Graph we will be able to see all the papers from this resear
 For this purpose, our Research Paper Analyser records all papers whose keywords contain the name of the research area. 
 The Research Paper Analyser then classifies the papers thus recorded into their respective families. 
 Families that consist of many papers with the research area in their keywords are considered to be relevant.
+
 ![../img/img_02.png](../img/img_02.png)
 
 3. Given is researcher Bob. 
@@ -78,11 +85,11 @@ The user can filter and sort the graphs according to his research interests.
 It translates the user's actions into equivalent database queries and 
 passes the resulting data to the frontend in an efficiently usable format. 
 
+![../img/img_03.png](../img/img_03.png)
+
 ## Scope
 - In our project we will primarily read the papers from the ResearchGate API. 
 Reading other papers and information from secondary APIs is optional. 
 - We will primarily present families of papers as graphs, while we will only optionally present research areas and 
 families of communicating researchers.
 - We initially limit our filtering and sorting parameters to time, distance, and relevance.
-
-![../img/img_03.png](../img/img_03.png)
