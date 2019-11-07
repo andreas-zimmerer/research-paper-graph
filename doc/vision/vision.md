@@ -29,10 +29,23 @@ In order to find similar papers to B, we pass the Research Paper Analyser our pa
 we give its name, its DOI, or its author.
 The Research Paper Analyser now presents all papers on which our paper B is based, and it presents all papers 
 that are based on our paper B in the form of a graph. 
-Because these are potentially very many papers, we can filter and sort papers according to our interest. 
+Because these are potentially very many papers, we can filter and sort papers according to our interest, e.g.
+we can filter and sort them by time, distance, or relevance.
 When filtering, we can let the Research Paper Analyser only output papers from a certain period of time. 
 Or we can only have it present papers with a certain keyword.
 The Research Paper Analyser can sort papers by time, distance, and relevance. 
+### Parameters for Filtering and Sorting
+- The time of a paper is its year of origin. 
+Example: Paper A was written in 2018. Its time is 2018.
+- The distance of two papers indicates how closely they are related. 
+Example: If paper A quotes paper B, i.e. they are directly connected, then their distance is 1. 
+If a paper E quotes paper D that quotes paper C that quotes Paper B, then Paper E and Paper B are only indirectly connected.
+They have a distance of 3. 
+- The relevance of a paper counts its direct quotes. 
+For example, if Paper A quotes both Paper B and Paper C, and if Paper B quotes Paper C, 
+then this group of three quotes 0 times Paper A, 1 times Paper B, and 2 times Paper C. 
+For this group, Paper C is the most relevant. 
+
 For example, we might be particularly interested in those relatives of our paper B that were created around 2018. 
 After sorting, the Research Paper Graph first shows us only relatives of paper B from 2018. 
 If we zoom out the graph by scrolling over it, it also shows us papers from 2017 and 2019. 
