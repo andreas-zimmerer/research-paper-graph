@@ -70,7 +70,7 @@ considers other researchers from these families.
 ## Architecture
 Our Research Paper Analyzer is composed of a scraper, a database, an analyzing backend and a graph-heavy frontend:
 - The scraper stores the meta information and references of research papers in a database. 
-It reads this data from a research API such as ResearchGate, Clarivate, ArXiv and Google Scholar and it 
+It reads this data from a research API such as SemanticScholar, Clarivate, ArXiv and Google Scholar and it 
 adapts the format of the data to the schema of the underlying database. 
 - The research graphs in the frontend represent firstly families of related research papers, 
 secondly research areas with their respective work, 
@@ -82,8 +82,19 @@ passes the resulting data to the frontend in an efficiently usable format.
 
 ![../img/img_03.png](../img/img_03.png)
 
+## Technologies
+- As our database we use Postgres.
+- We implement our scraper in Python and let it access the SemanticScholar Paper API.
+- We develop our backend in Python.
+- We write our frontend in Typescript and React, integrating frameworks for graph visualization.
+
+### SemanticScholar Paper API
+SemanticScholar stores metainformation about papers, their authors, and their references. 
+We can download this information and access it through an API.
+Link: https://api.semanticscholar.org 
+
 ## Scope
-- In our project we will primarily read the papers from the ResearchGate API. 
+- In our project we will primarily read the papers from the SemanticScholar API. 
 Reading other papers and information from secondary APIs is optional. 
 - We will primarily present families of papers as graphs, while we will only optionally present research areas and 
 families of communicating researchers.
