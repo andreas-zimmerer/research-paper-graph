@@ -38,4 +38,4 @@ jobs:
         run: npm build
       - name: Run Tests
         working-directory: ./frontend
-        run: npm test
+        run: npm test --ci --watchAll=false
