@@ -120,6 +120,7 @@ Link: [https://www.typescriptlang.org](https://www.typescriptlang.org)
 React is a JavaScript-based web framework, i.e. it acts as a basic framework for the output of UI components on websites. 
 In React, we build components hierarchically and represent them as self-defined HTML tags. 
 React is designed for simplicity, performance, and reusability. 
+Link: [https://reactjs.org](https://reactjs.org)
 
 ### Graph Visualization Frameworks
 #### ECharts
