@@ -24,7 +24,7 @@ If you don't want to use `virtualenv`, you can install the required dependencies
 pip install -r requirements.txt
 ```
 
-### Installing new packages
+### Installing new Packages
 When installing new packages, make sure that
  - they are in the `virtualenv`
  - they are in the `requirements.txt` file
@@ -55,6 +55,7 @@ Some good staring resources are:
  - [React + TypeScript Cheatsheets](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet#reacttypescript-cheatsheets)
  - [React: Getting Started](https://reactjs.org/docs/getting-started.html)
 
+### Starting the Frontend
 To build the frontend, make sure you have `npm` or `yarn` installed.
 Change to the `frontend` directory and run
 ```
@@ -66,6 +67,12 @@ npm start
 ```
 
 Now the frontend should open in your browser.
+
+### Linting
+The project uses `tslint`. Run `tslint` with
+```
+npm run lint
+```
 
 If you use `yarn`, issue the same commands but with `yarn` instead of `npm`.
 
