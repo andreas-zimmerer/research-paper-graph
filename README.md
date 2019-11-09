@@ -4,12 +4,6 @@
 If you are using IntelliJ/PyCharm Professional, you should simply be able to open the project.
 You will find some useful run configurations as well.
 
-Make sure the existing `virtualenv` is properly set up in your IDE:  
-> Open "File" -> "Project Structure".  
-> For the "Project SDK" click on "New".  
-> Select "Python SDK" and select "Existing Environment".  
-> Navigate to "./backend/venv/bin/python3" and press "Ok".
-
 ## Backend
 The backend is a Python application with Flask framework.
 
@@ -17,31 +11,19 @@ Some good starting resources are:
  - [The Flask mega tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
  - [Flask Project Website](https://palletsprojects.com/p/flask/)
 
-### Virtualenv
-This project uses `virtualenv` to make dependency management easier.
-To activate the virtual environment on your command line, run
-```
-source venv/bin/activate
-```
-Now you should have python, pip and everything else available.
-
-### Bare Python
 If you don't want to use `virtualenv`, you can install the required dependencies with
 ```
 pip install -r requirements.txt
 ```
+Overall, it is advisable to use `virtualenv`.
 
 ### Installing new Packages
-When installing new packages, make sure that
- - they are in the `virtualenv`
- - they are in the `requirements.txt` file
+When installing new packages, make sure that they appear in the `requirements.txt` file
 
-The first point is simply done by activating the `virtualenv` before installing.
-For the second point, run
+To update the `requirements.txt` file, run
 ```
 pip freeze > requirements.txt
 ```
-To update the `requirements.txt` file.
 
 ### Starting the Backend
 To start the backend on a local machine, navigate to the `backend` directory.

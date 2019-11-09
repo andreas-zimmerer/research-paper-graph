@@ -14,8 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Setup python venv
-        run: source ./backend/venv/bin/activate
+      - name: Setup Python
+        uses: actions/setup-python@v1
+      - name: Install Dependencies
+        working-directory: ./backend
+        run: pip install -r requirements.txt
       - name: Run PyLint
         working-directory: ./backend
         run: pylint app
