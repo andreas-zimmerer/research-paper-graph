@@ -120,6 +120,8 @@ React is designed for simplicity, performance, and reusability.
 Link: [https://reactjs.org](https://reactjs.org)
 
 ### Graph Visualization Frameworks
+Graph visualization frameworks let us represent structural information as networks. 
+
 #### ECharts
 ECharts is an open source, cross-platform framework for rapidly constructing data visualizations. 
 ECharts is characterized by its high performance, ease of use, and richness of built-in interactions. 
