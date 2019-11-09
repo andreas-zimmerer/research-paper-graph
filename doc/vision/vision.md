@@ -110,6 +110,17 @@ A web application framework acts as a building block system with many ready-made
 Speed, security, and scalability thereby make Django stand out. 
 Link: [https://www.djangoproject.com](https://www.djangoproject.com)
 
+### TypeScript
+TypeScript is a superset of JavaScript, i.e. it extends JavaScript by features such as, 
+in particular, the optional static typing at the time of compilation. 
+This allows us to , for example, structurally type, infer types, and parameterize types. 
+Link: [https://www.typescriptlang.org](https://www.typescriptlang.org)
+
+### React
+React is a JavaScript-based web framework, i.e. it acts as a basic framework for the output of UI components on websites. 
+In React, we build components hierarchically and represent them as self-defined HTML tags. 
+React is designed for simplicity, performance, and reusability. 
+
 ### Graph Visualization Frameworks
 #### ECharts
 ECharts is an open source, cross-platform framework for rapidly constructing data visualizations. 
