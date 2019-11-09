@@ -1,4 +1,4 @@
-name: "CI Pipeline"
+name: "CI Pipeline Backend"
 
 on:
   push:
@@ -15,8 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Setup python venv
-        working-directory: ./backend
-        run: source venv/bin/activate
+        run: source ./backend/venv/bin/activate
       - name: Run PyLint
         working-directory: ./backend
         run: pylint app
