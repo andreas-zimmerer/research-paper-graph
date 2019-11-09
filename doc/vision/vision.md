@@ -1,15 +1,13 @@
 # Vision
 The Research Paper Analyser examines to what extent research work is related to each other, 
 i.e. whether and how often it refers to each other. 
-For example, if paper C is based on papers A and B and paper B is based on paper A, then papers A, B and C are connected. 
-
+For example, if paper C is based on paper B and paper B is based on paper A, then papers A, B and C are connected. 
 ![../img/img_01.png](../img/img_01.png)
 
 ## Motivation
+
 When we read a paper for our research and are interested in further work on our topic, 
-we are sometimes not sure which reference of the paper or which reference of reference of the paper is appropriate. 
-What we need here is a tool that gives us all the relevant papers for a particular paper. 
-We want to filter and sort these papers according to their relevance for our research.
+going through all cited papers to find out which one is important can be a tedious exercise. In our project, we want to facilitate the process by providing a citation graph which will easily give the opportunity to see which papers are similar and hence close to our paper and which are generally most important to the topic by identifying the most central papers in the topic cluster in the graph.
 
 Sometimes we don't come across a special paper, but a whole field of research that interests us. 
 On the one hand, we will ask ourselves which papers are relevant for the respective research area. 
@@ -17,13 +15,12 @@ On the other hand, we want to know into which topics our field can be subdivided
 We therefore need an instrument that assigns families of research work to their research topic and their field of research.
 
 When our government discusses a problem, it often involves external professors and asks them for advice. 
-Our governments could choose these experts more safely if they were able to visualize all the experts on a particular topic. 
-When a university calls a professor to a chair, their selection can be supported by a tool that visualizes all their candidates. 
+We want to make sure that our government has the best information in order to decide which experts to invite concerning a special topic by seeing how central the professor's papers are within the field of interest. The same holds for universities calling a professor to a chair. Our graph provides multiple additional information which can support their decision making. It also helps to easily identify members of the appointment commission, which have been publishing with a candidate and which are therefore biased. 
 
 ## Goal
 The Research Paper Analyser will examine related research papers in such a way that it firstly presents groups of 
 papers that build on each other, secondly research areas with their respective papers, and thirdly groups of 
-communicating researchers.
+communicating researchers:
 
 ### Paper Families
 Given is a Paper B and we are interested in its related papers. 
@@ -40,13 +37,14 @@ Example: If paper A quotes paper B, i.e. they are directly connected, then their
 If a paper E quotes paper D that quotes paper C that quotes Paper B, then Paper E and Paper B are only indirectly connected.
 They have a distance of 3. 
 - The relevance of a paper counts its direct quotes. 
-For example, if Paper A quotes both Paper B and Paper C, and if Paper B quotes Paper C, 
-then this group of three quotes 0 times Paper A, 1 times Paper B, and 2 times Paper C. 
-For this group, Paper C is the most relevant.
+For example, if paper A quotes both paper B and paper C, and if paper B quotes paper C, 
+then this group of three quotes 0 times paper A, 1 times paper B, and 2 times paper C. 
+For this group, paper C is the most relevant.
 
 #### Examples for Filtering and Sorting
 - If we filter for papers written between 2015 and 2019, our graphs only present papers from 2015 - 2019.
-- If we sort these papers by newness, then the graph initially only presents papers from this year. If we zoom out of the graph by scrolling, it displays more and more papers from earlier years until we reach 2015.   
+- If we sort these papers by newness, then the graph initially only presents papers from this year.
+ If we zoom out of the graph by scrolling, it displays more and more papers from earlier years until we reach 2015.   
 
 ### Research Fields
 We give a research area, for example we enter the name "Web Databases" or "Join Optimisation".
@@ -69,7 +67,7 @@ considers other researchers from these families.
 ## Architecture
 Our Research Paper Analyzer is composed of a scraper, a database, an analyzing backend and a graph-heavy frontend:
 - The scraper stores the meta information and references of research papers in a database. 
-It reads this data from a research API such as SemanticScholar, Clarivate, and ArXiv and it 
+It reads this data from a research API such as SemanticScholar, Clarivate, ArXiv and Google Scholar and it 
 adapts the format of the data to the schema of the underlying database. 
 - The research graphs in the frontend represent firstly families of related research papers, 
 secondly research areas with their respective work, 
@@ -82,62 +80,15 @@ passes the resulting data to the frontend in an efficiently usable format.
 ![../img/img_03.png](../img/img_03.png)
 
 ## Technologies
-- As our database we use PostgreSQL.
+- As our database we use Postgres.
 - We implement our scraper in Python and let it access the SemanticScholar Paper API.
-- We build our backend on Django using Python.
+- We develop our backend in Python.
 - We write our frontend in Typescript and React, integrating frameworks for graph visualization.
-
-### PostgreSQL
-PostgreSQL is a free, open source object-relational database management system. 
-It supports SQL language, extensible data types, operators, functions and aggregates as well as the ACID conditions.
-Reliability, robustness, and performance characterize PostgreSQL.
-Link: [https://www.postgresql.org](https://www.postgresql.org)
-
-### Python
-Python is a universal, interpreted, and higher programming language. 
-Because it is both concise and readable, we can easily learn and understand Python. 
-Data is particularly well analysed with Python.
-Link: [https://www.python.org](https://www.python.org) 
 
 ### SemanticScholar Paper API
 SemanticScholar stores metainformation about papers, their authors, and their references. 
 We can download this information and access it through an API.
-Link: [https://api.semanticscholar.org](https://api.semanticscholar.org) 
-
-### Django
-Django is a free, open source web application framework in Python. 
-A web application framework acts as a building block system with many ready-made parts for web application development. 
-Speed, security, and scalability thereby make Django stand out. 
-Link: [https://www.djangoproject.com](https://www.djangoproject.com)
-
-### TypeScript
-TypeScript is a superset of JavaScript, i.e. it extends JavaScript by features such as, 
-in particular, the optional static typing at the time of compilation. 
-This allows us to , for example, structurally type, infer types, and parameterize types. 
-Link: [https://www.typescriptlang.org](https://www.typescriptlang.org)
-
-### React
-React is a JavaScript-based web framework, i.e. it acts as a basic framework for the output of UI components on websites. 
-In React, we build components hierarchically and represent them as self-defined HTML tags. 
-React is designed for simplicity, performance, and reusability. 
-Link: [https://reactjs.org](https://reactjs.org)
-
-### Graph Visualization Frameworks
-#### ECharts
-ECharts is an open source, cross-platform framework for rapidly constructing data visualizations. 
-ECharts is characterized by its high performance, ease of use, and richness of built-in interactions. 
-Link: [https://echarts.apache.org/en/index.html](https://echarts.apache.org/en/index.html)
-
-#### Chart.js
-Chart.js is an open source diagram library for designers and developers. 
-It is based on JavaScript and supports HTML5 Canvas and JSON. 
-Its high responsiveness makes Chart.js stand out.
-Link: [https://www.chartjs.org](https://www.chartjs.org)
-
-#### D3.js
-D3.js (Data Driven Documents) is a JavaScript-based library that allows you to visualize data with graphical elements in your browser. 
-D3.js is based on the web standards SVG, CSS, and HTML5, which makes D3.js not only fast even with large amounts of data, but also future-proof.
-Link: [https://d3js.org](https://d3js.org)
+Link: https://api.semanticscholar.org 
 
 ## Scope
 - In our project we will primarily read the papers from the SemanticScholar API. 
