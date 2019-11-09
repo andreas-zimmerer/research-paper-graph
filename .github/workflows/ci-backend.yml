@@ -15,11 +15,10 @@ jobs:
     name: Lint Backend
     runs-on: ubuntu-latest
     steps:
-      steps:
-        - uses: actions/checkout@v1
-        - name: Setup python venv
-          working-directory: ./backend
-          run: source venv/bin/activate
-        - name: Run PyLint
-          working-directory: ./backend
-          run: pylint app
+      - uses: actions/checkout@v1
+      - name: Setup python venv
+        working-directory: ./backend
+        run: source venv/bin/activate
+      - name: Run PyLint
+        working-directory: ./backend
+        run: pylint app
