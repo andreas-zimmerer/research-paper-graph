@@ -82,15 +82,33 @@ passes the resulting data to the frontend in an efficiently usable format.
 ![../img/img_03.png](../img/img_03.png)
 
 ## Technologies
-- As our database we use Postgres.
+- As our database we use PostgreSQL.
 - We implement our scraper in Python and let it access the SemanticScholar Paper API.
-- We develop our backend in Python.
+- We build our backend on Django using Python.
 - We write our frontend in Typescript and React, integrating frameworks for graph visualization.
+
+### PostgreSQL
+PostgreSQL is a free, open source object-relational database management system. 
+It supports SQL language, extensible data types, operators, functions and aggregates as well as the ACID conditions.
+Reliability, robustness, and performance characterize PostgreSQL.
+Link: [https://www.postgresql.org](https://www.postgresql.org)
+
+### Python
+Python is a universal, interpreted, and higher programming language. 
+Because it is both concise and readable, we can easily learn and understand Python. 
+Data is particularly well analysed with Python.
+Link: [https://www.python.org](https://www.python.org) 
 
 ### SemanticScholar Paper API
 SemanticScholar stores metainformation about papers, their authors, and their references. 
 We can download this information and access it through an API.
 Link: [https://api.semanticscholar.org](https://api.semanticscholar.org) 
+
+### Django
+Django is a free, open source web application framework in Python. 
+A web application framework acts as a building block system with many ready-made parts for web application development. 
+Speed, security, and scalability thereby make Django stand out. 
+Link: [https://www.djangoproject.com](https://www.djangoproject.com)
 
 ## Scope
 - In our project we will primarily read the papers from the SemanticScholar API. 
