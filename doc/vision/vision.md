@@ -1,7 +1,7 @@
 # Vision
 The Research Paper Analyser examines to what extent research work is related to each other, 
 i.e. whether and how often it refers to each other. 
-For example, if paper C is based on paper B and paper B is based on paper A, then papers A, B and C are connected. 
+For example, if paper C is based on papers A and B and paper B is based on paper A, then papers A, B and C are connected. 
 
 ![../img/img_01.png](../img/img_01.png)
 
@@ -23,7 +23,7 @@ When a university calls a professor to a chair, their selection can be supported
 ## Goal
 The Research Paper Analyser will examine related research papers in such a way that it firstly presents groups of 
 papers that build on each other, secondly research areas with their respective papers, and thirdly groups of 
-communicating researchers:
+communicating researchers.
 
 ### Paper Families
 Given is a Paper B and we are interested in its related papers. 
@@ -46,8 +46,7 @@ For this group, Paper C is the most relevant.
 
 #### Examples for Filtering and Sorting
 - If we filter for papers written between 2015 and 2019, our graphs only present papers from 2015 - 2019.
-- If we sort these papers by newness, then the graph initially only presents papers from this year.
- If we zoom out of the graph by scrolling, it displays more and more papers from earlier years until we reach 2015.   
+- If we sort these papers by newness, then the graph initially only presents papers from this year. If we zoom out of the graph by scrolling, it displays more and more papers from earlier years until we reach 2015.   
 
 ### Research Fields
 We give a research area, for example we enter the name "Web Databases" or "Join Optimisation".
@@ -70,7 +69,7 @@ considers other researchers from these families.
 ## Architecture
 Our Research Paper Analyzer is composed of a scraper, a database, an analyzing backend and a graph-heavy frontend:
 - The scraper stores the meta information and references of research papers in a database. 
-It reads this data from a research API such as SemanticScholar, Clarivate, ArXiv and Google Scholar and it 
+It reads this data from a research API such as SemanticScholar, Clarivate, and ArXiv and it 
 adapts the format of the data to the schema of the underlying database. 
 - The research graphs in the frontend represent firstly families of related research papers, 
 secondly research areas with their respective work, 
