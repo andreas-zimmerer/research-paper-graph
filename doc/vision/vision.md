@@ -90,7 +90,7 @@ passes the resulting data to the frontend in an efficiently usable format.
 ### SemanticScholar Paper API
 SemanticScholar stores metainformation about papers, their authors, and their references. 
 We can download this information and access it through an API.
-Link: https://api.semanticscholar.org 
+Link: [https://api.semanticscholar.org](https://api.semanticscholar.org) 
 
 ## Scope
 - In our project we will primarily read the papers from the SemanticScholar API. 
