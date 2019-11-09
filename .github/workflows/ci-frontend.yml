@@ -1,8 +1,57 @@
-steps:
-- uses: actions/checkout@v1
-- uses: actions/setup-node@v1
-  with:
-    node-version: '10.x'
-- run: npm install
-- run: npm test
+name: "CI Pipeline"
 
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  schedule: # run once a month
+    - cron: '0 0 1 * *'
+
+jobs:
+  lint-frontend:
+    name: Lint Frontend
+    runs-on: ubuntu-latest
+    steps:
+      steps:
+        - uses: actions/checkout@v1
+        - name: Setup node
+          uses: actions/setup-node@v1
+        - name: Install Dependencies
+          working-directory: ./frontend
+          run: npm install
+        - name: Run tslint
+          working-directory: ./frontend
+          run: npm run lint
+
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      steps:
+        - uses: actions/checkout@v1
+        - name: Setup node
+          uses: actions/setup-node@v1
+        - name: Install Dependencies
+          working-directory: ./frontend
+          run: npm install
+        - name: Build with NPM
+          working-directory: ./frontend
+          run: npm build
+
+  test-frontend:
+    name: Test Frontend
+    runs-on: ubuntu-latest
+    steps:
+      steps:
+        - uses: actions/checkout@v1
+        - name: Setup node
+          uses: actions/setup-node@v1
+        - name: Install Dependencies
+          working-directory: ./frontend
+          run: npm install
+        - name: Run Tests
+          working-directory: ./frontend
+          run: npm test
