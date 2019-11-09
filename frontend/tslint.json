@@ -1,0 +1,17 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+    	"quotemark": [true, "single", "jsx-double", "avoid-escape", "avoid-template"],
+	"ordered-imports": false
+    },
+    "linterOptions": {
+        "exclude": [
+            "src/serviceWorker.ts"
+        ]
+    },
+    "rulesDirectory": []
+}
