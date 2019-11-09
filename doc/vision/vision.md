@@ -110,6 +110,23 @@ A web application framework acts as a building block system with many ready-made
 Speed, security, and scalability thereby make Django stand out. 
 Link: [https://www.djangoproject.com](https://www.djangoproject.com)
 
+### Graph Visualization Frameworks
+#### ECharts
+ECharts is an open source, cross-platform framework for rapidly constructing data visualizations. 
+ECharts is characterized by its high performance, ease of use, and richness of built-in interactions. 
+Link: [https://echarts.apache.org/en/index.html](https://echarts.apache.org/en/index.html)
+
+#### Chart.js
+Chart.js is an open source diagram library for designers and developers. 
+It is based on JavaScript and supports HTML5 Canvas and JSON. 
+Its high responsiveness makes Chart.js stand out.
+Link: [https://www.chartjs.org](https://www.chartjs.org)
+
+#### D3.js
+D3.js (Data Driven Documents) is a JavaScript-based library that allows you to visualize data with graphical elements in your browser. 
+D3.js is based on the web standards SVG, CSS, and HTML5, which makes D3.js not only fast even with large amounts of data, but also future-proof.
+Link: [https://d3js.org](https://d3js.org)
+
 ## Scope
 - In our project we will primarily read the papers from the SemanticScholar API. 
 Reading other papers and information from secondary APIs is optional. 
