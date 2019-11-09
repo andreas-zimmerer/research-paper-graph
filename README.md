@@ -51,6 +51,15 @@ Now you can run the backend on [http://localhost:5000](http://localhost:5000) by
 flask run
 ```
 
+### Linting
+This project uses `pylint` as a linter. Simply run
+```
+pylint app
+```
+in the `backend` folder.
+
+If you are using IntelliJ , it is recommended to install the [PyLint Plugin](https://plugins.jetbrains.com/plugin/11084-pylint/).
+
 
 ## Frontend
 The frontend is located in the `frontend` folder and is written in TypeScript with React.

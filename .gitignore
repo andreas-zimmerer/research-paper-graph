@@ -12,6 +12,9 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+# Sonarlint
+.idea/sonarlint
+
 # Generated files
 .idea/**/contentModel.xml
 
