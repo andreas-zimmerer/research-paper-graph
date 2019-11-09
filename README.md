@@ -1,9 +1,16 @@
 # research-paper-graph
 
 # Project Setup
+If you are using IntelliJ/PyCharm Professional, you should simply be able to open the project.
+You will find some useful run configurations as well.
+
+Make sure the existing `virtualenv` is properly set up in your IDE:  
+> Open "File" -> "Project Structure".  
+> For the "Project SDK" click on "New".  
+> Select "Python SDK" and select "Existing Environment".  
+> Navigate to "./backend/venv/bin/python3" and press "Ok".
 
 ## Backend
-
 The backend is a Python application with Flask framework.
 
 Some good starting resources are:
@@ -39,14 +46,13 @@ To update the `requirements.txt` file.
 ### Starting the Backend
 To start the backend on a local machine, navigate to the `backend` directory.
 Next, activate the `virtualenv` as described before.
-Now you can run the backend on [localhost:5000](localhost:5000) by typing
+Now you can run the backend on [http://localhost:5000](http://localhost:5000) by typing
 ```
 flask run
 ```
 
 
 ## Frontend
-
 The frontend is located in the `frontend` folder and is written in TypeScript with React.
 
 Some good staring resources are:
@@ -65,7 +71,6 @@ and then
 ```
 npm start
 ```
-
 Now the frontend should open in your browser.
 
 ### Linting
