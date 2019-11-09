@@ -81,7 +81,7 @@ passes the resulting data to the frontend in an efficiently usable format.
 ## Technologies
 - As our database we use PostgreSQL.
 - We implement our scraper in Python and let it access the SemanticScholar Paper API.
-- We build our backend on Django using Python.
+- We build our backend on Flask using Python.
 - We write our frontend in Typescript and React, integrating frameworks for graph visualization.
 
 ### PostgreSQL
@@ -101,11 +101,11 @@ SemanticScholar stores metainformation about papers, their authors, and their re
 We can download this information and access it through an API.
 Link: [https://api.semanticscholar.org](https://api.semanticscholar.org) 
 
-### Django
-Django is a free, open source web application framework in Python. 
-A web application framework acts as a building block system with many ready-made parts for web application development. 
-Speed, security, and scalability thereby make Django stand out. 
-Link: [https://www.djangoproject.com](https://www.djangoproject.com)
+### Flask
+Flask is a Web Application Framework in Python. 
+We use Flask to develop the components of our web application because it helps us integrate existing libraries into our software.
+Extensibility and good documentation characterize Flask. 
+Link: [https://www.palletsprojects.com/p/flask/](https://www.palletsprojects.com/p/flask/)
 
 ### TypeScript
 TypeScript is a superset of JavaScript, i.e. it extends JavaScript by features such as, 
