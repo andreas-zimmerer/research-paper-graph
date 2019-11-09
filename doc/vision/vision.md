@@ -7,9 +7,7 @@ For example, if paper C is based on papers A and B and paper B is based on paper
 
 ## Motivation
 When we read a paper for our research and are interested in further work on our topic, 
-we are sometimes not sure which reference of the paper or which reference of reference of the paper is appropriate. 
-What we need here is a tool that gives us all the relevant papers for a particular paper. 
-We want to filter and sort these papers according to their relevance for our research.
+going through all cited papers to find out which one is important can be a tedious exercise. In our project, we want to facilitate the process by providing a citation graph which will easily give the opportunity to see which papers are similar and hence close to our paper and which are generally most important to the topic by identifying the most central papers in the topic cluster in the graph.
 
 Sometimes we don't come across a special paper, but a whole field of research that interests us. 
 On the one hand, we will ask ourselves which papers are relevant for the respective research area. 
@@ -17,8 +15,7 @@ On the other hand, we want to know into which topics our field can be subdivided
 We therefore need an instrument that assigns families of research work to their research topic and their field of research.
 
 When our government discusses a problem, it often involves external professors and asks them for advice. 
-Our governments could choose these experts more safely if they were able to visualize all the experts on a particular topic. 
-When a university calls a professor to a chair, their selection can be supported by a tool that visualizes all their candidates. 
+We want to make sure that our government has the best information in order to decide which experts to invite concerning a special topic by seeing how central the professor's papers are within the field of interest. The same holds for universities calling a professor to a chair. Our graph provides multiple additional information which can support their decision making. It also helps to easily identify members of the appointment commission, which have been publishing with a candidate and which are therefore biased. 
 
 ## Goal
 The Research Paper Analyser will examine related research papers in such a way that it firstly presents groups of 
@@ -26,7 +23,7 @@ papers that build on each other, secondly research areas with their respective p
 communicating researchers.
 
 ### Paper Families
-Given is a Paper B and we are interested in its related papers. 
+Given is a paper B and we are interested in its related papers. 
 For this, we pass the Research Paper Analyser our paper B, i.e. we give its name, its DOI, or its author.
 The Research Paper Analyser now presents all papers on which our paper B is based, and it presents all papers 
 that are based on our paper B in the form of a graph.
@@ -37,12 +34,12 @@ Because these are potentially very many papers, we can filter and scale graphs a
 Example: Paper A was written in 2018. Its time is 2018.
 - The distance of two papers indicates how closely they are related. 
 Example: If paper A quotes paper B, i.e. they are directly connected, then their distance is 1. 
-If a paper E quotes paper D that quotes paper C that quotes Paper B, then Paper E and Paper B are only indirectly connected.
+If a paper E quotes paper D that quotes paper C that quotes paper B, then paper E and paper B are only indirectly connected.
 They have a distance of 3. 
 - The relevance of a paper counts its direct quotes. 
-For example, if Paper A quotes both Paper B and Paper C, and if Paper B quotes Paper C, 
-then this group of three quotes 0 times Paper A, 1 times Paper B, and 2 times Paper C. 
-For this group, Paper C is the most relevant.
+For example, if paper A quotes both paper B and paper C, and if paper B quotes paper C, 
+then this group of three quotes 0 times paper A, 1 times paper B, and 2 times paper C. 
+For this group, paper C is the most relevant.
 
 #### Examples for Filtering and Sorting
 - If we filter for papers written between 2015 and 2019, our graphs only present papers from 2015 - 2019.
