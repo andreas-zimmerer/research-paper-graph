@@ -1,20 +1,20 @@
 \documentclass{beamer}
 \usepackage[utf8x]{inputenc}
 \usepackage{graphicx}
-\usepackage{tikz}    
-\graphicspath{{./R/}}
+\usepackage{tikz}
+\graphicspath{{./../../img/}}
 
 \usepackage[outputdir=latex.out]{minted}
-
+\usepackage[T1]{fontenc}
 
 \usetheme{TUM}
 
-\title[Seminar Example Presentation]{Long Version of the Seminar Example Presentation Title}
+\title[Research Graph]{Research Graph}
 
-\author[Short Name]{Your Full Name}
-\institute{Technische Universität München}
+\author[Guerin, Schönball, Silva, Zimmerer]{Fiona Guerin, Raphael Schönball, Alvaro Silva, Andreas Zimmerer}
+\institute{Technical University of Munich}
 
-\date{Presentation Date}
+\date{12 November 2019}
 
 % Customize alert
 \setbeamercolor{alerted text}{fg=TUMZusatzfarbeBlau3}
@@ -23,61 +23,24 @@
 \begin{document}
 \maketitle
 
-\begin{frame}{Lists}
-\begin{itemize}
-	\item Sample List Item
-	\item Sample List Item
-	\begin{itemize}
-		\item Sample List Subitem
-		\item Sample List Subitem
-	\end{itemize}
-	
-	\item[$\Rightarrow$] Other Label List Item
-\end{itemize}
+\begin{frame}{Vision}
+\only<1>{\includegraphics{img_02.png}}
 \end{frame}
 
-\begin{frame}{Tables}
-\centering
-\begin{table}
-\begin{tabular}{@{::}l|c|c|r@{::}}
-	\hline 
-	left & center & center & right \\ 
-	\hline 
-	aligned & \multicolumn{2}{c|}{aligned} & aligned \\ 
-	\hline 
-	column & column & column & column \\ 
-	\hline 
-\end{tabular}
-
-\label{tab1}
-\caption{Caption text for table} 
-\end{table}
+\begin{frame}{Mockup}
+	Link: https://marvelapp.com/d3c33g7
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Listing}
-\begin{minted}{cpp}
-#include <iostream>
-
-int main() {
-  std::cout << "hello, world" << std::endl;
-  return 0;
-}
-\end{minted}
+\begin{frame}{Architecture}
+    \only<1>{\includegraphics{img_03.png}}
 \end{frame}
 
-\begin{frame}{Figures}
-\includegraphics{example.pdf}
+\begin{frame}{Technology Stack}
+    \only<1>{\includegraphics{img_04.png}}
 \end{frame}
 
-\begin{frame}{Animation}
-\only<1>{\includegraphics{animation_1.pdf}}
-
-\only<2>{\includegraphics{animation_2.pdf}}
-
-\only<3>{\includegraphics{animation_3.pdf}}
-
-\only<4>{\includegraphics{animation_4.pdf}}
+\begin{frame}{Thank you}
+    \only<1>{\includegraphics{img_05.png}}
 \end{frame}
-
 
 \end{document}

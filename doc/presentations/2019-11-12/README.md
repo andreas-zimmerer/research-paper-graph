@@ -16,7 +16,7 @@ You can find some examples of usage and the integration in te `R` folder within 
 To replace the given examples with your own remember to set the `PLOT_PREFIX` in the Makefile and name the files accordingly (`PLOT_PREFIXfilename.R`).
 
 ### Building
-
+****
 If you installed `R`, `ggplot` and `minted` correctly you can build the example and your own project using `make` in the source director. The makefile provides multiple targets
 
 ```
