@@ -1,4 +1,4 @@
-## Seminar Presentation Template
+## Presentation Template
 
 Fork this project for your presentation if you want to. The template provides a basic `Makefile` including `ggplot` integration and some examples. You are free to edit and extend the scaffold to fit your needs.
 
