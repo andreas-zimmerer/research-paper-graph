@@ -34,7 +34,8 @@ facilitate later filtering and sorting. To do this, the service stores the follo
 ![../img/img_09.png](../img/img_09.png)
 
 ### Flask Controller
-TODO: Briefly describe how the Flask REST-API
+The Flask Controller acts as the REST API. 
+It forwards the UI actions to the Service and returns the computed paper families back to the frontend.
 
 
 ## Database schema
