@@ -15,16 +15,16 @@ We use the Repository to access the database entities.
 The getPapers call of the repository recursively queries the database for the family of the paper.
 Query: 
                 
-                `with recursive family (related, distance) as (`
-                `select referencing, 1 as distance`
-                `from references`
-                `where referenced = Best WebDatabases Paper Ever)`  
+                with recursive family (related, distance) as (
+                select referencing, 1 as distance
+                from references
+                where referenced = Best WebDatabases Paper Ever)
                   
-                  `union all`
+                  union all
                 
-                `select ref.referencing, distance + 1 as distance`
-                `from family fam, references ref`
-                `where fam.related = ref.referenced)` 
+                select ref.referencing, distance + 1 as distance
+                from family fam, references ref
+                where fam.related = ref.referenced)
                 
 The query will return something like this:
 
