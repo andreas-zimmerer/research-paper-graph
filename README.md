@@ -7,7 +7,8 @@ For example, if paper C is based on papers A and B and paper B is based on paper
 
 ## Build Status
 
-[![Build Status](https://travis-ci.com/Jibbow/research-paper-graph.svg?branch=master)](https://travis-ci.com/Jibbow/research-paper-graph)
+[![Actions Status](https://github.com/Jibbow/research-paper-graph/workflows/.github/workflows/ci-backend.yml/badge.svg)](https://github.com/Jibbow/research-paper-graph/actions)
+[![Actions Status](https://github.com/Jibbow/research-paper-graph/workflows/.github/workflows/ci-frontend.yml/badge.svg)](https://github.com/Jibbow/research-paper-graph/actions)
 
 ## Motivation
 When we read a paper for our research and are interested in further work on our topic, 
