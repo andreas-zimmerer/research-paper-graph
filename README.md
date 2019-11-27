@@ -64,6 +64,7 @@ For this, our Research Paper Analyser observes which paper families Bob is invol
 considers other researchers from these families. 
 
 ## Mockup
+
 ![./doc/img/mockup.gif](./doc/img/mockup.gif)
 
 ## Architecture
@@ -141,82 +142,56 @@ D3.js (Data Driven Documents) is a JavaScript-based library that allows you to v
 D3.js is based on the web standards SVG, CSS, and HTML5, which makes D3.js not only fast even with large amounts of data, but also future-proof.
 Link: [https://d3js.org](https://d3js.org)
 
-## Contribute
-If you want to contribute to the research-graph repository, please first read the Contributing Guidelines in the [Contributing](CONTRIBUTING.md) file.
+## Installation
+### How to run the Research Analyzer
+#### Step 1: Install all prerequisites
+1. Install Python.
+2. Install pip.
+3. Install npm or yarn.
+4. [Recommended] Install virtualenv.
+5. [Recommended] If you are using IntelliJ, install the [PyLint Plugin](https://plugins.jetbrains.com/plugin/11084-pylint/).
 
-## Project Setup
-If you are using IntelliJ/PyCharm Professional, you should simply be able to open the project.
-You will find some useful run configurations as well.
+#### Step 2: Start the backend
+1. Navigate to the backend directory: `cd backend`
+2a. [If you have installed virtualenv] Start virtualenv: `virtualenv venv`
+2b. [If you have not installed virtualenv] Install required dependencies: `pip install -r requirements.txt`
+3. Run Flask: `flask run`
+4. Check the backend: `curl http://127.0.0.1:5000/` should return `Hello, World!`.
 
-### Backend
-The backend is a Python application with Flask framework.
+#### Step 3: Start the frontend
+1. Navigate to the frontend directory: `cd frontend`
+2. Install required frontend dependencies: `npm install` or `yarn install`
+3. Run server file: `npm start` or `yarn start`
+4. Make sure that the frontend opens in your browser.
 
-Some good starting resources are:
+### How to modify the Research Analyzer
+#### Learn Flask
  - [The Flask mega tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
  - [Flask Project Website](https://palletsprojects.com/p/flask/)
 
-If you don't want to use `virtualenv`, you can install the required dependencies with
-```
-pip install -r requirements.txt
-```
-Overall, it is advisable to use `virtualenv`.
-
-#### Installing new Packages
-When installing new packages, make sure that they appear in the `requirements.txt` file
-
-To update the `requirements.txt` file, run
-```
-pip freeze > requirements.txt
-```
-
-#### Starting the Backend
-To start the backend on a local machine, navigate to the `backend` directory.
-Next, activate the `virtualenv` as described before.
-Now you can run the backend on [http://localhost:5000](http://localhost:5000) by typing
-```
-flask run
-```
-
-#### Linting
-This project uses `pylint` as a linter. Simply run
-```
-pylint app
-```
-in the `backend` folder.
-
-If you are using IntelliJ , it is recommended to install the [PyLint Plugin](https://plugins.jetbrains.com/plugin/11084-pylint/).
-
-
-### Frontend
-The frontend is located in the `frontend` folder and is written in TypeScript with React.
-
-Some good staring resources are:
+#### Learn TypeScript and React
  - [The TypeScript Handbook](https://www.typescriptlang.org/)
  - [TypeScript Example on React](https://www.typescriptlang.org/play/index.html?jsx=2&esModuleInterop=true&e=196#example/typescript-with-react)
  - [React + TypeScript Cheatsheets](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet#reacttypescript-cheatsheets)
  - [React: Getting Started](https://reactjs.org/docs/getting-started.html)
 
-#### Starting the Frontend
-To build the frontend, make sure you have `npm` or `yarn` installed.
-Change to the `frontend` directory and run
-```
-npm install
-```
-and then
-```
-npm start
-```
-Now the frontend should open in your browser.
+#### Installing new packages
+When installing new packages, make sure that they appear in the `requirements.txt` file.
+To update the `requirements.txt` file, run: `pip freeze > requirements.txt`
 
 #### Linting
-The project uses `tslint`. Run `tslint` with
-```
-npm run lint
-```
+##### Backend
+The backend uses `pylint`:
+1. Navigate to the backend directory: `cd backend`
+2. Run pylint: `pylint app`
 
-If you use `yarn`, issue the same commands but with `yarn` instead of `npm`.
+##### Frontend
+The project uses `tslint`:
+1. Navigate to the frontend directory: `cd frontend`
+2. Run tslint: `npm run lint` or `yarn run lint`
 
+## Contribute
+If you want to contribute to the research-graph repository, please first read the Contributing Guidelines in the [Contributing](CONTRIBUTING.md) file.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
