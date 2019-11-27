@@ -1,0 +1,41 @@
+name: "CI Pipeline Frontend"
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+  schedule: # run once a month
+    - cron: '0 0 1 * *'
+
+jobs:
+  lint-frontend:
+    name: Lint Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup node
+        uses: actions/setup-node@v1
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm install
+      - name: Run tslint
+        working-directory: ./frontend
+        run: npm run lint
+
+  test-frontend:
+    name: Build/Test Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup node
+        uses: actions/setup-node@v1
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm install
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: npm build
+      - name: Run Tests
+        working-directory: ./frontend
+        run: npm test -- --ci --watchAll=false
