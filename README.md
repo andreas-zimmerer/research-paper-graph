@@ -1,4 +1,4 @@
-# Research Paper Analyser
+# Research Paper Graph
 The Research Paper Analyser examines to what extent research work is related to each other, 
 i.e. whether and how often it refers to each other. 
 For example, if paper C is based on papers A and B and paper B is based on paper A, then papers A, B and C are connected. 
@@ -94,16 +94,56 @@ Link: [https://d3js.org](https://d3js.org)
 5. [Recommended] If you are using IntelliJ, install the [PyLint Plugin](https://plugins.jetbrains.com/plugin/11084-pylint/).
 
 #### Step 2: Start the backend
-1. Navigate to the backend directory: `cd backend`
-2a. [If you have installed virtualenv] Start virtualenv: `virtualenv venv`
-2b. [If you have not installed virtualenv] Install required dependencies: `pip install -r requirements.txt`
-3. Run Flask: `flask run`
-4. Check the backend: `curl http://127.0.0.1:5000/` should return `Hello, World!`.
+1. Navigate to the backend directory: 
+```
+cd backend
+```
+
+2a. [If you have installed virtualenv] Start virtualenv: 
+```
+virtualenv venv
+```
+
+2b. [If you have not installed virtualenv] Install required dependencies: 
+```
+pip install -r requirements.txt
+```
+
+3. Run Flask: 
+```
+flask run
+```
+
+4. Check the backend: 
+```
+curl http://127.0.0.1:5000/
+```
+should return `Hello, World!`.
 
 #### Step 3: Start the frontend
-1. Navigate to the frontend directory: `cd frontend`
-2. Install required frontend dependencies: `npm install` or `yarn install`
-3. Run server file: `npm start` or `yarn start`
+1. Navigate to the frontend directory: 
+```
+cd frontend
+```
+
+2. Install required frontend dependencies: 
+```
+npm install
+```
+or 
+```
+yarn install
+```
+
+3. Run server file: 
+```
+npm start
+```
+or 
+```
+yarn start
+```
+
 4. Make sure that the frontend opens in your browser.
 
 ### How to modify the Research Analyzer
@@ -119,18 +159,39 @@ Link: [https://d3js.org](https://d3js.org)
 
 #### Installing new packages
 When installing new packages, make sure that they appear in the `requirements.txt` file.
-To update the `requirements.txt` file, run: `pip freeze > requirements.txt`
+To update the `requirements.txt` file, run: 
+```
+pip freeze > requirements.txt
+```
 
 #### Linting
 ##### Backend
 The backend uses `pylint`:
-1. Navigate to the backend directory: `cd backend`
-2. Run pylint: `pylint app`
+1. Navigate to the backend directory:
+```
+cd backend
+```
+
+2. Run pylint:
+```
+pylint app
+```
 
 ##### Frontend
 The project uses `tslint`:
-1. Navigate to the frontend directory: `cd frontend`
-2. Run tslint: `npm run lint` or `yarn run lint`
+1. Navigate to the frontend directory: 
+```
+cd frontend
+```
+
+2. Run tslint: 
+```
+npm run lint
+```
+or 
+```
+yarn run lint
+```
 
 ## Contribute
 If you want to contribute to the research-graph repository, please first read the Contributing Guidelines in the [Contributing](CONTRIBUTING.md) file.
