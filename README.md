@@ -5,6 +5,10 @@ For example, if paper C is based on papers A and B and paper B is based on paper
 
 ![./doc/img/img_01.png](./doc/img/img_01.png)
 
+## Build Status
+
+[![Build Status](https://travis-ci.com/Jibbow/research-paper-graph.svg?branch=master)](https://travis-ci.com/Jibbow/research-paper-graph)
+
 ## Motivation
 When we read a paper for our research and are interested in further work on our topic, 
 going through all cited papers to find out which one is important can be a tedious exercise. In our project, we want to facilitate the process by providing a citation graph which will easily give the opportunity to see which papers are similar and hence close to our paper and which are generally most important to the topic by identifying the most central papers in the topic cluster in the graph.
