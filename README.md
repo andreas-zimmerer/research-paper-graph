@@ -3,7 +3,7 @@ The Research Paper Analyser examines to what extent research work is related to 
 i.e. whether and how often it refers to each other. 
 For example, if paper C is based on papers A and B and paper B is based on paper A, then papers A, B and C are connected. 
 
-![../img/img_01.png](../img/img_01.png)
+![./doc/img/img_01.png](./doc/img/img_01.png)
 
 ## Motivation
 When we read a paper for our research and are interested in further work on our topic, 
@@ -53,7 +53,7 @@ their time, distance, and relevance.
 Our Research Paper Analyser considers which paper families contain the most papers that have our research area as a buzzword. 
 These families represent our research area. 
 
-![../img/img_02.png](../img/img_02.png)
+![./doc/img/img_02.png](./doc/img/img_02.png)
 
 ### Researcher Families
 Given is researcher Bob and we ask ourselves with which researchers he has frequent exchange. 
@@ -62,6 +62,9 @@ researchers that he communicates with.
 
 For this, our Research Paper Analyser observes which paper families Bob is involved in and 
 considers other researchers from these families. 
+
+## Mockup
+![./doc/img/mockup.gif](./doc/img/mockup.gif)
 
 ## Architecture
 Our Research Paper Analyzer is composed of a scraper, a database, an analyzing backend and a graph-heavy frontend:
@@ -76,7 +79,7 @@ The user can filter and sort the graphs according to his research interests.
 It translates the user's actions into equivalent database queries and 
 passes the resulting data to the frontend in an efficiently usable format. 
 
-![../img/img_03.png](../img/img_03.png)
+![./doc/img/img_03.png](./doc/img/img_03.png)
 
 ## Technologies
 - As our database we use PostgreSQL.
