@@ -5,8 +5,10 @@
     ],
     "jsRules": {},
     "rules": {
-    	"quotemark": [true, "single", "jsx-double", "avoid-escape", "avoid-template"],
-	"ordered-imports": false
+        "quotemark": [true, "single", "jsx-double", "avoid-escape", "avoid-template"],
+        "trailing-comma": false,
+        "ordered-imports": false,
+        "object-literal-sort-keys": false
     },
     "linterOptions": {
         "exclude": [

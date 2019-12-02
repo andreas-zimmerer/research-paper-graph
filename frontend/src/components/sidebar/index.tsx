@@ -3,7 +3,7 @@ import { Form, Nav, Modal } from 'react-bootstrap';
 import './sidebar.css';
 
 export default class Sidebar extends Component {
-  render() {
+  public render() {
     return (
       <div className="sidebar">
           <Nav>

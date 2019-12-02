@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 export default class ScientistsPage extends Component {
-  render() {
+  public render() {
     return <div className="page">I am the scientist view.</div>;
   }
 }

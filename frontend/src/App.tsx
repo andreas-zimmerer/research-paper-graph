@@ -27,11 +27,11 @@ const App: React.FC = () => {
       </Navbar>
 
       <Switch>
-        <Route exact path='/home' component={PapersPage} />
-        <Route exact path='/papers' component={PapersPage}/>
-        <Route exact path='/areas' component={AreasPage} />
-        <Route exact path='/scientists' component={ScientistsPage} />
-        <Route exact path='/about' component={AboutPage} />
+        <Route exact path="/home" component={PapersPage} />
+        <Route exact path="/papers" component={PapersPage}/>
+        <Route exact path="/areas" component={AreasPage} />
+        <Route exact path="/scientists" component={ScientistsPage} />
+        <Route exact path="/about" component={AboutPage} />
       </Switch>
     </div>
   );
