@@ -73,20 +73,26 @@ export default class PaperGraph extends Component<IProps> {
 
     // Initialize the links between nodes
     const link = svg
-      .selectAll('line')
+      .selectAll('.line')
       .data(links)
       .enter()
       .append('line')
       .style('stroke', '#aaa');
 
-    // Initialize the nodes
+    // Initialize the nodes.
+    // A node is a "group" (g) consisting of a circle and text.
     const node = svg
-      .selectAll('circle')
+      .selectAll('.node')
       .data(nodes)
       .enter()
-      .append('circle')
+      .append('g');
+    node.append('circle')
       .attr('r', 20)
       .style('fill', '#69b3a2');
+    node.append('text')
+      .attr('dx', 20)
+      .attr('dy', -10)
+      .text((d) => d.paper.title);
 
     const simulation = d3
       .forceSimulation(nodes) // Force algorithm is applied to papers
@@ -112,8 +118,7 @@ export default class PaperGraph extends Component<IProps> {
         .attr('y2', (d) => d.target.y);
 
       node
-        .attr('cx', (d) => d.x)
-        .attr('cy', (d) => d.y);
+        .attr('transform', (d) => 'translate(' + d.x + ', ' + d.y + ')');
     }
 
     // Create an x-axis with years
