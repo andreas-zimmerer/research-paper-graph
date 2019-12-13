@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
+import ReactTooltip from 'react-tooltip';
 import { IPaper } from '../../types/paper';
 import CitationLink from './CitationLink';
 import PaperNode from './PaperNode';
+import PaperTooltip from './PaperTooltip';
 import './graph.css';
 
 /**
@@ -23,7 +25,16 @@ export default class PaperGraph extends Component<IProps> {
 
   public render() {
     // We will paint on this SVG canvas
-    return <svg ref={this.canvas} className="canvas"></svg>;
+    return (
+      <div className="graph">
+        <svg ref={this.canvas} className="canvas" />
+
+        <ReactTooltip getContent={(paperId) => {
+          const paper = this.props.papers.find((p) => p.id === Number(paperId));
+          return <PaperTooltip paper={paper}/>;
+        }}/>
+      </div>
+    );
   }
 
   public componentDidUpdate(prevProps: IProps) {
@@ -110,7 +121,8 @@ export default class PaperGraph extends Component<IProps> {
       .attr('class', 'node-group');
     node.append('circle')
       .attr('r', 20)
-      .attr('class', 'node-circle');
+      .attr('class', 'node-circle')
+      .attr('data-tip', (d) => d.paper.id);
     node.append('text')
       .attr('dx', 20)
       .attr('dy', -10)
@@ -143,5 +155,8 @@ export default class PaperGraph extends Component<IProps> {
       node
         .attr('transform', (d) => 'translate(' + d.x + ', ' + d.y + ')');
     }
+
+    // Make sure to register the new targets for tooltips after graph has been rebuilt.
+    ReactTooltip.rebuild();
   }
 }

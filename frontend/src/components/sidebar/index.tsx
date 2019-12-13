@@ -31,6 +31,7 @@ export default class Sidebar extends Component<IProps, IState> {
           <Form.Group controlId="searchPaper" className="search-form-group">
             <Form.Label>Search for papers:</Form.Label>
             <AsyncTypeahead
+              id="searchbar-paper"
               options={this.state.suggestedPapers}
               isLoading={this.state.isSearching}
               filterBy={() => true} // the backend filters for us

@@ -9,10 +9,6 @@ interface IProps {
 }
 
 export default class PaperMenuItem extends Component<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <div>
