@@ -55,6 +55,7 @@ export default class PaperGraph extends Component<IProps> {
   private drawGraph(nodes: PaperNode[], links: CitationLink[]) {
     const width = this.canvas.current!.clientWidth;
     const height = this.canvas.current!.clientHeight;
+    const padding = 20;
 
     // Compute the max and min years so we can adjust the scale
     let minYear = Number.MAX_VALUE;
@@ -111,7 +112,7 @@ export default class PaperGraph extends Component<IProps> {
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
       // Constrains/fixes x-position
-      node.each((d) => { d.x = (d.paper.year - minYear) * width / (maxYear - minYear); });
+      node.each((d) => { d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding; });
 
       link
         .attr('x1', (d) => d.source.x)
@@ -127,7 +128,7 @@ export default class PaperGraph extends Component<IProps> {
     const xAxis = d3.axisBottom(
       d3.scaleLinear()
         .domain([minYear, maxYear])
-        .range([0, width]))
+        .range([padding, width - padding]))
       .tickFormat(d3.format('d'));
     svg.append('g')
       .call(xAxis);
