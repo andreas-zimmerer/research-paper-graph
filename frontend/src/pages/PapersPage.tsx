@@ -12,7 +12,7 @@ export default class PapersPage extends Component {
         authors: ['Dagobert', 'Donald'],
         abstract: 'A long time ago, in a galaxy far, far away...',
         year: 2019,
-        citations: [2, 3]
+        citations: [2, 3, 4]
       },
       {
         id: 2,
@@ -28,6 +28,14 @@ export default class PapersPage extends Component {
         authors: ['Disney'],
         abstract: 'wish, dress, prince, kiss',
         year: 2005,
+        citations: [4]
+      },
+      {
+        id: 4,
+        title: 'FooBar',
+        authors: ['Google'],
+        abstract: 'A Foo walks into a Bar...',
+        year: 2012,
         citations: [4]
       }
     ];

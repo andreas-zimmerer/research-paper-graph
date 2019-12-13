@@ -53,6 +53,21 @@ export default class PaperGraph extends Component<IProps> {
    * @param links The links/edges between nodes.
    */
   private drawGraph(nodes: PaperNode[], links: CitationLink[]) {
+    const width = this.canvas.current!.clientWidth;
+    const height = this.canvas.current!.clientHeight;
+
+    // Compute the max and min years so we can adjust the scale
+    let minYear = Number.MAX_VALUE;
+    let maxYear = Number.MIN_VALUE;
+    for (const n of nodes) {
+      if (n.paper.year < minYear) {
+        minYear = n.paper.year;
+      }
+      if (n.paper.year > maxYear) {
+        maxYear = n.paper.year;
+      }
+    }
+
     // Initialize canvas
     const svg = d3.select(this.canvas.current);
 
@@ -82,11 +97,14 @@ export default class PaperGraph extends Component<IProps> {
       // This adds repulsion between nodes. Play with the number for the repulsion strength
       .force('charge', d3.forceManyBody().strength(-8000))
       // This force attracts nodes to the center of the svg area
-      .force('center', d3.forceCenter(this.canvas.current!.clientWidth / 2, this.canvas.current!.clientHeight / 2))
+      .force('center', d3.forceCenter(width / 2, height / 2))
       .on('end', ticked);
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
+      // Constrains/fixes x-position
+      node.each((d) => { d.x = (d.paper.year - minYear) * width / (maxYear - minYear); });
+
       link
         .attr('x1', (d) => d.source.x)
         .attr('y1', (d) => d.source.y)
@@ -94,8 +112,17 @@ export default class PaperGraph extends Component<IProps> {
         .attr('y2', (d) => d.target.y);
 
       node
-        .attr('cx', (d) => d.x + 6)
-        .attr('cy', (d) => d.y - 6);
+        .attr('cx', (d) => d.x)
+        .attr('cy', (d) => d.y);
     }
+
+    // Create an x-axis with years
+    const xAxis = d3.axisBottom(
+      d3.scaleLinear()
+        .domain([minYear, maxYear])
+        .range([0, width]))
+      .tickFormat(d3.format('d'));
+    svg.append('g')
+      .call(xAxis);
   }
 }
