@@ -19,12 +19,12 @@ export default class Sidebar extends Component<IProps, IState> {
     this.onKeywordChange = this.onKeywordChange.bind(this);
 
     this.state = {
-      keyword: ""
-    }
+      keyword: ''
+    };
 
     // Initially fetch a list of papers without any filters.
     fetch('http://localhost:5000/search?keyword=')
-      .then(response => response.json())
+      .then((response) => response.json())
       .then((p: IPaper[]) => this.props.papersUpdated(p));
   }
 
@@ -32,8 +32,8 @@ export default class Sidebar extends Component<IProps, IState> {
     return (
       <div className="sidebar">
           <Nav>
-            <Form.Control type="text" placeholder="Search for a paper" 
-              value={this.state.keyword} 
+            <Form.Control type="text" placeholder="Search for a paper"
+              value={this.state.keyword}
               onChange={this.onKeywordChange} />
           </Nav>
       </div>
@@ -41,12 +41,12 @@ export default class Sidebar extends Component<IProps, IState> {
   }
 
   // Get an updated list of papers from the backend when the keyword changes.
-  onKeywordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  private onKeywordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = event.currentTarget.value;
-    this.setState({keyword: keyword});
+    this.setState({keyword});
 
-    fetch('http://localhost:5000/search?keyword=' + keyword)
-      .then(response => response.json())
+    fetch(`http://localhost:5000/search?keyword=${keyword}`)
+      .then((response) => response.json())
       .then((p: IPaper[]) => this.props.papersUpdated(p));
   }
 }

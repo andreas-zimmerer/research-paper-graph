@@ -71,7 +71,7 @@ export default class PaperGraph extends Component<IProps> {
     // Initialize canvas
     const svg = d3.select(this.canvas.current);
     // Remove old elements from canvas
-    svg.selectAll("*").remove();
+    svg.selectAll('*').remove();
 
     // Initialize the links between nodes
     const link = svg
