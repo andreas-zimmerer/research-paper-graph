@@ -1,0 +1,6 @@
+.canvas {
+    margin-left: 350px;
+    margin-right: 50px;
+    height: 100%;
+    width: calc(100% - 400px);
+}
