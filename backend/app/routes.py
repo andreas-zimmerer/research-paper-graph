@@ -54,4 +54,5 @@ def search():
     Searches the database for papers with the given keyword.
     """
     keyword = request.args.get('keyword')
-    return jsonify(papers)
+    matching_papers = list(filter(lambda paper: keyword in paper['title'], papers))
+    return jsonify(matching_papers)
