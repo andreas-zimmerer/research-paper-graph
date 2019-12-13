@@ -12,6 +12,11 @@
 .node-circle {
     fill: #69b3a2;
     stroke: #555;
+    cursor: pointer;
+}
+
+.node-circle:hover {
+    stroke-width: 2px;
 }
 
 .node-text {
