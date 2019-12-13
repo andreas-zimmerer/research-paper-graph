@@ -21,6 +21,11 @@ export default class Sidebar extends Component<IProps, IState> {
     this.state = {
       keyword: ""
     }
+
+    // Initially fetch a list of papers without any filters.
+    fetch('http://localhost:5000/search?keyword=')
+      .then(response => response.json())
+      .then((p: IPaper[]) => this.props.papersUpdated(p));
   }
 
   public render() {
@@ -35,6 +40,7 @@ export default class Sidebar extends Component<IProps, IState> {
     );
   }
 
+  // Get an updated list of papers from the backend when the keyword changes.
   onKeywordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = event.currentTarget.value;
     this.setState({keyword: keyword});
