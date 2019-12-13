@@ -17,7 +17,7 @@ export default class PapersPage extends Component<IProps, IState> {
     this.state = {
       selectedPaper: undefined,
       allPapers: []
-    }
+    };
 
     // Initially fetch a list of papers without any filters.
     fetch('http://localhost:5000/search?keyword=')

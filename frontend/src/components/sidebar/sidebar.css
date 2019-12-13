@@ -18,3 +18,7 @@ mark {
     padding: 0em;
     font-weight: 600;
 }
+
+.search-form-group {
+    margin-bottom: 4rem;
+}

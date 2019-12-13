@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { Form } from 'react-bootstrap';
 import PaperMenuItem from './PaperMenuItem';
 import { IPaper } from '../../types/paper';
 import './sidebar.css';
@@ -26,19 +27,52 @@ export default class Sidebar extends Component<IProps, IState> {
   public render() {
     return (
       <div className="sidebar">
-          <AsyncTypeahead
-            options={this.state.suggestedPapers}
-            isLoading={this.state.isSearching}
-            filterBy={() => true} // the backend filters for us
-            labelKey={() => ""} // not needed because there is no frontend filtering
-            minLength={1}
-            onSearch={this.handleSearch}
-            placeholder="Search for a paper..."
-            onChange={(selected: IPaper[]) => this.props.onSelectedPaperChanged(selected[0])}
-            renderMenuItemChildren={(paper: IPaper, props) => (
-              <PaperMenuItem key={paper.id} paper={paper} searchText={props.text} />
-          )}
-        />
+        <Form>
+          <Form.Group controlId="searchPaper" className="search-form-group">
+            <Form.Label>Search for papers:</Form.Label>
+            <AsyncTypeahead
+              options={this.state.suggestedPapers}
+              isLoading={this.state.isSearching}
+              filterBy={() => true} // the backend filters for us
+              labelKey={(p) => `${p.title} (${p.year})`}
+              minLength={1}
+              onSearch={this.handleSearch}
+              placeholder="Search..."
+              onChange={(selected: IPaper[]) => this.props.onSelectedPaperChanged(selected[0])}
+              renderMenuItemChildren={(paper: IPaper, props) => (
+                <PaperMenuItem key={paper.id} paper={paper} searchText={props.text} />
+            )}/>
+            <Form.Text className="text-muted">
+              Input the title, the DOI or other keywords.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group controlId="displayOptionsPreSucc">
+            <Form.Label>Which papers should be displayed:</Form.Label>
+            <Form.Check
+              type="checkbox"
+              id="checkbox-display-preceding-papers"
+              label="Preceding papers"
+            />
+            <Form.Check
+              type="checkbox"
+              id="checkbox-display-succeeding-papers"
+              label="Succeeding papers"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="displayOptionsDate">
+            <Form.Label>Date of the displayed papers:</Form.Label>
+            <Form.Control type="range" />
+            <Form.Text className="text-muted">
+              Minimum year a paper was published.
+            </Form.Text>
+            <Form.Control type="range" />
+            <Form.Text className="text-muted">
+              Maximum year a paper was published.
+            </Form.Text>
+          </Form.Group>
+        </Form>
       </div>
     );
   }
@@ -52,6 +86,6 @@ export default class Sidebar extends Component<IProps, IState> {
           isSearching: false,
           suggestedPapers: p
         });
-      })
+      });
   }
 }

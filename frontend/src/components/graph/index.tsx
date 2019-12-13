@@ -89,7 +89,7 @@ export default class PaperGraph extends Component<IProps> {
       .tickSize(-height);
     svg.append('g')
       .attr('class', 'grid')
-      .attr('transform',`translate(0, ${height})`)
+      .attr('transform', `translate(0, ${height})`)
       .call(gridLines);
 
     // Initialize the links between nodes
