@@ -101,10 +101,10 @@ export default class PaperGraph extends Component<IProps> {
           .links(links) // and this the list of links
       )
       // This adds repulsion between nodes. Play with the number for the repulsion strength
-      .force('charge', d3.forceManyBody().strength(-8000))
+      .force('charge', d3.forceManyBody().strength(-40000))
       // This force attracts nodes to the center of the svg area
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .on('end', ticked);
+      .on('tick', ticked);
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
