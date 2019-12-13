@@ -85,7 +85,7 @@ export default class PaperGraph extends Component<IProps> {
 
     // Create vertical grid lines
     const gridLines = d3.axisBottom(xAxisScale)
-      .tickFormat(null)
+      .tickFormat(() => '')
       .tickSize(-height);
     svg.append('g')
       .attr('class', 'grid')
