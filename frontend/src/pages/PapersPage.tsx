@@ -3,8 +3,7 @@ import PaperGraph from '../components/graph';
 import Sidebar from '../components/sidebar';
 import { IPaper } from '../types/paper';
 
-interface IProps {
-}
+interface IProps {}
 
 interface IState {
   papers: IPaper[];

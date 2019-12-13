@@ -38,7 +38,6 @@ const papers: IPaper[] = [
   }
 ];
 
-
 interface IProps {
   // A callback function that is invoked, when we get new papers from the backend.
   papersUpdated: ((papers: IPaper[]) => void);
