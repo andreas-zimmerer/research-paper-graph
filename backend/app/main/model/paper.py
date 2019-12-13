@@ -1,6 +1,7 @@
-from .. import db, flask_bcrypt
+"""Database model for papers"""
+from .. import db
 
-class Paper(db.Model):
+class Paper(db.Model): # pylint: disable=too-few-public-methods
     """ Paper Model for storing paper related details """
     __tablename__ = "paper"
 
