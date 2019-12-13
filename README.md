@@ -157,14 +157,14 @@ yarn start
  - [React + TypeScript Cheatsheets](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet#reacttypescript-cheatsheets)
  - [React: Getting Started](https://reactjs.org/docs/getting-started.html)
 
-#### Installing new packages
+#### Install new packages
 When installing new packages, make sure that they appear in the `requirements.txt` file.
 To update the `requirements.txt` file, run: 
 ```
 pip freeze > requirements.txt
 ```
 
-#### Linting
+#### Lint
 ##### Backend
 The backend uses `pylint`:
 1. Navigate to the backend directory:
@@ -191,6 +191,17 @@ npm run lint
 or 
 ```
 yarn run lint
+```
+
+#### Update database migrations
+1. Create a new migration script from the model changes:
+```
+python manage.py db migrate --message 'my database migration'
+```
+
+2. Apply the migration script to the database:
+```
+python manage.py db upgrade
 ```
 
 ## Contribute
