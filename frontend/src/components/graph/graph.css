@@ -4,3 +4,30 @@
     height: 100%;
     width: calc(100% - 400px);
 }
+
+.line {
+    stroke: #aaa;
+}
+
+.node-circle {
+    fill: #69b3a2;
+    stroke: #555;
+}
+
+.node-text {
+    fill: #555;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.6;
+  shape-rendering: crispEdges;
+}
+
+.grid {
+    stroke-dasharray: 3; 
+}
+
+.grid path {
+  stroke-width: 0;
+}

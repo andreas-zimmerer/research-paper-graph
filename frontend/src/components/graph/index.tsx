@@ -74,13 +74,31 @@ export default class PaperGraph extends Component<IProps> {
     // Remove old elements from canvas
     svg.selectAll('*').remove();
 
+    // Create an x-axis with years
+    const xAxisScale = d3.scaleLinear()
+      .domain([minYear, maxYear])
+      .range([padding, width - padding]);
+    const xAxis = d3.axisBottom(xAxisScale)
+      .tickFormat(d3.format('d'));
+    svg.append('g')
+      .call(xAxis);
+
+    // Create vertical grid lines
+    const gridLines = d3.axisBottom(xAxisScale)
+      .tickFormat(null)
+      .tickSize(-height);
+    svg.append('g')
+      .attr('class', 'grid')
+      .attr('transform',`translate(0, ${height})`)
+      .call(gridLines);
+
     // Initialize the links between nodes
     const link = svg
       .selectAll('.line')
       .data(links)
       .enter()
       .append('line')
-      .style('stroke', '#aaa');
+      .attr('class', 'line');
 
     // Initialize the nodes.
     // A node is a "group" (g) consisting of a circle and text.
@@ -88,13 +106,15 @@ export default class PaperGraph extends Component<IProps> {
       .selectAll('.node')
       .data(nodes)
       .enter()
-      .append('g');
+      .append('g')
+      .attr('class', 'node-group');
     node.append('circle')
       .attr('r', 20)
-      .style('fill', '#69b3a2');
+      .attr('class', 'node-circle');
     node.append('text')
       .attr('dx', 20)
       .attr('dy', -10)
+      .attr('class', 'node-text')
       .text((d) => d.paper.title);
 
     const simulation = d3
@@ -123,14 +143,5 @@ export default class PaperGraph extends Component<IProps> {
       node
         .attr('transform', (d) => 'translate(' + d.x + ', ' + d.y + ')');
     }
-
-    // Create an x-axis with years
-    const xAxis = d3.axisBottom(
-      d3.scaleLinear()
-        .domain([minYear, maxYear])
-        .range([padding, width - padding]))
-      .tickFormat(d3.format('d'));
-    svg.append('g')
-      .call(xAxis);
   }
 }
