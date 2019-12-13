@@ -26,7 +26,7 @@ export default class PaperGraph extends Component<IProps> {
     return <svg ref={this.canvas} className="canvas"></svg>;
   }
 
-  public componentDidMount() {
+  public componentDidUpdate(prevProps: IProps) {
     // We got a 'Paper' passed from the props.
     // To display a 'Paper' on the graph, we need to convert it to a 'PaperNode'
     const paperNodes = this.props.papers.map((p) => new PaperNode(p));
