@@ -29,7 +29,7 @@ export default class PaperGraph extends Component<IProps> {
       <div className="graph">
         <svg ref={this.canvas} className="canvas" />
 
-        <ReactTooltip getContent={(paperId) => {
+        <ReactTooltip clickable={true} getContent={(paperId) => {
           const paper = this.props.papers.find((p) => p.id === Number(paperId));
           return <PaperTooltip paper={paper}/>;
         }}/>
