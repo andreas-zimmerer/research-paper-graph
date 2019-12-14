@@ -196,12 +196,12 @@ yarn run lint
 #### Update database migrations
 1. Create a new migration script from the model changes:
 ```
-python manage.py db migrate --message 'my database migration'
+python app.py db migrate --message 'my database migration'
 ```
 
 2. Apply the migration script to the database:
 ```
-python manage.py db upgrade
+python app.py db upgrade
 ```
 
 ## Contribute
