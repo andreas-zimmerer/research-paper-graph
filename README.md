@@ -109,16 +109,15 @@ virtualenv venv
 source venv/bin/activate
 ```
 
-4. Run Flask: 
+4. Run the app: 
 ```
-flask run
+python app.py run
 ```
 
-5. Check the backend: 
+5. Check the Swagger documentation in your browser: 
 ```
-curl http://127.0.0.1:5000/
+http://127.0.0.1:5000
 ```
-should return `Hello, World!`.
 
 #### Step 3: Start the frontend
 1. Navigate to the frontend directory: 

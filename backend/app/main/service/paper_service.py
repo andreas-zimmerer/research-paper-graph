@@ -1,12 +1,11 @@
-import uuid
-import datetime
-
+"""Database service for papers"""
 from app.main import db
 from app.main.model.paper import Paper
 
 def save_new_paper(data):
+    """POST paper"""
     paper = Paper.query.filter_by(title=data['title']).first()
-    if not paper:
+    if not paper: # pylint: disable=no-else-return
         new_paper = Paper(
             title=data['title'],
             year=data['year'],
@@ -26,11 +25,14 @@ def save_new_paper(data):
         return response_object, 409
 
 def get_all_papers():
+    """GET all papers"""
     return Paper.query.all()
 
 def get_a_paper(title):
+    """GET paper by title"""
     return Paper.query.filter_by(title=title).first()
 
 def save_changes(data):
-    db.session.add(data)
-    db.session.commit()
+    """Save to database"""
+    db.session.add(data) # pylint: disable=no-member
+    db.session.commit() # pylint: disable=no-member
