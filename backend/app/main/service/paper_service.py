@@ -35,9 +35,7 @@ def get_a_paper(title):
 
 def search_paper(keyword):
     """SEARCH paper by keyword"""
-    query = "select * from paper where title like '%iss%'"
-    result = db.engine.execute(query, multi = True)
-    return result
+    return Paper.query.filter(Paper.title.like(f"%{keyword}%")).all()
 
 def save_changes(data):
     """Save to database"""

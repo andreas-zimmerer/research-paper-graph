@@ -80,7 +80,7 @@ export default class Sidebar extends Component<IProps, IState> {
 
   private handleSearch = (query: string) => {
     this.setState({isSearching: true});
-    fetch(`http://localhost:5000/paper/search?keyword=${query}`)
+    fetch(`http://localhost:5000/paper/search/${query}`)
       .then((response) => response.json())
       .then((p: IPaper[]) => {
         this.setState({

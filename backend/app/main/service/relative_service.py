@@ -31,19 +31,21 @@ def get_all_relatives(title):
             "title": row['from_title'],
             "abstract": row['from_abstract'],
             "year": row['from_year'],
-            "dependents": []
+            "citations": [],
+            "authors": [],
         }
         dictionary[to_paper] = {
             "id": to_paper,
             "title": row['to_title'],
             "abstract": row['to_abstract'],
             "year": row['to_year'],
-            "dependents": []
+            "citations": [],
+            "authors": []
         }
 
     for row in resultLink:
         from_paper = row['from_paper']
-        dictionary[from_paper]['dependents'].append(row['to_paper'])
+        dictionary[from_paper]['citations'].append(row['to_paper'])
 
     relatives = []
     for key in dictionary:
