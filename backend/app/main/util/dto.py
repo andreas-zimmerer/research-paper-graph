@@ -23,4 +23,5 @@ class RelativeDto:
         'title': fields.String(required=True, description='relative title'),
         'abstract': fields.String(required=True, description='relative title'),
         'year': fields.Integer(required=True, description='relative year'),
+        'dependents': fields.List(fields.Integer),
     })
