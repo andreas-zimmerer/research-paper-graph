@@ -33,6 +33,12 @@ def get_a_paper(title):
     """GET paper by title"""
     return Paper.query.filter_by(title=title).first()
 
+def search_paper(keyword):
+    """SEARCH paper by keyword"""
+    query = "select * from paper where title like '%iss%'"
+    result = db.engine.execute(query, multi = True)
+    return result
+
 def save_changes(data):
     """Save to database"""
     db.session.add(data) # pylint: disable=no-member
