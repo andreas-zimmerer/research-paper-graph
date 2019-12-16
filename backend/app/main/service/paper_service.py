@@ -4,9 +4,10 @@ from app.main.model.paper import Paper
 
 def save_new_paper(data):
     """POST paper"""
-    paper = Paper.query.filter_by(title=data['title']).first()
+    paper = Paper.query.filter_by(id=data['id']).first()
     if not paper: # pylint: disable=no-else-return
         new_paper = Paper(
+            id=data['id'],
             title=data['title'],
             year=data['year'],
             abstract=data['abstract']
