@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
+import ReactTooltip from 'react-tooltip';
 import { IPaper } from '../../types/paper';
 import CitationLink from './CitationLink';
 import PaperNode from './PaperNode';
+import PaperTooltip from './PaperTooltip';
 import './graph.css';
 
 /**
@@ -11,6 +13,8 @@ import './graph.css';
 interface IProps {
   // A list of papers that should be displayed.
   papers: IPaper[];
+  // One or none currently selected paper.
+  selectedPaper?: IPaper;
 }
 
 /**
@@ -23,7 +27,16 @@ export default class PaperGraph extends Component<IProps> {
 
   public render() {
     // We will paint on this SVG canvas
-    return <svg ref={this.canvas} className="canvas"></svg>;
+    return (
+      <div className="graph">
+        <svg ref={this.canvas} className="canvas" />
+
+        <ReactTooltip clickable={true} getContent={(paperId) => {
+          const paper = this.props.papers.find((p) => p.id === Number(paperId));
+          return <PaperTooltip paper={paper}/>;
+        }}/>
+      </div>
+    );
   }
 
   public componentDidUpdate(prevProps: IProps) {
@@ -55,6 +68,7 @@ export default class PaperGraph extends Component<IProps> {
   private drawGraph(nodes: PaperNode[], links: CitationLink[]) {
     const width = this.canvas.current!.clientWidth;
     const height = this.canvas.current!.clientHeight;
+    const padding = 20;
 
     // Compute the max and min years so we can adjust the scale
     let minYear = Number.MAX_VALUE;
@@ -73,13 +87,31 @@ export default class PaperGraph extends Component<IProps> {
     // Remove old elements from canvas
     svg.selectAll('*').remove();
 
+    // Create an x-axis with years
+    const xAxisScale = d3.scaleLinear()
+      .domain([minYear, maxYear])
+      .range([padding, width - padding]);
+    const xAxis = d3.axisBottom(xAxisScale)
+      .tickFormat(d3.format('d'));
+    svg.append('g')
+      .call(xAxis);
+
+    // Create vertical grid lines
+    const gridLines = d3.axisBottom(xAxisScale)
+      .tickFormat(() => '')
+      .tickSize(-height);
+    svg.append('g')
+      .attr('class', 'grid')
+      .attr('transform', `translate(0, ${height})`)
+      .call(gridLines);
+
     // Initialize the links between nodes
     const link = svg
       .selectAll('.line')
       .data(links)
       .enter()
       .append('line')
-      .style('stroke', '#aaa');
+      .attr('class', 'line');
 
     // Initialize the nodes.
     // A node is a "group" (g) consisting of a circle and text.
@@ -87,13 +119,16 @@ export default class PaperGraph extends Component<IProps> {
       .selectAll('.node')
       .data(nodes)
       .enter()
-      .append('g');
+      .append('g')
+      .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node-group node-selected' : 'node-group');
     node.append('circle')
       .attr('r', 20)
-      .style('fill', '#69b3a2');
+      .attr('class', 'node-circle')
+      .attr('data-tip', (d) => d.paper.id);
     node.append('text')
       .attr('dx', 20)
       .attr('dy', -10)
+      .attr('class', 'node-text')
       .text((d) => d.paper.title);
 
     const simulation = d3
@@ -111,7 +146,7 @@ export default class PaperGraph extends Component<IProps> {
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
       // Constrains/fixes x-position
-      node.each((d) => { d.x = (d.paper.year - minYear) * width / (maxYear - minYear); });
+      node.each((d) => { d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding; });
 
       link
         .attr('x1', (d) => d.source.x)
@@ -123,13 +158,7 @@ export default class PaperGraph extends Component<IProps> {
         .attr('transform', (d) => 'translate(' + d.x + ', ' + d.y + ')');
     }
 
-    // Create an x-axis with years
-    const xAxis = d3.axisBottom(
-      d3.scaleLinear()
-        .domain([minYear, maxYear])
-        .range([0, width]))
-      .tickFormat(d3.format('d'));
-    svg.append('g')
-      .call(xAxis);
+    // Make sure to register the new targets for tooltips after graph has been rebuilt.
+    ReactTooltip.rebuild();
   }
 }
