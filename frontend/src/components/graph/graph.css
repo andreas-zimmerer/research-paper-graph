@@ -20,6 +20,10 @@
     cursor: pointer;
 }
 
+.node-selected > .node-circle {
+    fill: #FFBE96;
+}
+
 .node-circle:hover {
     stroke-width: 2px;
 }

@@ -13,6 +13,8 @@ import './graph.css';
 interface IProps {
   // A list of papers that should be displayed.
   papers: IPaper[];
+  // One or none currently selected paper.
+  selectedPaper?: IPaper;
 }
 
 /**
@@ -118,7 +120,7 @@ export default class PaperGraph extends Component<IProps> {
       .data(nodes)
       .enter()
       .append('g')
-      .attr('class', 'node-group');
+      .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node-group node-selected' : 'node-group');
     node.append('circle')
       .attr('r', 20)
       .attr('class', 'node-circle')
