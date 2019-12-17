@@ -15,6 +15,8 @@ interface IProps {
   papers: IPaper[];
   // One or none currently selected paper.
   selectedPaper?: IPaper;
+  // Callback when a user selects a paper in the graph.
+  onSelectedPaperChanged: ((paper: IPaper) => void);
 }
 
 /**
@@ -124,7 +126,8 @@ export default class PaperGraph extends Component<IProps> {
     node.append('circle')
       .attr('r', 20)
       .attr('class', 'node-circle')
-      .attr('data-tip', (d) => d.paper.id);
+      .attr('data-tip', (d) => d.paper.id)
+      .on("click", (d) => this.props.onSelectedPaperChanged(d.paper));
     node.append('text')
       .attr('dx', 20)
       .attr('dy', -10)

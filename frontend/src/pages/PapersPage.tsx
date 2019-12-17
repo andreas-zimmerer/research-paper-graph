@@ -23,8 +23,8 @@ export default class PapersPage extends Component<IProps, IState> {
   public render() {
     return (
       <div className="page">
-        <Sidebar onSelectedPaperChanged={this.handlePaperChanged}/>
-        <PaperGraph papers={this.state.allPapers} selectedPaper={this.state.selectedPaper} />
+        <Sidebar onSelectedPaperChanged={this.handlePaperChanged} />
+        <PaperGraph papers={this.state.allPapers} selectedPaper={this.state.selectedPaper} onSelectedPaperChanged={this.handlePaperChanged} />
       </div>
     );
   }
