@@ -1,8 +1,8 @@
 export interface IPaper {
-  id: number;
+  id: string;
   title: string;
   authors: string[];
   abstract: string;
   year: number;
-  citations: number[];
+  citations: string[];
 }

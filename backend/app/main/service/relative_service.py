@@ -6,7 +6,7 @@ from collections import defaultdict
 def get_all_relatives(title):
     """GET paper relatives by paper title"""
     query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, to_title, to_abstract, to_year) as (" \
-            "select pf.*, pt.* " \
+            "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, pt.year " \
             "from paper pf, reference r, paper pt " \
             "where pf.id == r.from_paper and pf.title == '" + title + "' and pt.id == r.to_paper " \
             "" \

@@ -32,7 +32,7 @@ export default class PaperGraph extends Component<IProps> {
         <svg ref={this.canvas} className="canvas" />
 
         <ReactTooltip clickable={true} getContent={(paperId) => {
-          const paper = this.props.papers.find((p) => p.id === Number(paperId));
+          const paper = this.props.papers.find((p) => p.id === paperId);
           return <PaperTooltip paper={paper}/>;
         }}/>
       </div>
@@ -138,7 +138,7 @@ export default class PaperGraph extends Component<IProps> {
           .links(links) // and this the list of links
       )
       // This adds repulsion between nodes. Play with the number for the repulsion strength
-      .force('charge', d3.forceManyBody().strength(-40000))
+      .force('charge', d3.forceManyBody().strength(-2000))
       // This force attracts nodes to the center of the svg area
       .force('center', d3.forceCenter(width / 2, height / 2))
       .on('tick', ticked);
