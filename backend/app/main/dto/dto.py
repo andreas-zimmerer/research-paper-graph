@@ -11,7 +11,7 @@ class PaperDto:
     })
 
 class ReferenceDto:
-    api = Namespace('reference', description='reference related operations')
+    api = Namespace('reference', description='Manage references')
     reference = api.model('reference', {
         'from_paper': fields.String(required=True, description='referencing paper'),
         'to_paper': fields.String(required=True, description='referenced paper'),

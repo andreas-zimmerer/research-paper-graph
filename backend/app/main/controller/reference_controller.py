@@ -3,24 +3,50 @@ from flask import request
 from flask_restplus import Resource
 
 from ..dto.dto import ReferenceDto
-from ..service.reference_service import save_new_reference, get_all_references
+from ..service.reference_service import post, get_all, delete, get
 
 api = ReferenceDto.api
 _reference = ReferenceDto.reference
 
 @api.route('/')
-class ReferenceList(Resource):
-    """Class for all references"""
-    @api.doc('list_of_registered_references')
+class References(Resource):
+    """Handle all references"""
+    @api.response(200, 'All references have been listed.')
+    @api.doc('List all references.')
     @api.marshal_list_with(_reference, envelope='data')
     def get(self):
-        """List all registered references"""
-        return get_all_references()
+        """List all references."""
+        return get_all()
 
-    @api.response(201, 'Reference successfully created.')
-    @api.doc('create a new reference')
+    @api.response(201, 'The reference has been created.')
+    @api.response(409, 'The reference already exists.')
+    @api.doc('Create a new reference.')
     @api.expect(_reference, validate=True)
     def post(self):
-        """Creates a new Reference"""
+        """Create a new reference."""
         data = request.json
-        return save_new_reference(data=data)
+        return post(data=data)
+
+@api.route('/<source>/<sink>')
+class Reference(Resource):
+    """Handle one reference."""
+    @api.response(200, 'The reference has been found.')
+    @api.response(404, 'The reference has not been found.')
+    @api.doc('Display the reference you are looking for.')
+    @api.marshal_with(_reference)
+    def get(self, source, sink):
+        """Display the reference you are looking for."""
+        reference = get(source, sink)
+        if not reference:
+            return api.abort(404)
+        return reference
+
+    @api.response(200, 'The reference has been deleted.')
+    @api.response(404, 'The reference has not been found.')
+    @api.doc('Delete the reference you are looking for.')
+    @api.marshal_with(_reference)
+    def delete(self, source, sink):
+        """Delete the reference you are looking for."""
+        reference = self.get(source, sink)
+        delete(source, sink)
+        return reference
