@@ -90,26 +90,25 @@ cd backend
 virtualenv venv
 ```
 
-3. Install Python dependencies
-```
-pip install -r requirements.txt
-```
-
-4. [Recommended] Activate virtualenv:
+3. [Recommended] Activate virtualenv:
 ```
 source venv/bin/activate
 ```
 
-5. Run Flask: 
+4. Install Python dependencies
 ```
-flask run
+pip install -r requirements.txt
 ```
 
-6. Check the backend: 
+5. Run the app: 
 ```
-curl http://127.0.0.1:5000/
+python app.py run
 ```
-should return `Hello, World!`.
+
+6. Check the Swagger documentation in your browser: 
+```
+http://127.0.0.1:5000
+```
 
 #### Step 3: Start the frontend
 1. Navigate to the frontend directory: 
@@ -135,7 +134,10 @@ or
 yarn start
 ```
 
-4. Make sure that the frontend opens in your browser.
+4. Check the Swagger documentation in your browser: 
+```
+http://127.0.0.1:3000
+```
 
 ### How to modify the Research Analyzer
 #### Learn Flask
@@ -148,14 +150,25 @@ yarn start
  - [React + TypeScript Cheatsheets](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet#reacttypescript-cheatsheets)
  - [React: Getting Started](https://reactjs.org/docs/getting-started.html)
 
-#### Installing new packages
+#### Install new packages
 When installing new packages, make sure that they appear in the `requirements.txt` file.
 To update the `requirements.txt` file, run: 
 ```
 pip freeze > requirements.txt
 ```
 
-#### Linting
+#### Test the backend
+1. Navigate to the backend directory:
+```
+cd backend
+```
+
+2. Run all backend tests:
+```
+python app.py test
+```
+
+#### Lint
 ##### Backend
 The backend uses `pylint`:
 1. Navigate to the backend directory:
@@ -182,6 +195,17 @@ npm run lint
 or 
 ```
 yarn run lint
+```
+
+#### Update database migrations
+1. Create a new migration script from the model changes:
+```
+python app.py db migrate --message 'my database migration'
+```
+
+2. Apply the migration script to the database:
+```
+python app.py db upgrade
 ```
 
 ## Contribute
