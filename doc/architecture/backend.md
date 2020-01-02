@@ -9,7 +9,7 @@ The Flask controller manages the REST API for the frontend.
 The Service takes over the actual backend logic. 
 We use the Repository to access the database entities. 
 
-![../img/img_06.png](../img/img_06.png)
+![../img/img_06.png](../img/img_15.png)
 
 ### Repository
 The getPapers call of the repository recursively queries the database for the family of the paper.
@@ -28,18 +28,18 @@ Query:
                 
 The query will return something like this:
 
-![../img/img_07.png](../img/img_07.png)
+![../img/img_07.png](../img/img_16.png)
 
 ### Service
 The service will then transform the received family into something like this:
 
-![../img/img_08.png](../img/img_08.png)
+![../img/img_08.png](../img/img_17.png)
 
 Thereby, the service will count how often a paper is referenced in the family.
 In addition, the service pre-sorts the resulting family by time, distance, and relevance, and caches these results to 
 facilitate later filtering and sorting. To do this, the service stores the following maps locally:
 
-![../img/img_09.png](../img/img_09.png)
+![../img/img_09.png](../img/img_18.png)
 
 ### Flask Controller
 The Flask Controller acts as the REST API. 
@@ -52,6 +52,6 @@ A paper references none, one, or several papers and it is never, once, or severa
 A paper has at least one author and several authors can work on a paper from different institutes. 
 Each author and each institute have a name.
 
-![../img/img_04.png](../img/img_04.png)
+![../img/img_04.png](../img/img_13.png)
 
-![../img/img_05.png](../img/img_05.png)
+![../img/img_05.png](../img/img_14.png)
