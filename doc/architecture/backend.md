@@ -4,10 +4,10 @@ For this, the backend should compute the family of a paper and prepare the outpu
 filter quickly and the frontend can sort quickly. 
 
 ## Backend Components
-The backend consists of a Flask controller, a Service, and a Repository. 
+The backend consists of a Flask controller, a service, and a repository. 
 The Flask controller manages the REST API for the frontend. 
-The Service takes over the actual backend logic. 
-We use the Repository to access the database entities. 
+The service takes over the actual backend logic. 
+We use the repository to access the database entities. 
 
 ![../img/img_06.png](../img/img_15.png)
 
@@ -15,16 +15,19 @@ We use the Repository to access the database entities.
 The getPapers call of the repository recursively queries the database for the family of the paper.
 Query: 
                 
-                with recursive family (related, distance) as (
-                select referencing, 1 as distance
-                from references
-                where referenced = Best WebDatabases Paper Ever)
+                with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, to_title, to_abstract, to_year) as (
+                	select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, pt.year
+                    from paper pf, reference r, paper pt
+                    where pf.id == r.from_paper and pf.title == '" + title + "' and pt.id == r.to_paper
+                            
+                    	UNION ALL
                   
-                  union all
-                
-                select ref.referencing, distance + 1 as distance
-                from family fam, references ref
-                where fam.related = ref.referenced)
+                    select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as to_title, pt.abstract as to_abstract, pt.year as to_year
+                    from family f, reference r, paper pt
+                    where f.to_paper == r.from_paper and pt.id == r.to_paper)
+                            
+                select *
+                from family
                 
 The query will return something like this:
 
