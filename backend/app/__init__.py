@@ -2,10 +2,9 @@
 This file serves as the point of entry for of the webserver logic.
 """
 
-from flask import Flask
+from flask import Flask, Blueprint
 from flask_cors import CORS, cross_origin
 from flask_restplus import Api
-from flask import Blueprint # pylint: disable=ungrouped-imports
 
 from .main.controller.paper_controller import api as paper_ns
 from .main.controller.reference_controller import api as reference_ns
