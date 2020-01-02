@@ -65,22 +65,8 @@ In React, we build components hierarchically and represent them as self-defined 
 React is designed for simplicity, performance, and reusability. 
 Link: [https://reactjs.org](https://reactjs.org)
 
-### Graph Visualization Frameworks
-Graph visualization frameworks let us represent structural information as networks. 
-
-#### ECharts
-ECharts is an open source, cross-platform framework for rapidly constructing data visualizations. 
-ECharts is characterized by its high performance, ease of use, and richness of built-in interactions. 
-Link: [https://echarts.apache.org/en/index.html](https://echarts.apache.org/en/index.html)
-
-#### Chart.js
-Chart.js is an open source diagram library for designers and developers. 
-It is based on JavaScript and supports HTML5 Canvas and JSON. 
-Its high responsiveness makes Chart.js stand out.
-Link: [https://www.chartjs.org](https://www.chartjs.org)
-
-#### D3.js
-D3.js (Data Driven Documents) is a JavaScript-based library that allows you to visualize data with graphical elements in your browser. 
+### D3.js
+D3.js (Data Driven Documents) is a JavaScript-based library that allows you to represent structural information as a network in your browser.
 D3.js is based on the web standards SVG, CSS, and HTML5, which makes D3.js not only fast even with large amounts of data, but also future-proof.
 Link: [https://d3js.org](https://d3js.org)
 
@@ -99,12 +85,17 @@ Link: [https://d3js.org](https://d3js.org)
 cd backend
 ```
 
-2. Create virtualenv: 
+2. [Recommended] Create virtualenv: 
 ```
 virtualenv venv
 ```
 
-3. Activate virtualenv:
+3. Install Python dependencies
+```
+pip install -r requirements.txt
+```
+
+4. [Recommended] Activate virtualenv:
 ```
 source venv/bin/activate
 ```
