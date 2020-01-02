@@ -1,18 +1,21 @@
 """Database service for relatives"""
-from app.main import db
 from collections import defaultdict
+from app.main import db
 
 
 def get_all_relatives(title):
     """GET paper relatives by paper title"""
-    query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, to_title, to_abstract, to_year) as (" \
+    query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
+                "to_title, to_abstract, to_year) as (" \
             "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, pt.year " \
             "from paper pf, reference r, paper pt " \
             "where pf.id == r.from_paper and pf.title == '" + title + "' and pt.id == r.to_paper " \
             "" \
             "UNION ALL " \
             "" \
-            "select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as to_title, pt.abstract as to_abstract, pt.year as to_year " \
+            "select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as " \
+                "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
+                "to_title, pt.abstract as to_abstract, pt.year as to_year " \
             "from family f, reference r, paper pt " \
             "where f.to_paper == r.from_paper and pt.id == r.to_paper) " \
             "" \

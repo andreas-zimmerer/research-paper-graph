@@ -4,11 +4,13 @@ from app.main.model.reference import Reference
 
 def save_new_reference(data):
     """POST reference"""
-    reference = Reference.query.filter_by(from_paper=data['from_paper']).filter_by(to_paper=data['to_paper']).first()
-    if not reference: # pylint: disable=no-else-return
+    from_paper = data['from_paper']
+    to_paper = data['to_paper']
+    reference = Reference.query.filter_by(from_paper).filter_by(to_paper).first()
+    if not reference:
         new_reference = Reference(
-            from_paper=data['from_paper'],
-            to_paper=data['to_paper']
+            from_paper,
+            to_paper
         )
         save_changes(new_reference)
         response_object = {
@@ -29,5 +31,5 @@ def get_all_references():
 
 def save_changes(data):
     """Save to database"""
-    db.session.add(data) # pylint: disable=no-member
-    db.session.commit() # pylint: disable=no-member
+    db.session.add(data)
+    db.session.commit()

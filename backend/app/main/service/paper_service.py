@@ -5,7 +5,7 @@ from app.main.model.paper import Paper
 def save_new_paper(data):
     """POST paper"""
     paper = Paper.query.filter_by(id=data['id']).first()
-    if not paper: # pylint: disable=no-else-return
+    if not paper:
         new_paper = Paper(
             id=data['id'],
             title=data['title'],
@@ -39,5 +39,5 @@ def search_paper(keyword):
 
 def save_changes(data):
     """Save to database"""
-    db.session.add(data) # pylint: disable=no-member
-    db.session.commit() # pylint: disable=no-member
+    db.session.add(data)
+    db.session.commit()

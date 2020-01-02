@@ -6,16 +6,13 @@ from flask_bcrypt import Bcrypt # pylint: disable=import-error
 
 from .config import config_by_name
 
-# pylint: disable=invalid-name
 db = SQLAlchemy()
-# pylint: disable=invalid-name
 flask_bcrypt = Bcrypt()
 
 def create_app(config_name):
     """Initialize the backend"""
     app = Flask(__name__)
 
-    cors = CORS(app)
     app.config['CORS_HEADERS'] = 'Content-Type'
 
     app.config.from_object(config_by_name[config_name])
