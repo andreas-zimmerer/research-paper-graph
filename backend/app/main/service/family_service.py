@@ -3,13 +3,13 @@ from collections import defaultdict
 from app.main import db
 
 
-def get_all_relatives(title):
-    """GET paper relatives by paper title"""
+def get(relative):
+    """List the family of a paper."""
     query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
                 "to_title, to_abstract, to_year) as (" \
             "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, pt.year " \
             "from paper pf, reference r, paper pt " \
-            "where pf.id == r.from_paper and pf.title == '" + title + "' and pt.id == r.to_paper " \
+            "where pf.id == r.from_paper and pf.title == '" + relative + "' and pt.id == r.to_paper " \
             "" \
             "UNION ALL " \
             "" \
@@ -22,35 +22,35 @@ def get_all_relatives(title):
             "select * " \
             "from family "
 
-    result_node = db.engine.execute(query)
-    result_link = db.engine.execute(query)
+    connectionsA = db.engine.execute(query)
+    connectionsB = db.engine.execute(query)
 
     dictionary = defaultdict(list)
-    for row in result_node:
-        from_paper = row['from_paper']
-        to_paper = row['to_paper']
+    for connection in connectionsA:
+        from_paper = connection['from_paper']
+        to_paper = connection['to_paper']
         dictionary[from_paper] = {
             "id": from_paper,
-            "title": row['from_title'],
-            "abstract": row['from_abstract'],
-            "year": row['from_year'],
+            "title": connection['from_title'],
+            "abstract": connection['from_abstract'],
+            "year": connection['from_year'],
             "citations": [],
             "authors": [],
         }
         dictionary[to_paper] = {
             "id": to_paper,
-            "title": row['to_title'],
-            "abstract": row['to_abstract'],
-            "year": row['to_year'],
+            "title": connection['to_title'],
+            "abstract": connection['to_abstract'],
+            "year": connection['to_year'],
             "citations": [],
             "authors": []
         }
 
-    for row in result_link:
-        from_paper = row['from_paper']
-        dictionary[from_paper]['citations'].append(row['to_paper'])
+    for connection in connectionsB:
+        from_paper = connection['from_paper']
+        dictionary[from_paper]['citations'].append(connection['to_paper'])
 
-    relatives = []
+    family = []
     for key in dictionary:
-        relatives.append(dictionary[key])
-    return relatives
+        family.append(dictionary[key])
+    return family

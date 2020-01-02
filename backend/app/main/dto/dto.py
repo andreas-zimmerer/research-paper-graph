@@ -18,7 +18,7 @@ class ReferenceDto:
     })
 
 class RelativeDto:
-    api = Namespace('relative', description='relative related operations')
+    api = Namespace('family', description='Manage families')
     relative = api.model('relative', {
         'id': fields.String(required=True, description='relative id'),
         'title': fields.String(required=True, description='relative title'),
