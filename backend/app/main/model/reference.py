@@ -1,7 +1,7 @@
 """Database model for references"""
 from .. import db
 
-class Reference(db.Model): # pylint: disable=too-few-public-methods
+class Reference(db.Model):
     """ Reference Model for storing reference related details """
     __tablename__ = "reference"
 

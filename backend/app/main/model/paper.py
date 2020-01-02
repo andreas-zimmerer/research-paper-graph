@@ -1,7 +1,7 @@
 """Database model for papers"""
 from .. import db
 
-class Paper(db.Model): # pylint: disable=too-few-public-methods
+class Paper(db.Model):
     """ Paper Model for storing paper related details """
     __tablename__ = "paper"
 
