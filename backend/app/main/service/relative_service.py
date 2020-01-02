@@ -22,11 +22,11 @@ def get_all_relatives(title):
             "select * " \
             "from family "
 
-    resultNode = db.engine.execute(query)
-    resultLink = db.engine.execute(query)
+    result_node = db.engine.execute(query)
+    result_link = db.engine.execute(query)
 
     dictionary = defaultdict(list)
-    for row in resultNode:
+    for row in result_node:
         from_paper = row['from_paper']
         to_paper = row['to_paper']
         dictionary[from_paper] = {
@@ -46,7 +46,7 @@ def get_all_relatives(title):
             "authors": []
         }
 
-    for row in resultLink:
+    for row in result_link:
         from_paper = row['from_paper']
         dictionary[from_paper]['citations'].append(row['to_paper'])
 

@@ -5,25 +5,24 @@ from app.main.model.paper import Paper
 def save_new_paper(data):
     """POST paper"""
     paper = Paper.query.filter_by(id=data['id']).first()
-    if not paper:
-        new_paper = Paper(
-            id=data['id'],
-            title=data['title'],
-            year=data['year'],
-            abstract=data['abstract']
-        )
-        save_changes(new_paper)
-        response_object = {
-            'status': 'success',
-            'message': 'Successfully registered.'
-        }
-        return response_object, 201
-    else:
+    if paper:
         response_object = {
             'status': 'fail',
             'message': 'Paper already exists'
         }
         return response_object, 409
+    new_paper = Paper(
+        id=data['id'],
+        title=data['title'],
+        year=data['year'],
+        abstract=data['abstract']
+    )
+    save_changes(new_paper)
+    response_object = {
+        'status': 'success',
+        'message': 'Successfully registered.'
+    }
+    return response_object, 201
 
 def get_all_papers():
     """GET all papers"""

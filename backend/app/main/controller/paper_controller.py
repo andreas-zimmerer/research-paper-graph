@@ -38,8 +38,7 @@ class Paper(Resource):
         paper = get_a_paper(title)
         if not paper:
             return api.abort(404)
-        else:
-            return paper
+        return paper
 
 @api.route('/search/<keyword>')
 @api.param('keyword', 'The searched keyword')

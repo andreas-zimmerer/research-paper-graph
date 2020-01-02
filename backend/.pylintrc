@@ -141,7 +141,6 @@ disable=print-statement,
         comprehension-escape,
         invalid-name,
         no-self-use,
-        no-else-return,
         no-member,
         too-few-public-methods,
         duplicate-code
