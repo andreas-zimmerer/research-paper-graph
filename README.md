@@ -134,7 +134,7 @@ or
 yarn start
 ```
 
-4. Check the Swagger documentation in your browser: 
+4. Check the frontend in your browser: 
 ```
 http://127.0.0.1:3000
 ```
