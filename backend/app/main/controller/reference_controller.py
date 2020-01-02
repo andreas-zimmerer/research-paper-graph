@@ -2,7 +2,7 @@
 from flask import request
 from flask_restplus import Resource
 
-from ..util.dto import ReferenceDto
+from ..dto.dto import ReferenceDto
 from ..service.reference_service import save_new_reference, get_all_references
 
 api = ReferenceDto.api

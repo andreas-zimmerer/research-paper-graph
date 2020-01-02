@@ -14,9 +14,9 @@ from .main.controller.relative_controller import api as relative_ns
 blueprint = Blueprint('api', __name__)
 
 api = Api(blueprint,
-          title='FLASK RESTPLUS API BOILER-PLATE WITH JWT',
+          title='Research Paper Graph',
           version='1.0',
-          description='a boilerplate for flask restplus web service'
+          description='Research Paper Graph'
           )
 
 api.add_namespace(paper_ns, path='/paper')

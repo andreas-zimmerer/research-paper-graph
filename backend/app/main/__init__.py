@@ -1,8 +1,7 @@
 """Control all backend features"""
 from flask import Flask
-from flask_cors import CORS, cross_origin
-from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
-from flask_bcrypt import Bcrypt # pylint: disable=import-error
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 
 from .config import config_by_name
 
