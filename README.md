@@ -85,22 +85,27 @@ Link: [https://d3js.org](https://d3js.org)
 cd backend
 ```
 
-2. Create virtualenv: 
+2. [Recommended] Create virtualenv: 
 ```
 virtualenv venv
 ```
 
-3. Activate virtualenv:
+3. Install Python dependencies
+```
+pip install -r requirements.txt
+```
+
+4. [Recommended] Activate virtualenv:
 ```
 source venv/bin/activate
 ```
 
-4. Run Flask: 
+5. Run Flask: 
 ```
 flask run
 ```
 
-5. Check the backend: 
+6. Check the backend: 
 ```
 curl http://127.0.0.1:5000/
 ```
