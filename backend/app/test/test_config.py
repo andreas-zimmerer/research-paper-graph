@@ -18,7 +18,7 @@ class TestDevelopmentConfig(TestCase):
         self.assertFalse(app.config['SECRET_KEY'] == 'my_precious')
         self.assertTrue(app.config['DEBUG'] is True)
         self.assertFalse(current_app is None)
-        uri = 'sqlite:///' + os.path.join(basedir, 'flask_boilerplate_main.db')
+        uri = 'sqlite:///' + os.path.join(basedir, 'research_paper_graph_main.db')
         self.assertTrue(
             app.config['SQLALCHEMY_DATABASE_URI'] == uri
         )
@@ -35,7 +35,7 @@ class TestTestingConfig(TestCase):
         """Check if the app is in test"""
         self.assertFalse(app.config['SECRET_KEY'] == 'my_precious')
         self.assertTrue(app.config['DEBUG'])
-        uri = 'sqlite:///' + os.path.join(basedir, 'flask_boilerplate_test.db')
+        uri = 'sqlite:///' + os.path.join(basedir, 'research_paper_graph_test.db')
         self.assertTrue(
             app.config['SQLALCHEMY_DATABASE_URI'] == uri
         )
