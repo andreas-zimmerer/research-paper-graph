@@ -2,38 +2,38 @@
 from app.main import db
 from app.main.model.paper import Paper
 
-def save_new_paper(data):
-    """POST paper"""
+def post(data):
+    """Create a new paper."""
     paper = Paper.query.filter_by(id=data['id']).first()
     if paper:
-        response_object = {
-            'status': 'fail',
-            'message': 'Paper already exists'
+        response = {
+            'status': 'Failure',
+            'message': 'The paper already exists.'
         }
-        return response_object, 409
-    new_paper = Paper(
-        id=data['id'],
-        title=data['title'],
-        year=data['year'],
-        abstract=data['abstract']
-    )
-    save_changes(new_paper)
-    response_object = {
-        'status': 'success',
-        'message': 'Successfully registered.'
+        return response, 409
+    paper = Paper(id=data['id'], title=data['title'], year=data['year'], abstract=data['abstract'])
+    save_changes(paper)
+    response = {
+        'status': 'Success',
+        'message': 'The paper has been created.'
     }
-    return response_object, 201
+    return response, 201
 
-def get_all_papers():
-    """GET all papers"""
+def delete(title):
+    """Delete the paper with the title you are looking for."""
+    Paper.query.filter_by(title=title).delete()
+    db.session.commit()
+
+def get_all():
+    """List all papers."""
     return Paper.query.all()
 
-def get_a_paper(title):
-    """GET paper by title"""
+def get(title):
+    """Display the paper with the title you are looking for."""
     return Paper.query.filter_by(title=title).first()
 
-def search_paper(keyword):
-    """SEARCH paper by keyword"""
+def search(keyword):
+    """List all papers that contain a searched keyword."""
     return Paper.query.filter(Paper.title.like(f"%{keyword}%")).all()
 
 def save_changes(data):

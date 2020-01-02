@@ -3,50 +3,60 @@ from flask_restplus import Resource
 from flask import request
 
 from ..dto.dto import PaperDto
-from ..service.paper_service import save_new_paper, get_all_papers, get_a_paper, search_paper
+from ..service.paper_service import post, get_all, get, search, delete
 
 api = PaperDto.api
 _paper = PaperDto.paper
 
 @api.route('/')
-class PaperList(Resource):
-    """Class for all papers"""
-    @api.doc('list_of_registered_papers')
+class Papers(Resource):
+    """Handle all papers."""
+    @api.response(200, 'All papers have been listed.')
+    @api.doc('List all papers.')
     @api.marshal_list_with(_paper, envelope='data')
     def get(self):
-        """List all registered papers"""
-        return get_all_papers()
+        """List all papers."""
+        return get_all()
 
-    @api.response(201, 'Paper successfully created.')
-    @api.doc('create a new paper')
+    @api.response(201, 'The paper has been created.')
+    @api.response(409, 'The paper already exists.')
+    @api.doc('Create a new paper.')
     @api.expect(_paper, validate=True)
     def post(self):
-        """Creates a new Paper"""
+        """Create a new paper."""
         data = request.json
-        return save_new_paper(data=data)
-
+        return post(data=data)
 
 @api.route('/<title>')
-@api.param('title', 'The Paper title')
-@api.response(404, 'Paper not found.')
 class Paper(Resource):
-    """Class for one paper"""
-    @api.doc('get a paper')
+    """Handle one paper."""
+    @api.response(200, 'The paper has been found.')
+    @api.response(404, 'The paper has not been found.')
+    @api.doc('Display the paper with the title you are looking for.')
     @api.marshal_with(_paper)
     def get(self, title):
-        """get a paper given its title"""
-        paper = get_a_paper(title)
+        """Display the paper with the title you are looking for."""
+        paper = get(title)
         if not paper:
             return api.abort(404)
         return paper
 
+    @api.response(200, 'The paper has been deleted.')
+    @api.response(404, 'The paper has not been found.')
+    @api.doc('Delete the paper with the title you are looking for.')
+    @api.marshal_with(_paper)
+    def delete(self, title):
+        """Delete the paper with the title you are looking for."""
+        paper = self.get(title)
+        delete(title)
+        return paper
+
 @api.route('/search/<keyword>')
-@api.param('keyword', 'The searched keyword')
-class PaperSearch(Resource):
-    """Class for searching papers"""
-    @api.doc('search papers')
+class KeywordPapers(Resource):
+    """Handle all papers that contain a keyword."""
+    @api.response(200, 'All papers that contain the searched keyword have been listed.')
+    @api.doc('List all papers that contain a searched keyword.')
     @api.marshal_list_with(_paper)
     def get(self, keyword):
-        """search papers for a keyword"""
-        result = search_paper(keyword)
-        return result
+        """List all papers that contain a searched keyword."""
+        return search(keyword)
