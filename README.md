@@ -90,22 +90,22 @@ cd backend
 virtualenv venv
 ```
 
-3. Install Python dependencies
-```
-pip install -r requirements.txt
-```
-
-4. [Recommended] Activate virtualenv:
+3. [Recommended] Activate virtualenv:
 ```
 source venv/bin/activate
 ```
 
-4. Run the app: 
+4. Install Python dependencies
+```
+pip install -r requirements.txt
+```
+
+5. Run the app: 
 ```
 python app.py run
 ```
 
-5. Check the Swagger documentation in your browser: 
+6. Check the Swagger documentation in your browser: 
 ```
 http://127.0.0.1:5000
 ```
@@ -134,7 +134,10 @@ or
 yarn start
 ```
 
-4. Make sure that the frontend opens in your browser.
+4. Check the frontend in your browser: 
+```
+http://127.0.0.1:3000
+```
 
 ### How to modify the Research Analyzer
 #### Learn Flask
@@ -152,6 +155,17 @@ When installing new packages, make sure that they appear in the `requirements.tx
 To update the `requirements.txt` file, run: 
 ```
 pip freeze > requirements.txt
+```
+
+#### Test the backend
+1. Navigate to the backend directory:
+```
+cd backend
+```
+
+2. Run all backend tests:
+```
+python app.py test
 ```
 
 #### Lint
