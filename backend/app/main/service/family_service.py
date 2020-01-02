@@ -9,7 +9,8 @@ def get(relative):
                 "to_title, to_abstract, to_year) as (" \
             "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, pt.year " \
             "from paper pf, reference r, paper pt " \
-            "where pf.id == r.from_paper and pf.title == '" + relative + "' and pt.id == r.to_paper " \
+            "where pf.id == r.from_paper and pf.title == '" + relative + \
+                "' and pt.id == r.to_paper " \
             "" \
             "UNION ALL " \
             "" \
