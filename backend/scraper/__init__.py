@@ -26,6 +26,8 @@ def scrape():
 
         # Get all references
         citations = paper['citations']
+        if citations == []:
+            citations = paper['references']
         for citation in citations:
             citationId = citation['paperId']
             post_reference(paperId, citationId)
