@@ -1,4 +1,4 @@
-"""Database controller for papers"""
+"""Paper Controller"""
 from flask_restplus import Resource
 from flask import request
 

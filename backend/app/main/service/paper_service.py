@@ -1,4 +1,4 @@
-"""Database service for papers"""
+"""Paper Service"""
 from app.main import db
 from app.main.model.paper import Paper
 

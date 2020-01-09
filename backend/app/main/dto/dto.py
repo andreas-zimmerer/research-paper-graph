@@ -27,3 +27,10 @@ class RelativeDto:
         'citations': fields.List(fields.String),
         'authors': fields.List(fields.String),
     })
+
+class AuthorDto:
+    api = Namespace('author', description='Manage authors')
+    author = api.model('author', {
+        'id': fields.String(required=True, description='author id'),
+        'name': fields.String(required=True, description='author name')
+    })

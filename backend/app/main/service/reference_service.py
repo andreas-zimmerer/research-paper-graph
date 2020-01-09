@@ -1,4 +1,4 @@
-"""Database service for references"""
+"""Reference Service"""
 from app.main import db
 from app.main.model.reference import Reference
 

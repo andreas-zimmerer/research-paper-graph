@@ -1,4 +1,4 @@
-"""Database controller for relatives"""
+"""Family Controller"""
 from flask_restplus import Resource
 
 from ..dto.dto import RelativeDto

@@ -1,4 +1,4 @@
-"""Database controller for references"""
+"""Reference Controller"""
 from flask import request
 from flask_restplus import Resource
 
