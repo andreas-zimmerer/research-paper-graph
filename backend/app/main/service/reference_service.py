@@ -22,6 +22,11 @@ def post(data):
     }
     return response, 201
 
+def delete_all():
+    """Delete all references."""
+    Reference.query.delete()
+    db.session.commit()
+
 def get_all():
     """List all references."""
     return Reference.query.all()
