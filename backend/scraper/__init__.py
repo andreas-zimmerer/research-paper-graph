@@ -33,7 +33,7 @@ def scrape():
 
 def get_all_papers():
     """Determine the ids of all relevant research papers."""
-    authorIds = [143993045, 144122431]
+    authorIds = range(143993044, 144122432)
     paperIds = []
     for authorId in authorIds:
         author = ss.author(authorId)
