@@ -2,7 +2,7 @@
 from flask_restplus import Resource
 from flask import request
 
-from ..dto.dto import PaperDto
+from ..dto.paperDto import PaperDto
 from ..service.paper_service import post, get_all, get, search, delete_all, delete
 
 api = PaperDto.api

@@ -2,7 +2,7 @@
 from flask import request
 from flask_restplus import Resource
 
-from ..dto.dto import ReferenceDto
+from ..dto.referenceDto import ReferenceDto
 from ..service.reference_service import post, get_all, delete, get, delete_all
 
 api = ReferenceDto.api

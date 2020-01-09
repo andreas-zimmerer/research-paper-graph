@@ -2,7 +2,7 @@
 from flask_restplus import Resource
 from flask import request
 
-from ..dto.dto import AuthorDto
+from ..dto.authorDto import AuthorDto
 from ..service.author_service import post, get_all, get, delete_all, delete
 
 api = AuthorDto.api
