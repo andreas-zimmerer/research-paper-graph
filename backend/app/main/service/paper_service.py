@@ -24,6 +24,11 @@ def delete(title):
     Paper.query.filter_by(title=title).delete()
     db.session.commit()
 
+def delete_all():
+    """Delete all papers."""
+    Paper.query.delete()
+    db.session.commit()
+
 def get_all():
     """List all papers."""
     return Paper.query.all()

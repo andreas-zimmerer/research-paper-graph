@@ -3,7 +3,7 @@ from flask_restplus import Resource
 from flask import request
 
 from ..dto.dto import PaperDto
-from ..service.paper_service import post, get_all, get, search, delete
+from ..service.paper_service import post, get_all, get, search, delete_all, delete
 
 api = PaperDto.api
 _paper = PaperDto.paper
@@ -26,6 +26,13 @@ class Papers(Resource):
         """Create a new paper."""
         data = request.json
         return post(data=data)
+
+    @api.response(200, 'All papers have been deleted.')
+    @api.doc('Delete all papers.')
+    @api.marshal_list_with(_paper, envelope='data')
+    def delete(self):
+        """Delete all papers."""
+        return delete_all()
 
 @api.route('/<title>')
 class Paper(Resource):
