@@ -1,8 +1,8 @@
-"""Database model for papers"""
+"""Paper Model"""
 from .. import db
 
 class Paper(db.Model):
-    """ Paper Model for storing paper related details """
+    """Paper Model"""
     __tablename__ = "paper"
 
     id = db.Column(db.String(42), primary_key=True)

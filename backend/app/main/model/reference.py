@@ -1,8 +1,8 @@
-"""Database model for references"""
+"""Reference Model"""
 from .. import db
 
 class Reference(db.Model):
-    """ Reference Model for storing reference related details """
+    """Reference Model"""
     __tablename__ = "reference"
 
     id = db.Column(db.Integer, primary_key=True)

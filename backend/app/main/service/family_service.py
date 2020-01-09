@@ -1,4 +1,4 @@
-"""Database service for relatives"""
+"""Family Service"""
 from collections import defaultdict
 from app.main import db
 

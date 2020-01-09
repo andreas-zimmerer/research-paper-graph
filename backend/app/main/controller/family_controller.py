@@ -1,7 +1,7 @@
-"""Database controller for relatives"""
+"""Family Controller"""
 from flask_restplus import Resource
 
-from ..dto.dto import RelativeDto
+from ..dto.relativeDto import RelativeDto
 from ..service.family_service import get
 
 api = RelativeDto.api

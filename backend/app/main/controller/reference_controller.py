@@ -1,9 +1,9 @@
-"""Database controller for references"""
+"""Reference Controller"""
 from flask import request
 from flask_restplus import Resource
 
-from ..dto.dto import ReferenceDto
-from ..service.reference_service import post, get_all, delete, get
+from ..dto.referenceDto import ReferenceDto
+from ..service.reference_service import post, get_all, delete, get, delete_all
 
 api = ReferenceDto.api
 _reference = ReferenceDto.reference
@@ -26,6 +26,13 @@ class References(Resource):
         """Create a new reference."""
         data = request.json
         return post(data=data)
+
+    @api.response(200, 'All references have been deleted.')
+    @api.doc('Delete all references.')
+    @api.marshal_list_with(_reference, envelope='data')
+    def delete(self):
+        """Delete all references."""
+        return delete_all()
 
 @api.route('/<source>/<sink>')
 class Reference(Resource):

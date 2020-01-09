@@ -1,4 +1,4 @@
-"""Database service for references"""
+"""Reference Service"""
 from app.main import db
 from app.main.model.reference import Reference
 
@@ -21,6 +21,11 @@ def post(data):
         'message': 'The reference has been created.'
     }
     return response, 201
+
+def delete_all():
+    """Delete all references."""
+    Reference.query.delete()
+    db.session.commit()
 
 def get_all():
     """List all references."""

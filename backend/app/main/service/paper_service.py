@@ -1,4 +1,4 @@
-"""Database service for papers"""
+"""Paper Service"""
 from app.main import db
 from app.main.model.paper import Paper
 
@@ -22,6 +22,11 @@ def post(data):
 def delete(title):
     """Delete the paper with the title you are looking for."""
     Paper.query.filter_by(title=title).delete()
+    db.session.commit()
+
+def delete_all():
+    """Delete all papers."""
+    Paper.query.delete()
     db.session.commit()
 
 def get_all():
