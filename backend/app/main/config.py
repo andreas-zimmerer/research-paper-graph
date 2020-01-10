@@ -1,7 +1,7 @@
 """Configure different execution environments"""
 import os
 
-postgres_local_base = 'postgresql://localhost/appdb'
+postgres_local_base = 'postgresql://localhost/researchgraph'
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
