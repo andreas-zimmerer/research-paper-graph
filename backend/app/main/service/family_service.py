@@ -7,7 +7,8 @@ def get(relative):
     """List the family of a paper."""
     query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
                 "to_title, to_abstract, to_year, to_distance) as (" \
-            "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, pt.year, 1 " \
+            "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, " \
+            "pt.year, 1 " \
             "from paper pf, reference r, paper pt " \
             "where pf.id == r.from_paper and pf.title == '" + relative + \
                 "' and pt.id == r.to_paper " \
