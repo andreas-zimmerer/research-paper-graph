@@ -6,8 +6,8 @@ from app.main import db
 def get(relative):
     """List the family of a paper."""
     query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
-                "to_title, to_abstract, to_year) as (" \
-            "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, pt.year " \
+                "to_title, to_abstract, to_year, to_distance) as (" \
+            "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, pt.year, 1 " \
             "from paper pf, reference r, paper pt " \
             "where pf.id == r.from_paper and pf.title == '" + relative + \
                 "' and pt.id == r.to_paper " \
@@ -16,9 +16,9 @@ def get(relative):
             "" \
             "select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as " \
                 "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
-                "to_title, pt.abstract as to_abstract, pt.year as to_year " \
+                "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
             "from family f, reference r, paper pt " \
-            "where f.to_paper == r.from_paper and pt.id == r.to_paper) " \
+            "where f.to_distance < 5 and f.to_paper == r.from_paper and pt.id == r.to_paper) " \
             "" \
             "select * " \
             "from family "
