@@ -2,15 +2,19 @@
 from collections import defaultdict
 from app.main import db
 
-def get_all(relative):
+def get(relative, distance, year):
     """List all relatives of a paper."""
+    distance = int(distance)
+    distance = max(1, distance)
+    distance = min(5, distance)
+
     query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
                 "to_title, to_abstract, to_year, to_distance) as (" \
             "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, " \
             "pt.year, 1 " \
             "from paper pf, reference r, paper pt " \
-            "where pf.id = r.from_paper and pf.title = '" + relative + \
-                "' and pt.id = r.to_paper " \
+            "where pf.id = r.from_paper and pf.title like '" + relative + \
+                "' and pt.id = r.to_paper and pt.year > " + str(year) + " " \
             "" \
             "UNION ALL " \
             "" \
@@ -18,43 +22,12 @@ def get_all(relative):
                 "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
                 "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
             "from family f, reference r, paper pt " \
-            "where f.to_distance < 5 and f.to_paper = r.from_paper and pt.id = r.to_paper) " \
+            "where f.to_distance < " + str(distance) + " and f.to_paper = r.from_paper and " \
+                "pt.id = r.to_paper and pt.year > " + str(year) + ") " \
             "" \
             "select * " \
             "from family "
 
-    family = get(query)
-    return family
-
-def get_by_distance(relative, distance):
-    """List all relatives of a paper that are no more away than a given distance."""
-    distance = int(distance)
-    distance = max(1, distance)
-    distance = min(5, distance)
-    query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
-            "to_title, to_abstract, to_year, to_distance) as (" \
-            "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, " \
-            "pt.year, 1 " \
-            "from paper pf, reference r, paper pt " \
-            "where pf.id = r.from_paper and pf.title = '" + relative + \
-            "' and pt.id = r.to_paper " \
-            "" \
-            "UNION ALL " \
-            "" \
-            "select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as " \
-            "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
-            "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
-            "from family f, reference r, paper pt " \
-            "where f.to_distance < " + str(distance) + " and f.to_paper = r.from_paper and pt.id = r.to_paper) " \
-            "" \
-            "select * " \
-            "from family "
-
-    family = get(query)
-    return family
-
-def get(query):
-    """Get all papers that the query specifies."""
     connectionsA = db.engine.execute(query)
     connectionsB = db.engine.execute(query)
 
