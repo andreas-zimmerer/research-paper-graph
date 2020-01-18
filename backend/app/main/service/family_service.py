@@ -2,7 +2,7 @@
 from collections import defaultdict
 from app.main import db
 
-def get(relative, distance, year):
+def get(relative, distance, year, citations):
     """List all relatives of a paper."""
     distance = int(distance)
     distance = max(1, distance)
@@ -10,8 +10,8 @@ def get(relative, distance, year):
 
     query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
                 "to_title, to_abstract, to_year, to_distance) as (" \
-            "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, " \
-            "pt.year, 1 " \
+            "select distinct pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, " \
+                "pt.abstract, pt.year, 1 " \
             "from paper pf, reference r, paper pt " \
             "where pf.id = r.from_paper and pf.title like '" + relative + \
                 "' and pt.id = r.to_paper and pt.year > " + str(year) + " " \
@@ -25,8 +25,13 @@ def get(relative, distance, year):
             "where f.to_distance < " + str(distance) + " and f.to_paper = r.from_paper and " \
                 "pt.id = r.to_paper and pt.year > " + str(year) + ") " \
             "" \
-            "select * " \
-            "from family "
+            "select f.*, r.relevance " \
+            "from family f inner join " \
+                "(select to_paper, count(to_paper) as relevance " \
+                "from family " \
+                "group by to_paper) r " \
+            "on f.to_paper = r.to_paper " \
+            "where r.relevance > " + str(citations) + " "
 
     connectionsA = db.engine.execute(query)
     connectionsB = db.engine.execute(query)

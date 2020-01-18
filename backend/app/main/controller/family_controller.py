@@ -7,13 +7,13 @@ from ..service.family_service import get
 api = RelativeDto.api
 _relative = RelativeDto.relative
 
-@api.route('/<relative>/<distance>/<year>')
+@api.route('/<relative>/<distance>/<year>/<citations>')
 class Family(Resource):
     """Handle a paper family."""
     @api.response(200, 'The family of the paper has been listed.')
     @api.response(404, 'The paper has not been found.')
     @api.doc('List the family of the paper.')
     @api.marshal_with(_relative)
-    def get(self, relative, distance, year):
+    def get(self, relative, distance, year, citations):
         """List all relatives of a paper."""
-        return get(relative, distance, year)
+        return get(relative, distance, year, citations)
