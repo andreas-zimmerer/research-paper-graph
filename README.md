@@ -176,9 +176,14 @@ The backend uses `pylint`:
 cd backend
 ```
 
-2. Run pylint:
+2. Lint the app with pylint:
 ```
 pylint app
+```
+
+2. Lint the scraper with pylint:
+```
+pylint scraper
 ```
 
 ##### Frontend
