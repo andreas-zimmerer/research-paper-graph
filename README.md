@@ -201,7 +201,7 @@ cd backend
 pylint app
 ```
 
-2. Lint the scraper with pylint:
+3. Lint the scraper with pylint:
 ```
 pylint scraper
 ```
