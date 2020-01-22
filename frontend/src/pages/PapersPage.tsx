@@ -24,7 +24,10 @@ export default class PapersPage extends Component<IProps, IState> {
     return (
       <div className="page">
         <Sidebar onSelectedPaperChanged={this.handlePaperChanged} />
-        <PaperGraph papers={this.state.allPapers} selectedPaper={this.state.selectedPaper} onSelectedPaperChanged={this.handlePaperChanged} />
+        <PaperGraph papers={this.state.allPapers}
+                    selectedPaper={this.state.selectedPaper}
+                    onSelectedPaperChanged={this.handlePaperChanged}
+        />
       </div>
     );
   }
@@ -35,7 +38,7 @@ export default class PapersPage extends Component<IProps, IState> {
     if (selectedPaper === undefined) {
       return;
     }
-    
+
     // Fetch the family of papers that are connected to this paper
     fetch('http://localhost:5000/search?keyword=')
       .then((response) => response.json())
