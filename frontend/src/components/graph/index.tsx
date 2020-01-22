@@ -20,6 +20,21 @@ interface IProps {
 }
 
 /**
+ * Truncates a string and appends "…" at the end.
+ * Adapted from: https://stackoverflow.com/a/1199420/4777124
+ * @param s The string to be truncated.
+ * @param length The new length of the string.
+ * @param useWordBoundary Whether to only split at word boundaries (might result in an even shorter string).
+ */
+const truncateString = (s: string, length: number, useWordBoundary: boolean) => {
+    if (s.length <= length) { return s; }
+    const subString = s.substr(0, length - 1);
+    return (useWordBoundary ?
+      subString.substr(0, subString.lastIndexOf(' '))
+      : subString) + '…';
+};
+
+/**
  * The PaperGraph displays a list of papers and their connections.
  * It uses D3 network graphs.
  * See also https://www.d3-graph-gallery.com/network.html
@@ -132,7 +147,7 @@ export default class PaperGraph extends Component<IProps> {
       .attr('dx', 20)
       .attr('dy', -10)
       .attr('class', 'node-text')
-      .text((d) => d.paper.title);
+      .text((d) => truncateString(d.paper.title, 20, true));
 
     const simulation = d3
       .forceSimulation(nodes) // Force algorithm is applied to papers
