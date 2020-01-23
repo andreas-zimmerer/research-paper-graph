@@ -64,4 +64,5 @@ def get(relative, distance, year, citations):
     family = []
     for key in dictionary:
         family.append(dictionary[key])
+    family = sorted(family, key=lambda paper: paper['year'])
     return family
