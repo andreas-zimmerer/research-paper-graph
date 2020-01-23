@@ -26,8 +26,7 @@ export default class PapersPage extends Component<IProps, IState> {
         <Sidebar onSelectedPaperChanged={this.handlePaperChanged} />
         <PaperGraph papers={this.state.allPapers}
                     selectedPaper={this.state.selectedPaper}
-                    onSelectedPaperChanged={this.handlePaperChanged}
-        />
+                    onSelectedPaperChanged={this.handlePaperChanged} />
       </div>
     );
   }
