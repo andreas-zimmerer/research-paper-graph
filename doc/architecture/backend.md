@@ -12,7 +12,8 @@ We use the repository to access the database entities.
 ![../img/img_06.png](../img/img_15.png)
 
 ### Repository
-The getPapers call of the repository recursively queries the database for the family of the paper.
+The `getPapers` call of the repository recursively queries the database for the family of the paper.
+
 Query: 
                 
                 with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, to_title, to_abstract, to_year) as (
