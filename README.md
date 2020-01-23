@@ -6,8 +6,8 @@ For example, if paper C is based on papers A and B and paper B is based on paper
 ![./doc/img/img_01.png](./doc/img/img_01.png)
 
 ## Build Status
-[![Actions Status](https://github.com/Jibbow/research-paper-graph/workflows/.github/workflows/ci-backend.yml/badge.svg)](https://github.com/Jibbow/research-paper-graph/actions)
-[![Actions Status](https://github.com/Jibbow/research-paper-graph/workflows/.github/workflows/ci-frontend.yml/badge.svg)](https://github.com/Jibbow/research-paper-graph/actions)
+[![Actions Status](https://github.com/Jibbow/research-paper-graph/workflows/CI%20Pipeline%20Backend/badge.svg)](https://github.com/Jibbow/research-paper-graph/actions?query=workflow%3A%22CI+Pipeline+Backend%22)
+[![Actions Status](https://github.com/Jibbow/research-paper-graph/workflows/CI%20Pipeline%20Frontend/badge.svg)](https://github.com/Jibbow/research-paper-graph/actions?query=workflow%3A%22CI+Pipeline+Frontend%22)
 
 ## Motivation
 When we read a paper for our research and are interested in further work on our topic, 
