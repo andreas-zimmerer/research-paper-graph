@@ -3,6 +3,7 @@ This file serves as the point of entry for of the webserver logic.
 """
 
 from flask import Flask, Blueprint
+from flask_cors import CORS, cross_origin
 from flask_restplus import Api
 
 from .main.controller.paper_controller import api as paper_ns
@@ -25,3 +26,7 @@ api.add_namespace(author_ns, path='/author')
 api.add_namespace(write_ns, path='/write')
 api.add_namespace(family_ns, path='/family')
 
+app = Flask(__name__)
+
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
