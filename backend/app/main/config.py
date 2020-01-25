@@ -20,7 +20,7 @@ class TestingConfig(Config):
     """Configure test environment"""
     DEBUG = True
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/research'
+    SQLALCHEMY_DATABASE_URI = postgres_local_base
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
