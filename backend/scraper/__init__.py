@@ -52,8 +52,7 @@ def post_paper(paper_id, paper_title, paper_abstract, paper_year):
     data = {'id':paper_id,
             'title':paper_title,
             'abstract':paper_abstract,
-            'year':paper_year,
-            'authors':['kemper', 'neumann']
+            'year':paper_year
             }
     r = requests.post(url='http://127.0.0.1:5000/paper/', json=data)
     print(r.status_code)
