@@ -14,7 +14,7 @@ const App: React.FC = () => {
     <div className="App">
       <BrowserRouter>
         <Navbar bg="light" expand="lg">
-          <Navbar.Brand as={Link} to="/home">Research Paper Graph</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/">Research Paper Graph</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
@@ -29,7 +29,7 @@ const App: React.FC = () => {
         </Navbar>
 
         <Switch>
-          <Route exact path="/home" component={PapersPage} />
+          <Route exact path="/" component={PapersPage} />
           <Route exact path="/papers" component={PapersPage}/>
           <Route exact path="/areas" component={AreasPage} />
           <Route exact path="/scientists" component={ScientistsPage} />

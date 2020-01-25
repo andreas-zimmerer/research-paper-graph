@@ -1,6 +1,63 @@
+.graph {
+    width: 100%;
+    height: 100%;
+}
+
 .canvas {
     margin-left: 350px;
     margin-right: 50px;
     height: 100%;
     width: calc(100% - 400px);
+}
+
+.line {
+    stroke: #aaa;
+}
+
+.node-circle {
+    fill: #69b3a2;
+    stroke: #555;
+    cursor: pointer;
+}
+
+.node-selected > .node-circle {
+    fill: #FFBE96;
+}
+
+.node-circle:hover {
+    stroke-width: 2px;
+}
+
+.node-text {
+    fill: #555;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.6;
+  shape-rendering: crispEdges;
+}
+
+.grid {
+    stroke-dasharray: 3; 
+}
+
+.grid path {
+  stroke-width: 0;
+}
+
+.paper-tooltip {
+    width: 300px;
+}
+
+.paper-tooltip .title {
+    font-size: 1.5em;
+}
+
+.paper-tooltip .authors {
+    color: #bbb;
+}
+
+.paper-tooltip .abstract {
+    margin-top: 1em;
 }
