@@ -28,6 +28,7 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 more-itertools==8.0.2
 post==2019.4.13
+psycopg2-binary==2.8.4
 public==2019.4.13
 pycparser==2.19
 PyJWT==1.7.1

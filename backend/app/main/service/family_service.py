@@ -6,7 +6,7 @@ def get(relative, distance, year, citations):
     """List all relatives of a paper."""
     distance = int(distance)
     distance = max(1, distance)
-    distance = min(5, distance)
+    distance = min(3, distance)
 
     query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
                 "to_title, to_abstract, to_year, to_distance) as (" \
