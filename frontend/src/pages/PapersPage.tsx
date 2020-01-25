@@ -39,7 +39,7 @@ export default class PapersPage extends Component<IProps, IState> {
     }
 
     // Fetch the family of papers that are connected to this paper
-    fetch(`http://localhost:5000/family/${selectedPaper.title}`)
+    fetch(`http://localhost:5000/family/${selectedPaper.title}/3/0/1`)
       .then((response) => response.json())
       .then((p: IPaper[]) => this.setState({allPapers: p}));
   }
