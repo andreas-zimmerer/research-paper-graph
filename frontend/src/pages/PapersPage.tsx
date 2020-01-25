@@ -26,8 +26,7 @@ export default class PapersPage extends Component<IProps, IState> {
         <Sidebar onSelectedPaperChanged={this.handlePaperChanged} />
         <PaperGraph papers={this.state.allPapers}
                     selectedPaper={this.state.selectedPaper}
-                    onSelectedPaperChanged={this.handlePaperChanged}
-        />
+                    onSelectedPaperChanged={this.handlePaperChanged} />
       </div>
     );
   }
@@ -40,7 +39,7 @@ export default class PapersPage extends Component<IProps, IState> {
     }
 
     // Fetch the family of papers that are connected to this paper
-    fetch(`http://localhost:5000/relative/${selectedPaper.title}`)
+    fetch(`http://localhost:5000/family/${selectedPaper.title}`)
       .then((response) => response.json())
       .then((p: IPaper[]) => this.setState({allPapers: p}));
   }
