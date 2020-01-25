@@ -47,14 +47,6 @@ def get_all_papers():
             paperIds.append(paperId)
     return paperIds
 
-def extractIds(items, idName):
-    """Extract from an object list the ID of each object and create a list of all object IDs."""
-    listIds = []
-    for item in items:
-        itemId = item[idName]
-        listIds.append(itemId)
-    return listIds
-
 def post_paper(paper_id, paper_title, paper_abstract, paper_year):
     """Put the given paper into the database."""
     data = {'id':paper_id,
