@@ -14,10 +14,9 @@ def create_app(config_name):
     app = Flask(__name__)
     CORS(app)
 
-    app.config['CORS_HEADERS'] = 'Content-Type'
-
     app.config.from_object(config_by_name[config_name])
     db.init_app(app)
     flask_bcrypt.init_app(app)
 
     return app
+
