@@ -236,5 +236,20 @@ python app.py db upgrade
 ## Contribute
 If you want to contribute to the research-graph repository, please first read the Contributing Guidelines in the [Contributing](CONTRIBUTING.md) file.
 
+## Credits
+### How to structure a Flask-RESTPlus web service for production builds
+The article 
+[How to structure a Flask-RESTPlus web service for production builds](https://www.freecodecamp.org/news/structuring-a-flask-restplus-web-service-for-production-builds-c2ec676de563/) 
+helped us to set up our backend using Python, Flask and Flask-SQLAlchemy.
+
+### Flask Web Programming from Scratch
+The article
+[Flask Web Programming from Scratch](https://hackernoon.com/flask-web-programming-from-scratch-9ada8088fde1) 
+showed us how to change our database from SQLite to PostgreSQL.
+
+### Semantic Scholar API
+The [Semantic Scholar API documentation](https://api.semanticscholar.org) demonstrated how we could
+access paper and author information.
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
