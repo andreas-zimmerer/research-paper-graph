@@ -35,7 +35,12 @@ def scrape():
 
 def get_all_papers():
     """Determine the ids of all relevant research papers."""
-    authorIds = [143993045, 143990000, 144000000, 144100000, 144122431]
+    neumann = 143993045
+    valenzuela = 143990000
+    li = 144000000
+    grant = 144100000
+    kemper = 144122431
+    authorIds = [neumann, valenzuela, li, grant, kemper]
     paperIds = []
     for authorId in authorIds:
         author = ss.author(authorId)
