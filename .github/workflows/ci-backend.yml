@@ -9,6 +9,20 @@ on:
     - cron: '0 0 1 * *'
 
 jobs:
+  test-backend:
+    name: Test Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Python
+        uses: actions/setup-python@v1
+      - name: Install Dependencies
+        working-directory: ./backend
+        run: pip install -r requirements.txt
+      - name: Run all backend tests
+        working-directory: ./backend
+        run: python app.py test
+
   lint-backend:
     name: Lint Backend
     runs-on: ubuntu-latest
