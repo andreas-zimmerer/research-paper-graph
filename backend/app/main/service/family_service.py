@@ -10,8 +10,8 @@ def get(relative):
             "select pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, pt.abstract, " \
             "pt.year, 1 " \
             "from paper pf, reference r, paper pt " \
-            "where pf.id == r.from_paper and pf.title == '" + relative + \
-                "' and pt.id == r.to_paper " \
+            "where pf.id = r.from_paper and pf.title = '" + relative + \
+                "' and pt.id = r.to_paper " \
             "" \
             "UNION ALL " \
             "" \
@@ -19,7 +19,7 @@ def get(relative):
                 "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
                 "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
             "from family f, reference r, paper pt " \
-            "where f.to_distance < 5 and f.to_paper == r.from_paper and pt.id == r.to_paper) " \
+            "where f.to_distance < 3 and f.to_paper = r.from_paper and pt.id = r.to_paper) " \
             "" \
             "select * " \
             "from family "

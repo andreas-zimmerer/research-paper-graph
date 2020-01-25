@@ -8,4 +8,4 @@ class Paper(db.Model):
     id = db.Column(db.String(42), primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     year = db.Column(db.Integer)
-    abstract = db.Column(db.String(255), nullable=False)
+    abstract = db.Column(db.Text, nullable=False)
