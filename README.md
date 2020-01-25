@@ -76,10 +76,19 @@ Link: [https://d3js.org](https://d3js.org)
 1. Install Python.
 2. Install pip.
 3. Install npm or yarn.
-4. [Recommended] Install virtualenv.
-5. [Recommended] If you are using IntelliJ, install the [PyLint Plugin](https://plugins.jetbrains.com/plugin/11084-pylint/).
+4. Install PostgreSQL.
+5. [Recommended] Install virtualenv.
+6. [Recommended] If you are using IntelliJ, install the [PyLint Plugin](https://plugins.jetbrains.com/plugin/11084-pylint/).
 
-#### Step 2: Start the backend
+#### Step 2: Create the database
+1. Start PostgreSQL.
+
+2. Create a database called research:
+```
+createdb research
+```
+
+#### Step 3: Start the backend
 1. Navigate to the backend directory: 
 ```
 cd backend
@@ -110,7 +119,18 @@ python app.py run
 http://127.0.0.1:5000
 ```
 
-#### Step 3: Start the frontend
+#### Step 4: Scrape research papers
+1. Navigate to the scraper directory:
+```
+cd backend/scraper
+```
+
+2. Run the scraper:
+```
+python __init__.py
+```
+
+#### Step 5: Start the frontend
 1. Navigate to the frontend directory: 
 ```
 cd frontend
@@ -205,7 +225,7 @@ yarn run lint
 #### Update database migrations
 1. Create a new migration script from the model changes:
 ```
-python app.py db migrate --message 'my database migration'
+python app.py db migrate
 ```
 
 2. Apply the migration script to the database:

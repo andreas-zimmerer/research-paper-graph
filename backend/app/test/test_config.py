@@ -1,10 +1,8 @@
 """Backend test configuration"""
-import os
 import unittest
 from flask import current_app
 from flask_testing import TestCase
 from app import app
-from app.main.config import basedir
 
 class TestDevelopmentConfig(TestCase):
     """Tests the development configuration"""
@@ -18,7 +16,7 @@ class TestDevelopmentConfig(TestCase):
         self.assertFalse(app.config['SECRET_KEY'] == 'my_precious')
         self.assertTrue(app.config['DEBUG'] is True)
         self.assertFalse(current_app is None)
-        uri = 'sqlite:///' + os.path.join(basedir, 'research_paper_graph_main.db')
+        uri = 'postgresql://localhost/research'
         self.assertTrue(
             app.config['SQLALCHEMY_DATABASE_URI'] == uri
         )
@@ -35,7 +33,7 @@ class TestTestingConfig(TestCase):
         """Check if the app is in test"""
         self.assertFalse(app.config['SECRET_KEY'] == 'my_precious')
         self.assertTrue(app.config['DEBUG'])
-        uri = 'sqlite:///' + os.path.join(basedir, 'research_paper_graph_test.db')
+        uri = 'postgresql://localhost/research'
         self.assertTrue(
             app.config['SQLALCHEMY_DATABASE_URI'] == uri
         )
