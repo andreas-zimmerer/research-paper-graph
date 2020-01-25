@@ -19,7 +19,7 @@ def get(relative):
                 "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
                 "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
             "from family f, reference r, paper pt " \
-            "where f.to_distance < 5 and f.to_paper = r.from_paper and pt.id = r.to_paper) " \
+            "where f.to_distance < 3 and f.to_paper = r.from_paper and pt.id = r.to_paper) " \
             "" \
             "select * " \
             "from family "
