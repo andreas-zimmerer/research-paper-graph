@@ -35,7 +35,12 @@ def scrape():
 
 def get_all_papers():
     """Determine the ids of all relevant research papers."""
-    authorIds = [143993045, 143990000, 144000000, 144100000, 144122431]
+    neumann = 143993045
+    valenzuela = 143990000
+    li = 144000000
+    grant = 144100000
+    kemper = 144122431
+    authorIds = [neumann, valenzuela, li, grant, kemper]
     paperIds = []
     for authorId in authorIds:
         author = ss.author(authorId)
@@ -47,21 +52,12 @@ def get_all_papers():
             paperIds.append(paperId)
     return paperIds
 
-def extractIds(items, idName):
-    """Extract from an object list the ID of each object and create a list of all object IDs."""
-    listIds = []
-    for item in items:
-        itemId = item[idName]
-        listIds.append(itemId)
-    return listIds
-
 def post_paper(paper_id, paper_title, paper_abstract, paper_year):
     """Put the given paper into the database."""
     data = {'id':paper_id,
             'title':paper_title,
             'abstract':paper_abstract,
-            'year':paper_year,
-            'authors':['kemper', 'neumann']
+            'year':paper_year
             }
     r = requests.post(url='http://127.0.0.1:5000/paper/', json=data)
     print(r.status_code)
