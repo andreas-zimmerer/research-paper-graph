@@ -89,6 +89,15 @@ export default class PaperGraph extends Component<IProps> {
     // Remove old elements from canvas
     canvas.selectAll('*').remove();
 
+    // -------------------------------------------
+    // Setup plot.
+    // -------------------------------------------
+
+    // Define a scale for the x-axis and the grid lines.
+    const xAxisScale = d3.scaleLinear()
+      .domain([minYear, maxYear])
+      .range([padding, width - padding]);
+
     // The background of the plot. Allows pan&zoom when clicking on the background.
     const background = canvas.append('rect')
       .attr('class', 'background')
@@ -96,21 +105,6 @@ export default class PaperGraph extends Component<IProps> {
       .attr('height', height)
       .attr('fill', '#fff')
       .call(d3.zoom<SVGRectElement, unknown>().on('zoom', () => plot.attr('transform', d3.event.transform)));
-    
-    // Nodes and edges will be drawn on a 'plot' (seperated from axis).
-    // Allows pan&zoom when clocking on nodes.
-    const plot = canvas.append('g')
-      .call(d3.zoom<SVGGElement, unknown>().on('zoom', () => plot.attr('transform', d3.event.transform)));
-
-    // Create an x-axis with years
-    const xAxisScale = d3.scaleLinear()
-      .domain([minYear, maxYear])
-      .range([padding, width - padding]);
-    const xAxis = d3.axisBottom(xAxisScale)
-      .tickFormat(d3.format('d'));
-    canvas.append('g')
-      .attr('class', 'axis')
-      .call(xAxis);
 
     // Create vertical grid lines
     const gridLines = d3.axisBottom(xAxisScale)
@@ -120,6 +114,20 @@ export default class PaperGraph extends Component<IProps> {
       .attr('class', 'grid')
       .attr('transform', `translate(0, ${height})`)
       .call(gridLines);
+
+    // Nodes and edges will be drawn on a 'plot' (seperated from axis).
+    const plot = canvas.append('g');
+
+    // Create an x-axis with years
+    const xAxis = d3.axisBottom(xAxisScale)
+      .tickFormat(d3.format('d'));
+    canvas.append('g')
+      .attr('class', 'axis')
+      .call(xAxis);
+    
+    // -------------------------------------------
+    // Now we need to populate the plot with data.
+    // -------------------------------------------
     
     // Initialize the links between nodes
     const edges = plot
