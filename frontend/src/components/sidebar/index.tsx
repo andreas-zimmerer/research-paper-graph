@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { Form } from 'react-bootstrap';
+import { Range } from 'react-range';
 import PaperMenuItem from './PaperMenuItem';
 import { IPaper } from '../../types/paper';
 import './sidebar.css';
@@ -19,6 +20,12 @@ interface IProps {
 interface IState {
   suggestedPapers: IPaper[];
   isSearching: boolean;
+
+  yearSliderValues: number[];
+  distanceSliderValues: number[];
+  citationSliderValues: number[];
+
+  currentFilter?: IPaperFilter;
 }
 
 export default class Sidebar extends Component<IProps, IState> {
@@ -27,7 +34,13 @@ export default class Sidebar extends Component<IProps, IState> {
 
     this.state = {
       suggestedPapers: [],
-      isSearching: false
+      isSearching: false,
+
+      yearSliderValues: [2010],
+      distanceSliderValues: [3],
+      citationSliderValues: [1],
+
+      currentFilter: undefined
     };
   }
 
@@ -57,7 +70,15 @@ export default class Sidebar extends Component<IProps, IState> {
 
           <Form.Group controlId="displayOptionsDate">
             <Form.Label>Show only papers recent papers:</Form.Label>
-            <Form.Control type="range" />
+            <Range
+              step={1}
+              min={1900}
+              max={new Date().getFullYear()}
+              values={this.state.yearSliderValues}
+              onChange={(values: number[]) => this.setState({yearSliderValues: values})}
+              //onFinalChange={(values: number[]) => this.setStaate({currentFilter})}
+              renderTrack={({props, children}) => this.renderSliderTrack(props, children)}
+              renderThumb={({props, isDragged}) => this.renderSliderThumb(props, isDragged, this.state.yearSliderValues[0].toFixed(0))} />
             <Form.Text className="text-muted">
               Minimum year a paper was published.
               Helps to show only recent papers.
@@ -66,16 +87,32 @@ export default class Sidebar extends Component<IProps, IState> {
 
           <Form.Group controlId="displayOptionsDistance">
             <Form.Label>Limit the distance inside the graph:</Form.Label>
-            <Form.Control type="range" />
+            <Range
+              step={1}
+              min={0}
+              max={5}
+              values={this.state.distanceSliderValues}
+              onChange={(values: number[]) => this.setState({distanceSliderValues: values})}
+              //onFinalChange={(values: number[]) => this.setStaate({currentFilter})}
+              renderTrack={({props, children}) => this.renderSliderTrack(props, children)}
+              renderThumb={({props, isDragged}) => this.renderSliderThumb(props, isDragged, this.state.distanceSliderValues[0].toFixed(0))} />
             <Form.Text className="text-muted">
               Maximum distance (indirect citations) a paper should have to be displayed.
               Helps to filter out irrelevant papers.
             </Form.Text>
           </Form.Group>
 
-          <Form.Group controlId="displayOptionsDistance">
+          <Form.Group controlId="displayOptionsCitations">
             <Form.Label>Display only papers with a certain number of citations:</Form.Label>
-            <Form.Control type="range" />
+            <Range
+              step={1}
+              min={0}
+              max={500}
+              values={this.state.citationSliderValues}
+              onChange={(values: number[]) => this.setState({citationSliderValues: values})}
+              //onFinalChange={(values: number[]) => this.setStaate({currentFilter})}
+              renderTrack={({props, children}) => this.renderSliderTrack(props, children)}
+              renderThumb={({props, isDragged}) => this.renderSliderThumb(props, isDragged, this.state.citationSliderValues[0].toFixed(0))} />
             <Form.Text className="text-muted">
               Minimum number of citations a paper must have to be displayed.
               Helps to filter out unimportant papers.
@@ -101,6 +138,33 @@ export default class Sidebar extends Component<IProps, IState> {
         </Form>
       </div>
     );
+  }
+
+  private renderSliderTrack = (props: any, children: React.ReactNode) => {
+    return (
+      <div className='slider'
+        onMouseDown={props.onMouseDown}
+        onTouchStart={props.onTouchStart}
+        style={props.style}>
+        <div className='track' ref={props.ref}>
+          {children}
+        </div>
+      </div>
+    )
+  }
+
+  private renderSliderThumb = (props: any, isDragged: boolean, text: string) => {
+    return (
+      <div className='thumb' {...props} style={props.style}>
+        <div className='thumb-label'>
+          {text}
+        </div>
+        <div className='thumb-inner'
+          style={{
+            backgroundColor: isDragged ? '#548BF4' : '#CCC'
+          }} />
+      </div>
+    )
   }
 
   private handleSearch = (query: string) => {
