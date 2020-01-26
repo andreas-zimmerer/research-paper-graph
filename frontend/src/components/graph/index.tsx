@@ -132,11 +132,11 @@ export default class PaperGraph extends Component<IProps> {
     const xAxisGroup = canvas.append('g')
       .attr('class', 'axis')
       .call(xAxis);
-    
+
     // -------------------------------------------
     // Now we need to populate the plot with data.
     // -------------------------------------------
-    
+
     // Initialize the links between nodes
     const edges = plot
       .selectAll('.line')
