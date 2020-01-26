@@ -21,5 +21,5 @@ class Family(Resource):
         distance = request.args.get('distance')
         year = request.args.get('year')
         citations = request.args.get('citations')
-        
+
         return get(relative, distance, year, citations)
