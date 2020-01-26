@@ -39,7 +39,7 @@ def get(title):
 
 def search(keyword):
     """List all papers that contain a searched keyword."""
-    return Paper.query.filter(Paper.title.like(f"%{keyword}%")).all()
+    return Paper.query.filter(Paper.title.ilike(f"%{keyword}%")).all()
 
 def save_changes(data):
     """Save to database"""
