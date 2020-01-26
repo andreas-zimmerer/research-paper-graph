@@ -98,7 +98,9 @@ export default class PaperGraph extends Component<IProps> {
       .domain([minYear, maxYear])
       .range([padding, width - padding]);
 
-    // The background of the plot. Allows pan&zoom when clicking on the background.
+    // The background of the plot.
+    // NOTE: because we only grab the pan&zoom event on the background,
+    //       it is NOT possible to pan&zoom on the individual nodes!
     const background = canvas.append('rect')
       .attr('class', 'background')
       .attr('width', width)
