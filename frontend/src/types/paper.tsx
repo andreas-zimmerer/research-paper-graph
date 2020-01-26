@@ -3,6 +3,7 @@ export interface IPaper {
   title: string;
   authors: string[];
   abstract: string;
+  cluster: number;
   year: number;
   citations: string[];
 }

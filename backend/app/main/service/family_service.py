@@ -1,6 +1,10 @@
 """Family Service"""
 from collections import defaultdict
 from app.main import db
+from itertools import groupby
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.cluster import KMeans
+from sklearn.metrics import adjusted_rand_score
 
 def get(relative, distance, year, citations):
     """List all relatives of a paper."""
@@ -53,6 +57,7 @@ def get(relative, distance, year, citations):
             "title": connection['to_title'],
             "abstract": connection['to_abstract'],
             "year": connection['to_year'],
+            "cluster": 0,
             "citations": [],
             "authors": []
         }
@@ -64,5 +69,48 @@ def get(relative, distance, year, citations):
     family = []
     for key in dictionary:
         family.append(dictionary[key])
-    family = sorted(family, key=lambda paper: paper['year'])
+
+    keyfunc = lambda paper: paper['year']
+    data = sorted(family, key=keyfunc)
+
+    groups = []
+    for k, g in groupby(data, keyfunc):
+        groups.append(list(g))
+
+    titles = []
+    for group in groups:
+        titles = extractTitles(group)
+        vectorizer = TfidfVectorizer(stop_words='english')
+        X = vectorizer.fit_transform(titles)
+        true_k = min(3, len(group))
+        model = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1)
+        model.fit(X)
+        print("Top terms per cluster:")
+        order_centroids = model.cluster_centers_.argsort()[:, ::-1]
+        terms = vectorizer.get_feature_names()
+        for i in range(true_k):
+            print("Cluster %d:" % i),
+            for ind in order_centroids[i, :10]:
+                print(' %s' % terms[ind]),
+            print
+        print("\n")
+
+        for paper in group:
+            Y = vectorizer.transform([paper['title']])
+            prediction = model.predict(Y)
+            print(prediction[0])
+            paper['cluster'] = prediction[0]
+            print(paper['cluster'])
+
+
+    family = []
+    for group in groups:
+        for paper in group:
+            family.append(paper)
     return family
+
+def extractTitles(papers):
+    titles = []
+    for paper in papers:
+        titles.append(paper['title'])
+    return titles
