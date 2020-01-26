@@ -10,6 +10,11 @@
     width: calc(100% - 400px);
 }
 
+.background {
+    fill: #fff;
+    cursor: move;
+}
+
 .line {
     stroke: #aaa;
 }
