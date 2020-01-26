@@ -104,13 +104,20 @@ export default class PaperGraph extends Component<IProps> {
       .attr('width', width)
       .attr('height', height)
       .attr('fill', '#fff')
-      .call(d3.zoom<SVGRectElement, unknown>().on('zoom', () => plot.attr('transform', d3.event.transform)));
+      .call(d3.zoom<SVGRectElement, unknown>().on('zoom', () => {
+        // Pan&Zoom for nodes and edges:
+        plot.attr('transform', d3.event.transform);
+        // Pan&Zoom for axis and grid:
+        const newXScale = d3.event.transform.rescaleX(xAxisScale);
+        xAxisGroup.call(xAxis.scale(newXScale));
+        gridLinesGroup.call(gridLines.scale(newXScale));
+      }));
 
     // Create vertical grid lines
     const gridLines = d3.axisBottom(xAxisScale)
       .tickFormat(() => '')
       .tickSize(-height);
-    canvas.append('g')
+    const gridLinesGroup = canvas.append('g')
       .attr('class', 'grid')
       .attr('transform', `translate(0, ${height})`)
       .call(gridLines);
@@ -121,7 +128,7 @@ export default class PaperGraph extends Component<IProps> {
     // Create an x-axis with years
     const xAxis = d3.axisBottom(xAxisScale)
       .tickFormat(d3.format('d'));
-    canvas.append('g')
+    const xAxisGroup = canvas.append('g')
       .attr('class', 'axis')
       .call(xAxis);
     
