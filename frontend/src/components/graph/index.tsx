@@ -89,6 +89,19 @@ export default class PaperGraph extends Component<IProps> {
     // Remove old elements from canvas
     canvas.selectAll('*').remove();
 
+    // The background of the plot. Allows pan&zoom when clicking on the background.
+    const background = canvas.append('rect')
+      .attr('class', 'background')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('fill', '#fff')
+      .call(d3.zoom<SVGRectElement, unknown>().on('zoom', () => plot.attr('transform', d3.event.transform)));
+    
+    // Nodes and edges will be drawn on a 'plot' (seperated from axis).
+    // Allows pan&zoom when clocking on nodes.
+    const plot = canvas.append('g')
+      .call(d3.zoom<SVGGElement, unknown>().on('zoom', () => plot.attr('transform', d3.event.transform)));
+
     // Create an x-axis with years
     const xAxisScale = d3.scaleLinear()
       .domain([minYear, maxYear])
@@ -96,6 +109,7 @@ export default class PaperGraph extends Component<IProps> {
     const xAxis = d3.axisBottom(xAxisScale)
       .tickFormat(d3.format('d'));
     canvas.append('g')
+      .attr('class', 'axis')
       .call(xAxis);
 
     // Create vertical grid lines
@@ -106,9 +120,9 @@ export default class PaperGraph extends Component<IProps> {
       .attr('class', 'grid')
       .attr('transform', `translate(0, ${height})`)
       .call(gridLines);
-
+    
     // Initialize the links between nodes
-    const edges = canvas
+    const edges = plot
       .selectAll('.line')
       .data(links)
       .enter()
@@ -117,7 +131,7 @@ export default class PaperGraph extends Component<IProps> {
 
     // Initialize the nodes.
     // A node is a "group" (g) consisting of a circle and text.
-    const nodes = canvas
+    const nodes = plot
       .selectAll('.node')
       .data(papers)
       .enter()
