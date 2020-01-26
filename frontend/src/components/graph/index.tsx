@@ -105,7 +105,6 @@ export default class PaperGraph extends Component<IProps> {
       .attr('class', 'background')
       .attr('width', width)
       .attr('height', height)
-      .attr('fill', '#fff')
       .call(d3.zoom<SVGRectElement, unknown>().on('zoom', () => {
         // Pan&Zoom for nodes and edges:
         plot.attr('transform', d3.event.transform);
