@@ -56,7 +56,7 @@ def get(relative, distance, year, citations):
             "citations": [],
             "authors": []
         }
-        
+
     for connection in connectionsB:
         from_paper = connection['from_paper']
         dictionary[from_paper]['citations'].append(connection['to_paper'])
