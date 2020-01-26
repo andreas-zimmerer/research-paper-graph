@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PaperGraph from '../components/graph';
-import Sidebar from '../components/sidebar';
+import Sidebar, { IPaperFilter } from '../components/sidebar';
 import { IPaper } from '../types/paper';
 
 interface IProps {}
 
 interface IState {
   selectedPaper?: IPaper;
+  currentFilter?: IPaperFilter;
   allPapers: IPaper[];
 }
 
@@ -23,7 +24,8 @@ export default class PapersPage extends Component<IProps, IState> {
   public render() {
     return (
       <div className="page">
-        <Sidebar onSelectedPaperChanged={this.handlePaperChanged} />
+        <Sidebar onSelectedPaperChanged={this.handlePaperChanged}
+                 onPaperFilterChanged={this.handlePaperFilterChanged} />
         <PaperGraph papers={this.state.allPapers}
                     selectedPaper={this.state.selectedPaper}
                     onSelectedPaperChanged={this.handlePaperChanged} />
@@ -33,14 +35,26 @@ export default class PapersPage extends Component<IProps, IState> {
 
   private handlePaperChanged = (selectedPaper: IPaper) => {
     this.setState({selectedPaper});
-
     if (selectedPaper === undefined) {
       return;
     }
+    this.fetchNewPaper();
+  }
 
-    // Fetch the family of papers that are connected to this paper
-    fetch(`http://localhost:5000/family/${selectedPaper.title}/3/0/1`)
-      .then((response) => response.json())
-      .then((p: IPaper[]) => this.setState({allPapers: p}));
+  private handlePaperFilterChanged = (filter: IPaperFilter) => {
+    this.setState({currentFilter: filter});
+    if (filter === undefined) {
+      return;
+    }
+    this.fetchNewPaper();
+  }
+
+  private fetchNewPaper = () => {
+    fetch(`http://localhost:5000/family/${this.state.selectedPaper?.title}/
+              ${this.state.currentFilter?.maxDistance || 3}/
+              ${this.state.currentFilter?.minYear || 0}/
+              ${this.state.currentFilter?.minCitations || 1}`)
+          .then((response) => response.json())
+          .then((p: IPaper[]) => this.setState({allPapers: p}));
   }
 }
