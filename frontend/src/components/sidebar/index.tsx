@@ -42,6 +42,8 @@ export default class Sidebar extends Component<IProps, IState> {
 
       currentFilter: undefined
     };
+
+    this.handleFitlerUpdate();
   }
 
   public render() {
@@ -76,7 +78,7 @@ export default class Sidebar extends Component<IProps, IState> {
               max={new Date().getFullYear()}
               values={this.state.yearSliderValues}
               onChange={(values: number[]) => this.setState({yearSliderValues: values})}
-              // onFinalChange={(values: number[]) => this.setStaate({currentFilter})}
+              onFinalChange={(values: number[]) => this.handleFitlerUpdate()}
               renderTrack={({props, children}) => this.renderSliderTrack(props, children)}
               renderThumb={({props, isDragged}) =>
                 this.renderSliderThumb(props, isDragged, this.state.yearSliderValues[0].toFixed(0))} />
@@ -94,7 +96,7 @@ export default class Sidebar extends Component<IProps, IState> {
               max={5}
               values={this.state.distanceSliderValues}
               onChange={(values: number[]) => this.setState({distanceSliderValues: values})}
-              // onFinalChange={(values: number[]) => this.setStaate({currentFilter})}
+              onFinalChange={(values: number[]) => this.handleFitlerUpdate()}
               renderTrack={({props, children}) => this.renderSliderTrack(props, children)}
               renderThumb={({props, isDragged}) =>
                 this.renderSliderThumb(props, isDragged, this.state.distanceSliderValues[0].toFixed(0))} />
@@ -112,7 +114,7 @@ export default class Sidebar extends Component<IProps, IState> {
               max={500}
               values={this.state.citationSliderValues}
               onChange={(values: number[]) => this.setState({citationSliderValues: values})}
-              // onFinalChange={(values: number[]) => this.setStaate({currentFilter})}
+              onFinalChange={(values: number[]) => this.handleFitlerUpdate()}
               renderTrack={({props, children}) => this.renderSliderTrack(props, children)}
               renderThumb={({props, isDragged}) =>
                 this.renderSliderThumb(props, isDragged, this.state.citationSliderValues[0].toFixed(0))} />
@@ -168,6 +170,15 @@ export default class Sidebar extends Component<IProps, IState> {
           }} />
       </div>
     );
+  }
+
+  private handleFitlerUpdate = () => {
+    const filter: IPaperFilter = {
+      minYear: this.state.yearSliderValues[0],
+      maxDistance: this.state.distanceSliderValues[0],
+      minCitations: this.state.citationSliderValues[0]
+    };
+    this.props.onPaperFilterChanged(filter);
   }
 
   private handleSearch = (query: string) => {

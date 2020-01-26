@@ -34,26 +34,25 @@ export default class PapersPage extends Component<IProps, IState> {
   }
 
   private handlePaperChanged = (selectedPaper: IPaper) => {
-    this.setState({selectedPaper});
-    if (selectedPaper === undefined) {
-      return;
-    }
-    this.fetchNewPaper();
+    this.setState({selectedPaper}, () => {
+      if (selectedPaper === undefined) {
+        return;
+      }
+      this.fetchNewPaper();
+    });
   }
 
   private handlePaperFilterChanged = (filter: IPaperFilter) => {
-    this.setState({currentFilter: filter});
-    if (filter === undefined) {
-      return;
-    }
-    this.fetchNewPaper();
+    this.setState({currentFilter: filter}, () => {
+      if (filter === undefined) {
+        return;
+      }
+      this.fetchNewPaper();
+    });
   }
 
   private fetchNewPaper = () => {
-    fetch(`http://localhost:5000/family/${this.state.selectedPaper?.title}/
-              ${this.state.currentFilter?.maxDistance || 3}/
-              ${this.state.currentFilter?.minYear || 0}/
-              ${this.state.currentFilter?.minCitations || 1}`)
+    fetch(`http://localhost:5000/family/${this.state.selectedPaper?.title}/${this.state.currentFilter?.maxDistance || 3}/${this.state.currentFilter?.minYear || 0}/${this.state.currentFilter?.minCitations || 1}`)
           .then((response) => response.json())
           .then((p: IPaper[]) => this.setState({allPapers: p}));
   }
