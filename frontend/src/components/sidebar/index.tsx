@@ -5,8 +5,15 @@ import PaperMenuItem from './PaperMenuItem';
 import { IPaper } from '../../types/paper';
 import './sidebar.css';
 
+export interface IPaperFilter {
+  minYear: number;
+  maxDistance: number;
+  minCitations: number;
+}
+
 interface IProps {
   onSelectedPaperChanged: ((paper: IPaper) => void);
+  onPaperFilterChanged: ((filter: IPaperFilter) => void);
 }
 
 interface IState {
@@ -48,6 +55,33 @@ export default class Sidebar extends Component<IProps, IState> {
             </Form.Text>
           </Form.Group>
 
+          <Form.Group controlId="displayOptionsDate">
+            <Form.Label>Show only papers recent papers:</Form.Label>
+            <Form.Control type="range" />
+            <Form.Text className="text-muted">
+              Minimum year a paper was published.
+              Helps to show only recent papers.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group controlId="displayOptionsDistance">
+            <Form.Label>Limit the distance inside the graph:</Form.Label>
+            <Form.Control type="range" />
+            <Form.Text className="text-muted">
+              Maximum distance (indirect citations) a paper should have to be displayed.
+              Helps to filter out irrelevant papers.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group controlId="displayOptionsDistance">
+            <Form.Label>Display only papers with a certain number of citations:</Form.Label>
+            <Form.Control type="range" />
+            <Form.Text className="text-muted">
+              Minimum number of citations a paper must have to be displayed.
+              Helps to filter out unimportant papers.
+            </Form.Text>
+          </Form.Group>
+
           <Form.Group controlId="displayOptionsPreSucc">
             <Form.Label>Which papers should be displayed:</Form.Label>
             <Form.Check
@@ -60,17 +94,8 @@ export default class Sidebar extends Component<IProps, IState> {
               id="checkbox-display-succeeding-papers"
               label="Succeeding papers"
             />
-          </Form.Group>
-
-          <Form.Group controlId="displayOptionsDate">
-            <Form.Label>Date of the displayed papers:</Form.Label>
-            <Form.Control type="range" />
             <Form.Text className="text-muted">
-              Minimum year a paper was published.
-            </Form.Text>
-            <Form.Control type="range" />
-            <Form.Text className="text-muted">
-              Maximum year a paper was published.
+              Does not work yet.
             </Form.Text>
           </Form.Group>
         </Form>
