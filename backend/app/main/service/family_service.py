@@ -1,65 +1,22 @@
 """Family Service"""
 from collections import defaultdict
 from app.main import db
-from itertools import groupby
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
-from sklearn.metrics import adjusted_rand_score
 
 def get(relative, distance, year, citations):
     """List all relatives of a paper."""
     distance, year, citations = correct_filters(distance, year, citations)
-
     query = create_query(relative, distance, year, citations)
-
     paper_dictionary = create_papers(query)
-
     paper_dictionary = add_citations(query, paper_dictionary)
-
-    family = []
-    for key in paper_dictionary:
-        family.append(paper_dictionary[key])
-
-    keyfunc = lambda paper: paper['year']
-    data = sorted(family, key=keyfunc)
-
-    groups = []
-    for k, g in groupby(data, keyfunc):
-        groups.append(list(g))
-
-    abstracts = []
-    for group in groups:
-        abstracts = extract_abstracts(group)
-        vectorizer = TfidfVectorizer(stop_words='english')
-        X = vectorizer.fit_transform(abstracts)
-        true_k = min(3, len(group))
-        model = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1)
-        model.fit(X)
-        print("Top terms per cluster:")
-        order_centroids = model.cluster_centers_.argsort()[:, ::-1]
-        terms = vectorizer.get_feature_names()
-        for i in range(true_k):
-            print("Cluster %d:" % i),
-            for ind in order_centroids[i, :10]:
-                print(' %s' % terms[ind]),
-            print
-        print("\n")
-
-        for paper in group:
-            Y = vectorizer.transform([paper['title']])
-            prediction = model.predict(Y)
-            print(prediction[0])
-            paper['cluster'] = prediction[0]
-            print(paper['cluster'])
-
-
-    family = []
-    for group in groups:
-        for paper in group:
-            family.append(paper)
-    return family
+    paper_list = paper_dictionary_to_paper_list(paper_dictionary)
+    sorted_paper_list = sort_paper_list(paper_list)
+    sorted_paper_list = add_clusters(sorted_paper_list)
+    return sorted_paper_list
 
 def correct_filters(distance, year, citations):
+    """If a filter is too big or too small, set it to a default value."""
     distance = int(distance)
     distance = min(distance, 3)
     distance = max(distance, 1)
@@ -69,6 +26,7 @@ def correct_filters(distance, year, citations):
     return distance, year, citations
 
 def create_query(relative, distance, year, citations):
+    """Create the query that gets all the relatives of the paper."""
     query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
             "to_title, to_abstract, to_year, to_distance) as (" \
             "select distinct pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, " \
@@ -96,6 +54,7 @@ def create_query(relative, distance, year, citations):
     return query
 
 def create_papers(query):
+    """Transform the query format (from_paper, to_paper) to a dictionary format (paper_id, paper)."""
     relations = db.engine.execute(query)
     paper_dictionary = defaultdict(list)
     for relation in relations:
@@ -122,14 +81,61 @@ def create_papers(query):
     return paper_dictionary
 
 def add_citations(query, paper_dictionary):
+    """Fill the citation field of every query in the dictionary."""
     relations = db.engine.execute(query)
     for relation in relations:
         from_paper = relation['from_paper']
         paper_dictionary[from_paper]['citations'].append(relation['to_paper'])
     return paper_dictionary
 
+def paper_dictionary_to_paper_list(paper_dictionary):
+    """Transform the paper dictionary into a data list."""
+    paper_list = []
+    for key in paper_dictionary:
+        paper_list.append(paper_dictionary[key])
+    return paper_list
+
+def sort_paper_list(paper_list):
+    """Sort the paper list by paper year."""
+    keyfunc = lambda paper: paper['year']
+    sorted_paper_list = sorted(paper_list, key=keyfunc)
+    return sorted_paper_list
+
+def add_clusters(sorted_paper_list):
+    """Cluster the papers by abstract keywords. Assign each paper its cluster."""
+    if (len(sorted_paper_list) == 0):
+        return sorted_paper_list
+
+    abstract_list = extract_abstracts(sorted_paper_list)
+    vectorizer, model = train_clusters(abstract_list)
+    sorted_paper_list = predict_clusters(sorted_paper_list, vectorizer, model)
+    return sorted_paper_list
+
 def extract_abstracts(papers):
+    """Extract an abstract list from the paper list."""
     abstracts = []
     for paper in papers:
         abstracts.append(paper['abstract'])
     return abstracts
+
+def train_clusters(abstract_list):
+    """Train the clustering algorithm."""
+    vectorizer = TfidfVectorizer(stop_words='english')
+    X = vectorizer.fit_transform(abstract_list)
+    true_k = min(4, len(abstract_list))
+    model = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1)
+    model.fit(X)
+    return vectorizer, model
+
+def predict_clusters(sorted_paper_list, vectorizer, model):
+    """Cluster all papers by their abstract keywords."""
+    for paper in sorted_paper_list:
+        prediction = predict_cluster(vectorizer, model, paper['abstract'])
+        paper['cluster'] = prediction
+    return sorted_paper_list
+
+def predict_cluster(vectorizer, model, abstract):
+    """Map the given abstract to its cluster."""
+    Y = vectorizer.transform([abstract])
+    prediction = model.predict(Y)
+    return prediction[0]
