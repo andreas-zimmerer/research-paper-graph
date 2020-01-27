@@ -185,16 +185,20 @@ export default class PaperGraph extends Component<IProps> {
           .forceLink() // This force provides links between nodes
           .links(links) // and this the list of links
       )
-      // This adds repulsion between nodes. Play with the number for the repulsion strength
-      .force('charge', d3.forceManyBody().strength(-2000))
-      // This force attracts nodes to the center of the svg area
-      .force('center', d3.forceCenter(width / 2, height / 2))
-      .on('tick', ticked);
+      .force('y', d3.forceY<PaperNode>().strength(5).y( (d) => d.paper.cluster * 500 ))
+      // .force('x', d3.forceY().strength(0.1).y( height / 2 ))
+      .force('center', d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
+      .force('charge', d3.forceManyBody().strength(-5000)) // Nodes are attracted one each other of value is > 0
+      // .force('collide', d3.forceCollide().strength(10).radius(32).iterations(1))
+      .on('tick', ticked); // Force that avoids circle overlapping
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
       // Constrains/fixes x-position
-      nodes.each((d) => { d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding; });
+      nodes.each((d) => {
+        d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding;
+        // d.y = (d.paper.cluster) * height / 3;
+      });
 
       edges
         .attr('x1', (d) => d.source.x)

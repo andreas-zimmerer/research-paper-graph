@@ -8,67 +8,17 @@ from sklearn.metrics import adjusted_rand_score
 
 def get(relative, distance, year, citations):
     """List all relatives of a paper."""
-    distance = int(distance)
-    distance = max(1, distance)
-    distance = min(3, distance)
+    distance, year, citations = correct_filters(distance, year, citations)
 
-    query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
-                "to_title, to_abstract, to_year, to_distance) as (" \
-            "select distinct pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, " \
-                "pt.abstract, pt.year, 1 " \
-            "from paper pf, reference r, paper pt " \
-            "where pf.id = r.from_paper and pf.title like '" + relative + \
-                "' and pt.id = r.to_paper and pt.year > " + str(year) + " " \
-            "" \
-            "UNION ALL " \
-            "" \
-            "select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as " \
-                "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
-                "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
-            "from family f, reference r, paper pt " \
-            "where f.to_distance < " + str(distance) + " and f.to_paper = r.from_paper and " \
-                "pt.id = r.to_paper and pt.year > " + str(year) + ") " \
-            "" \
-            "select f.*, r.relevance " \
-            "from family f inner join " \
-                "(select to_paper, count(to_paper) as relevance " \
-                "from family " \
-                "group by to_paper) r " \
-            "on f.to_paper = r.to_paper " \
-            "where r.relevance > " + str(citations) + " "
+    query = create_query(relative, distance, year, citations)
 
-    connectionsA = db.engine.execute(query)
-    connectionsB = db.engine.execute(query)
+    paper_dictionary = create_papers(query)
 
-    dictionary = defaultdict(list)
-    for connection in connectionsA:
-        from_paper = connection['from_paper']
-        to_paper = connection['to_paper']
-        dictionary[from_paper] = {
-            "id": from_paper,
-            "title": connection['from_title'],
-            "abstract": connection['from_abstract'],
-            "year": connection['from_year'],
-            "citations": [],
-            "authors": [],
-        }
-        dictionary[to_paper] = {
-            "id": to_paper,
-            "title": connection['to_title'],
-            "abstract": connection['to_abstract'],
-            "year": connection['to_year'],
-            "cluster": 0,
-            "citations": [],
-            "authors": []
-        }
-
-    for connection in connectionsB:
-        from_paper = connection['from_paper']
-        dictionary[from_paper]['citations'].append(connection['to_paper'])
+    paper_dictionary = add_citations(query, paper_dictionary)
 
     family = []
-    for key in dictionary:
-        family.append(dictionary[key])
+    for key in paper_dictionary:
+        family.append(paper_dictionary[key])
 
     keyfunc = lambda paper: paper['year']
     data = sorted(family, key=keyfunc)
@@ -77,11 +27,11 @@ def get(relative, distance, year, citations):
     for k, g in groupby(data, keyfunc):
         groups.append(list(g))
 
-    titles = []
+    abstracts = []
     for group in groups:
-        titles = extractTitles(group)
+        abstracts = extract_abstracts(group)
         vectorizer = TfidfVectorizer(stop_words='english')
-        X = vectorizer.fit_transform(titles)
+        X = vectorizer.fit_transform(abstracts)
         true_k = min(3, len(group))
         model = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1)
         model.fit(X)
@@ -109,8 +59,77 @@ def get(relative, distance, year, citations):
             family.append(paper)
     return family
 
-def extractTitles(papers):
-    titles = []
+def correct_filters(distance, year, citations):
+    distance = int(distance)
+    distance = min(distance, 3)
+    distance = max(distance, 1)
+    year = int(year)
+    citations = int(citations)
+    citations = max(citations, 1)
+    return distance, year, citations
+
+def create_query(relative, distance, year, citations):
+    query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
+            "to_title, to_abstract, to_year, to_distance) as (" \
+            "select distinct pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, " \
+            "pt.abstract, pt.year, 1 " \
+            "from paper pf, reference r, paper pt " \
+            "where pf.id = r.from_paper and pf.title like '" + relative + \
+            "' and pt.id = r.to_paper and pt.year > " + str(year) + " " \
+            "" \
+            "UNION ALL " \
+            "" \
+            "select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as " \
+            "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
+            "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
+            "from family f, reference r, paper pt " \
+            "where f.to_distance < " + str(distance) + " and f.to_paper = r.from_paper and " \
+            "pt.id = r.to_paper and pt.year > " + str(year) + ") " \
+            "" \
+            "select f.*, r.relevance " \
+            "from family f inner join " \
+            "(select to_paper, count(to_paper) as relevance " \
+            "from family " \
+            "group by to_paper) r " \
+            "on f.to_paper = r.to_paper " \
+            "where r.relevance > " + str(citations) + " "
+    return query
+
+def create_papers(query):
+    relations = db.engine.execute(query)
+    paper_dictionary = defaultdict(list)
+    for relation in relations:
+        from_paper = relation['from_paper']
+        paper_dictionary[from_paper] = {
+            "id": from_paper,
+            "title": relation['from_title'],
+            "abstract": relation['from_abstract'],
+            "year": relation['from_year'],
+            "cluster": 0,
+            "citations": [],
+            "authors": [],
+        }
+        to_paper = relation['to_paper']
+        paper_dictionary[to_paper] = {
+            "id": to_paper,
+            "title": relation['to_title'],
+            "abstract": relation['to_abstract'],
+            "year": relation['to_year'],
+            "cluster": 0,
+            "citations": paper_dictionary[from_paper]['citations'],
+            "authors": []
+        }
+    return paper_dictionary
+
+def add_citations(query, paper_dictionary):
+    relations = db.engine.execute(query)
+    for relation in relations:
+        from_paper = relation['from_paper']
+        paper_dictionary[from_paper]['citations'].append(relation['to_paper'])
+    return paper_dictionary
+
+def extract_abstracts(papers):
+    abstracts = []
     for paper in papers:
-        titles.append(paper['title'])
-    return titles
+        abstracts.append(paper['abstract'])
+    return abstracts
