@@ -10,6 +10,7 @@ def get(relative, distance, year, citations):
     query = create_query(relative, distance, year, citations)
     paper_dictionary = create_papers(query)
     paper_dictionary = add_citations(query, paper_dictionary)
+    paper_dictionary = add_authors(query, paper_dictionary)
     paper_list = paper_dictionary_to_paper_list(paper_dictionary)
     sorted_paper_list = sort_paper_list(paper_list)
     sorted_paper_list = add_clusters(sorted_paper_list)
@@ -44,13 +45,13 @@ def create_query(relative, distance, year, citations):
             "where f.to_distance < " + str(distance) + " and f.to_paper = r.from_paper and " \
             "pt.id = r.to_paper and pt.year > " + str(year) + ") " \
             "" \
-            "select f.*, r.relevance " \
+            "select distinct f.*, r.relevance, a.name as author " \
             "from family f inner join " \
             "(select to_paper, count(to_paper) as relevance " \
             "from family " \
             "group by to_paper) r " \
-            "on f.to_paper = r.to_paper " \
-            "where r.relevance > " + str(citations) + " "
+            "on f.to_paper = r.to_paper, author a, write w " \
+            "where r.relevance > " + str(citations) + " and w.author = a.id and w.paper = f.from_paper "
     return query
 
 def create_papers(query):
@@ -81,11 +82,19 @@ def create_papers(query):
     return paper_dictionary
 
 def add_citations(query, paper_dictionary):
-    """Fill the citation field of every query in the dictionary."""
+    """Fill the citation field of every paper in the dictionary."""
     relations = db.engine.execute(query)
     for relation in relations:
         from_paper = relation['from_paper']
         paper_dictionary[from_paper]['citations'].append(relation['to_paper'])
+    return paper_dictionary
+
+def add_authors(query, paper_dictionary):
+    """Fill the author field of every paper in the dictionary."""
+    relations = db.engine.execute(query)
+    for relation in relations:
+        from_paper = relation['from_paper']
+        paper_dictionary[from_paper]['authors'].append(relation['author'])
     return paper_dictionary
 
 def paper_dictionary_to_paper_list(paper_dictionary):
