@@ -7,6 +7,7 @@ class RelativeDto:
         'title': fields.String(required=True, description='relative title'),
         'abstract': fields.String(required=True, description='relative title'),
         'year': fields.Integer(required=True, description='relative year'),
+        'cluster': fields.Integer(required=True, description='relative keyword cluster'),
         'citations': fields.List(fields.String),
         'authors': fields.List(fields.String),
     })
