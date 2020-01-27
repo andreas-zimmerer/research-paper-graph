@@ -66,34 +66,10 @@ def create_paper_query(relative, distance, year, citations):
     return query
 
 def create_citations_query(relative, distance, year, citations):
-    query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
-            "to_title, to_abstract, to_year, to_distance) as (" \
-            "select distinct pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, " \
-            "pt.abstract, pt.year, 1 " \
-            "from paper pf, reference r, paper pt " \
-            "where pf.id = r.from_paper and pf.title like '" + relative + \
-            "' and pt.id = r.to_paper and pt.year > " + str(year) + " " \
-            "" \
-            "UNION ALL " \
-            "" \
-            "select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as " \
-            "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
-            "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
-            "from family f, reference r, paper pt " \
-            "where f.to_distance < " + str(distance) + " and f.to_paper = r.from_paper and " \
-            "pt.id = r.to_paper and pt.year > " + str(year) + "), " \
-            "" \
-            "basics(from_paper, from_title, from_abstract, from_year, to_paper, to_title, to_abstract, to_year, to_distance, relevance, from_author, to_author) as ( " \
-            "select distinct f.*, r.relevance, fa.name as from_author, ta.name as to_author " \
-            "from family f inner join " \
-            "(select to_paper, count(to_paper) as relevance " \
-            "from family " \
-            "group by to_paper) r " \
-            "on f.to_paper = r.to_paper, author fa, write fw, author ta, write tw " \
-            "where r.relevance > " + str(citations) + " and fw.author = fa.id and fw.paper = f.from_paper and tw.author = ta.id and tw.paper = f.to_paper) " \
-            "" \
-            "select distinct from_paper, to_paper " \
-            "from basics "
+    citations_query = "" \
+                      "select distinct from_paper, to_paper " \
+                      "from basics "
+    query = create_query(relative, distance, year, citations) + citations_query
     return query
 
 def create_author_query(relative, distance, year, citations):
