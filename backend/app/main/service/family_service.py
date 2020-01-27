@@ -1,8 +1,8 @@
 """Family Service"""
 from collections import defaultdict
-from app.main import db
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
+from sklearn.feature_extraction.text import TfidfVectorizer
+from app.main import db
 
 def get(relative, distance, year, citations):
     """List all relatives of a paper."""
@@ -54,7 +54,7 @@ def create_query(relative, distance, year, citations):
     return query
 
 def create_papers(query):
-    """Transform the query format (from_paper, to_paper) to a dictionary format (paper_id, paper)."""
+    """Transform the query format to a dictionary format."""
     relations = db.engine.execute(query)
     paper_dictionary = defaultdict(list)
     for relation in relations:
@@ -103,7 +103,7 @@ def sort_paper_list(paper_list):
 
 def add_clusters(sorted_paper_list):
     """Cluster the papers by abstract keywords. Assign each paper its cluster."""
-    if (len(sorted_paper_list) == 0):
+    if len(sorted_paper_list) == 0:
         return sorted_paper_list
 
     abstract_list = extract_abstracts(sorted_paper_list)
