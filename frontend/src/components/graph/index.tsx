@@ -169,13 +169,13 @@ export default class PaperGraph extends Component<IProps> {
       .append('g')
       .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node-group node-selected' : 'node-group');
     nodes.append('circle')
-      .attr('r', 20)
+      .attr('r', 18)
       .attr('class', 'node-circle')
       .attr('data-tip', (d) => d.paper.id)
       .on('click', (d) => this.props.onSelectedPaperChanged(d.paper));
     nodes.append('text')
-      .attr('dx', 22)
-      .attr('dy', -5)
+      .attr('dx', 20)
+      .attr('dy', -4)
       .attr('class', 'node-text')
       .text((d) => truncateString(d.paper.title, 20, true));
 
@@ -188,7 +188,7 @@ export default class PaperGraph extends Component<IProps> {
       .force('y', d3.forceY<PaperNode>().strength(1.4).y((d) => d.paper.cluster * 600 ))
       .force('center', d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
       .force('charge', d3.forceManyBody().strength(-250)) // Nodes are attracted one each other of value is > 0
-      .force('collide', d3.forceCollide().strength(1).radius(20).iterations(1)) // Force that avoids circle overlapping
+      .force('collide', d3.forceCollide().strength(1).radius(19.5).iterations(1)) // Force that avoids circle overlapping
       .on('tick', ticked);
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.

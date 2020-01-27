@@ -16,17 +16,17 @@
 }
 
 .line {
-    stroke: #aaa;
+    stroke: #bbb;
 }
 
 .node-circle {
-    fill: #69b3a2;
+    fill: #64a0c8;
     stroke: #555;
     cursor: pointer;
 }
 
 .node-selected > .node-circle {
-    fill: #FFBE96;
+    fill: #e37222;
 }
 
 .node-circle:hover {
