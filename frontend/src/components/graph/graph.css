@@ -66,4 +66,9 @@
 
 .paper-tooltip .abstract {
     margin-top: 1em;
+    max-height: 200px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    padding-right: 5px;
+    margin-right: -11px;
 }
