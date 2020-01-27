@@ -7,7 +7,6 @@ from app.main import db
 def get(relative, distance, year, citations):
     """List all relatives of a paper."""
     distance, year, citations = correct_filters(distance, year, citations)
-    query = create_query(relative, distance, year, citations)
     paper_query = create_paper_query(relative, distance, year, citations)
     citations_query = create_citations_query(relative, distance, year, citations)
     author_query = create_author_query(relative, distance, year, citations)
@@ -30,42 +29,20 @@ def correct_filters(distance, year, citations):
     return distance, year, citations
 
 def create_paper_query(relative, distance, year, citations):
-    query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
-            "to_title, to_abstract, to_year, to_distance) as (" \
-            "select distinct pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, " \
-            "pt.abstract, pt.year, 1 " \
-            "from paper pf, reference r, paper pt " \
-            "where pf.id = r.from_paper and pf.title like '" + relative + \
-            "' and pt.id = r.to_paper and pt.year > " + str(year) + " " \
-            "" \
-            "UNION ALL " \
-            "" \
-            "select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as " \
-            "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
-            "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
-            "from family f, reference r, paper pt " \
-            "where f.to_distance < " + str(distance) + " and f.to_paper = r.from_paper and " \
-            "pt.id = r.to_paper and pt.year > " + str(year) + "), " \
-            "" \
-            "basics(from_paper, from_title, from_abstract, from_year, to_paper, to_title, to_abstract, to_year, to_distance, relevance, from_author, to_author) as ( " \
-            "select distinct f.*, r.relevance, fa.name as from_author, ta.name as to_author " \
-            "from family f inner join " \
-            "(select to_paper, count(to_paper) as relevance " \
-            "from family " \
-            "group by to_paper) r " \
-            "on f.to_paper = r.to_paper, author fa, write fw, author ta, write tw " \
-            "where r.relevance > " + str(citations) + " and fw.author = fa.id and fw.paper = f.from_paper and tw.author = ta.id and tw.paper = f.to_paper) " \
-            "" \
-            "select distinct from_paper as paper, from_title as title, from_abstract as abstract, from_year as year " \
-            "from basics " \
-            "" \
-            "UNION " \
-            "" \
-            "select distinct to_paper as paper, to_title as title, to_abstract as abstract, to_year as year " \
-            "from basics "
+    """Get all papers from the requested family."""
+    paper_query = "" \
+                  "select distinct from_paper as paper, from_title as title, from_abstract as abstract, from_year as year " \
+                  "from basics " \
+                  "" \
+                  "UNION " \
+                  "" \
+                  "select distinct to_paper as paper, to_title as title, to_abstract as abstract, to_year as year " \
+                  "from basics "
+    query = create_query(relative, distance, year, citations) + paper_query
     return query
 
 def create_citations_query(relative, distance, year, citations):
+    """Get all the citations from the requested family."""
     citations_query = "" \
                       "select distinct from_paper, to_paper " \
                       "from basics "
@@ -73,6 +50,7 @@ def create_citations_query(relative, distance, year, citations):
     return query
 
 def create_author_query(relative, distance, year, citations):
+    """Get all the writing relations from the respective family."""
     author_query = "" \
                    "select distinct from_paper as paper, from_author as author " \
                    "from basics " \
@@ -85,6 +63,7 @@ def create_author_query(relative, distance, year, citations):
     return query
 
 def create_query(relative, distance, year, citations):
+    """Get the family of the given paper."""
     query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
             "to_title, to_abstract, to_year, to_distance) as (" \
             "select distinct pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, " \
