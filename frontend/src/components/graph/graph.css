@@ -4,10 +4,10 @@
 }
 
 .canvas {
-    margin-left: 350px;
-    margin-right: 50px;
+    margin-left: 300px;
+    margin-right: 0px;
     height: 100%;
-    width: calc(100% - 400px);
+    width: calc(100% - 300px);
 }
 
 .background {

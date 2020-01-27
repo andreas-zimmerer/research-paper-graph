@@ -85,8 +85,7 @@ export default class PaperGraph extends Component<IProps> {
   private drawGraph(papers: PaperNode[], links: CitationLink[]) {
     const width = this.canvas.current!.clientWidth;
     const height = this.canvas.current!.clientHeight;
-    const padding = 20;
-
+    
     // Compute the max and min years so we can adjust the scale
     let minYear = Number.MAX_VALUE;
     let maxYear = Number.MIN_VALUE;
@@ -111,7 +110,7 @@ export default class PaperGraph extends Component<IProps> {
     // Define a scale for the x-axis and the grid lines.
     const xAxisScale = d3.scaleLinear()
       .domain([minYear, maxYear])
-      .range([padding, width - padding]);
+      .range([0, width]);
 
     // The background of the plot.
     // NOTE: because we only grab the pan&zoom event on the background,
@@ -143,6 +142,7 @@ export default class PaperGraph extends Component<IProps> {
 
     // Create an x-axis with years
     const xAxis = d3.axisBottom(xAxisScale)
+      .tickValues(Array.from({length: maxYear - minYear + 1 + 20}, (v, k) => k + minYear - 10))
       .tickFormat(d3.format('d'));
     const xAxisGroup = canvas.append('g')
       .attr('class', 'axis')
@@ -194,7 +194,7 @@ export default class PaperGraph extends Component<IProps> {
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
       // Constrains/fixes x-position
-      nodes.each((d) => { d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding; });
+      nodes.each((d) => { d.x = xAxisScale(d.paper.year); });
 
       edges
         .attr('x1', (d) => d.source.x)
