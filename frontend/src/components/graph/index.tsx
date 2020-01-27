@@ -174,8 +174,8 @@ export default class PaperGraph extends Component<IProps> {
       .attr('data-tip', (d) => d.paper.id)
       .on('click', (d) => this.props.onSelectedPaperChanged(d.paper));
     nodes.append('text')
-      .attr('dx', 20)
-      .attr('dy', -10)
+      .attr('dx', 22)
+      .attr('dy', -5)
       .attr('class', 'node-text')
       .text((d) => truncateString(d.paper.title, 20, true));
 
