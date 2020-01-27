@@ -185,20 +185,16 @@ export default class PaperGraph extends Component<IProps> {
           .forceLink() // This force provides links between nodes
           .links(links) // and this the list of links
       )
-      .force('y', d3.forceY<PaperNode>().strength(5).y( (d) => d.paper.cluster * 500 ))
-      // .force('x', d3.forceY().strength(0.1).y( height / 2 ))
+      .force('y', d3.forceY<PaperNode>().strength(1.4).y((d) => d.paper.cluster * 600 ))
       .force('center', d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
-      .force('charge', d3.forceManyBody().strength(-5000)) // Nodes are attracted one each other of value is > 0
-      // .force('collide', d3.forceCollide().strength(10).radius(32).iterations(1))
-      .on('tick', ticked); // Force that avoids circle overlapping
+      .force('charge', d3.forceManyBody().strength(-250)) // Nodes are attracted one each other of value is > 0
+      .force('collide', d3.forceCollide().strength(1).radius(20).iterations(1)) // Force that avoids circle overlapping
+      .on('tick', ticked);
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
       // Constrains/fixes x-position
-      nodes.each((d) => {
-        d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding;
-        // d.y = (d.paper.cluster) * height / 3;
-      });
+      nodes.each((d) => { d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding; });
 
       edges
         .attr('x1', (d) => d.source.x)
