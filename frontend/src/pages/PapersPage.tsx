@@ -54,6 +54,6 @@ export default class PapersPage extends Component<IProps, IState> {
   private fetchNewPaper = () => {
     fetch(`http://localhost:5000/family?paper=${encodeURIComponent(this.state.selectedPaper?.title || '')}&distance=${this.state.currentFilter?.maxDistance || 3}&year=${this.state.currentFilter?.minYear || 0}&citations=${this.state.currentFilter?.minCitations || 1}`)
       .then((response) => response.json())
-      .then((p: IPaper[]) => {console.log(p); return this.setState({allPapers: p})});
+      .then((p: IPaper[]) => this.setState({allPapers: p}));
   }
 }
