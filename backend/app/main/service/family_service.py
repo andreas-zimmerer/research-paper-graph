@@ -7,8 +7,9 @@ from app.main import db
 def get(relative, distance, year, citations):
     """List all relatives of a paper."""
     distance, year, citations = correct_filters(distance, year, citations)
-    query = create_query(relative, distance, year, citations)
-    paper_dictionary = create_papers(query)
+    family_query = create_family_query(relative, distance, year, citations)
+    default_query = create_default_query(relative)
+    paper_dictionary = create_papers(family_query, default_query)
     paper_list = paper_dictionary_to_paper_list(paper_dictionary)
     sorted_paper_list = sort_paper_list(paper_list)
     sorted_paper_list = add_clusters(sorted_paper_list)
@@ -24,7 +25,7 @@ def correct_filters(distance, year, citations):
     citations = max(citations, 1)
     return distance, year, citations
 
-def create_query(relative, distance, year, citations): # pylint:disable=unused-argument
+def create_family_query(relative, distance, year, citations): # pylint:disable=unused-argument
     """Get the family of the given paper."""
     query = """
             with recursive family(from_id, from_title, from_abstract, from_year, from_author, to_id, to_title, to_abstract, to_year, to_author, distance) as 
@@ -38,15 +39,32 @@ def create_query(relative, distance, year, citations): # pylint:disable=unused-a
                 from family f, reference r, paper tp, write tw, author ta 
                 where f.distance < {distance} and tp.year >= {year} and f.to_id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id) 
             
-            select *, count(*) over (partition by to_id) as relevance
-            from family 
+            select * 
+            from family
             """.format(title=relative, distance=distance, year=year)
     return query
 
-def create_papers(paper_query):
+def create_default_query(relative):
+    """Get the given paper."""
+    query = """
+            select p.id as from_id, p.title as from_title, p.abstract as from_abstract, p.year as from_year, a.name as from_author
+            from paper p, write w, author a 
+            where p.title = '{title}' and p.id = w.paper and w.author = a.id
+            """.format(title=relative)
+    return query
+
+def create_papers(family_query, default_query):
     """Transform the query format to a dictionary format."""
-    papers = db.engine.execute(paper_query)
     paper_dictionary = defaultdict(list)
+    papers = db.engine.execute(family_query)
+    paper_dictionary = add_family(paper_dictionary, papers)
+    if len(paper_dictionary) == 0:
+        papers = db.engine.execute(default_query)
+        paper_dictionary = add_default_paper(paper_dictionary, papers)
+    return paper_dictionary
+
+def add_family(paper_dictionary, papers):
+    """Add a family to the dictionary."""
     for paper in papers:
         paper_dictionary = add_paper(paper_dictionary, paper, 'from')
         paper_dictionary = add_paper(paper_dictionary, paper, 'to')
@@ -55,6 +73,12 @@ def create_papers(paper_query):
         citations = paper_dictionary[from_id]['citations']
         if to_id not in citations:
             citations.append(to_id)
+    return paper_dictionary
+
+def add_default_paper(paper_dictionary, papers):
+    """Add the given paper to the dictionary."""
+    for paper in papers:
+        paper_dictionary = add_paper(paper_dictionary, paper, 'from')
     return paper_dictionary
 
 def add_paper(paper_dictionary, paper, direction):
@@ -72,7 +96,7 @@ def add_paper(paper_dictionary, paper, direction):
     return paper_dictionary
 
 def create_paper(paper_id, paper_title, paper_abstract, paper_year):
-    """Initialize a paper object."""
+    """Initialize a paper."""
     paper = {
         "id": paper_id,
         "title": paper_title,
@@ -101,7 +125,6 @@ def add_clusters(sorted_paper_list):
     """Cluster the papers by abstract keywords. Assign each paper its cluster."""
     if len(sorted_paper_list) == 0:
         return sorted_paper_list
-
     abstract_list = extract_abstracts(sorted_paper_list)
     vectorizer, model = train_clusters(abstract_list)
     sorted_paper_list = predict_clusters(sorted_paper_list, vectorizer, model)
