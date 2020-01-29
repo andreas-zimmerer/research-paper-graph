@@ -70,9 +70,9 @@ def add_family(paper_dictionary, papers):
         paper_dictionary = add_paper(paper_dictionary, paper, 'to')
         from_id = paper['from_id']
         to_id = paper['to_id']
-        citations = paper_dictionary[from_id]['citations']
-        if to_id not in citations:
-            citations.append(to_id)
+        references = paper_dictionary[from_id]['references']
+        if to_id not in references:
+            references.append(to_id)
     return paper_dictionary
 
 def add_default_paper(paper_dictionary, papers):
@@ -103,7 +103,7 @@ def create_paper(paper_id, paper_title, paper_abstract, paper_year):
         "abstract": paper_abstract,
         "year": paper_year,
         "cluster": 0,
-        "citations": [],
+        "references": [],
         "authors": []
     }
     return paper
