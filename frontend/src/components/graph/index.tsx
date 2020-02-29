@@ -116,18 +116,33 @@ export default class PaperGraph extends Component<IProps> {
     // The background of the plot.
     // NOTE: because we only grab the pan&zoom event on the background,
     //       it is NOT possible to pan&zoom on the individual nodes!
+
+  var zoom = d3.zoom<SVGRectElement, unknown>()
+      .on('zoom', () => {
+            // Pan&Zoom for nodes and edges:
+            plot.attr('transform', d3.event.transform);
+            // Pan&Zoom for axis and grid:
+            const newXScale = d3.event.transform.rescaleX(xAxisScale);
+            xAxisGroup.call(xAxis.scale(newXScale));
+            gridLinesGroup.call(gridLines.scale(newXScale));
+          })
+      .scaleExtent([0.1,10])
+
+  function ai(){
+    zoom.scaleBy(background,4);
+  }
+
     const background = canvas.append('rect')
-      .attr('class', 'background')
-      .attr('width', width)
-      .attr('height', height)
-      .call(d3.zoom<SVGRectElement, unknown>().on('zoom', () => {
-        // Pan&Zoom for nodes and edges:
-        plot.attr('transform', d3.event.transform);
-        // Pan&Zoom for axis and grid:
-        const newXScale = d3.event.transform.rescaleX(xAxisScale);
-        xAxisGroup.call(xAxis.scale(newXScale));
-        gridLinesGroup.call(gridLines.scale(newXScale));
-      }));
+        .attr('class', 'background')
+        .attr('width', width)
+        .attr('height', height)
+        .call(zoom);
+
+  //var initialTransform = d3.zoomIdentity.scale(20); listenerRect.call(zoom.transform, initialTransform);
+
+
+//trying to adapt code from http://bl.ocks.org/TWiStErRob/b1c62730e01fe33baa2dea0d0aa29359 ,failing
+
 
     // Create vertical grid lines
     const gridLines = d3.axisBottom(xAxisScale)
@@ -193,7 +208,53 @@ export default class PaperGraph extends Component<IProps> {
       .on('tick', ticked); // Force that avoids circle overlapping
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
+    function zoomFit() {
+          console.log("zoom fit called");
+          var cy = height/2;
+          var cx = width/2;
+
+          var Maxi =  -999999;
+          var Mini =   999999;
+
+          nodes.each((d) => {
+            var dis = d.x;
+            if(dis > Maxi){
+              Maxi =dis;
+            }
+            if(dis < Mini){
+              Mini = dis;
+            }
+            // d.y = (d.paper.cluster) * height / 3;
+          });
+          var scale;
+          if(cy!= Maxi){
+                scale = 2*Maxi/height;
+          }
+             else{
+               scale = 1;
+          }
+
+          if(Maxi == -999999 || Mini == 999999 ){
+              scale=1;
+          }
+          console.log("scale is",scale);
+          console.log("max is:" ,Maxi);
+          console.log("min is:" ,Mini);
+
+          background.call(zoom.translateBy,0,cy);
+          background.call(zoom.scaleBy,scale);
+
+
+    }
+
+    var iterationuntilfit = 0;
+
     function ticked() {
+
+      iterationuntilfit +=1;
+      if(iterationuntilfit == 200){
+        zoomFit();
+      }
       // Constrains/fixes x-position
       nodes.each((d) => {
         d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding;
