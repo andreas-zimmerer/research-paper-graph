@@ -29,6 +29,10 @@
     fill: #FFBE96;
 }
 
+.node-highlighted > .node-circle {
+    fill: rgb(255, 230, 150);
+}
+
 .node-circle:hover {
     stroke-width: 2px;
 }

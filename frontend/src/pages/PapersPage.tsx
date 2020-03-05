@@ -12,8 +12,11 @@ interface IState {
 }
 
 export default class PapersPage extends Component<IProps, IState> {
+  graph: React.RefObject<PaperGraph>;
+
   constructor(props: IProps) {
     super(props);
+    this.graph = React.createRef();
 
     this.state = {
       selectedPaper: undefined,
@@ -25,10 +28,12 @@ export default class PapersPage extends Component<IProps, IState> {
     return (
       <div className="page">
         <Sidebar onSelectedPaperChanged={this.handlePaperChanged}
-                 onPaperFilterChanged={this.handlePaperFilterChanged} />
+                 onPaperFilterChanged={this.handlePaperFilterChanged}
+                 onHighlightKeywordchanged={(k) => this.graph.current?.highlightPapers(k)} />
         <PaperGraph papers={this.state.allPapers}
                     selectedPaper={this.state.selectedPaper}
-                    onSelectedPaperChanged={this.handlePaperChanged} />
+                    onSelectedPaperChanged={this.handlePaperChanged}
+                    ref={this.graph} />
       </div>
     );
   }

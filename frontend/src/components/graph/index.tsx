@@ -42,6 +42,9 @@ const truncateString = (s: string, length: number, useWordBoundary: boolean) => 
 export default class PaperGraph extends Component<IProps> {
   private canvas = React.createRef<SVGSVGElement>();
 
+  private paperNodes: PaperNode[] = [];
+  private citationLinks: CitationLink[] = [];
+
   public render() {
     // We will paint on this SVG canvas
     return (
@@ -74,7 +77,28 @@ export default class PaperGraph extends Component<IProps> {
       }
     }
 
+    this.paperNodes = paperNodes;
+    this.citationLinks = citationLinks;
     this.drawGraph(paperNodes, citationLinks);
+  }
+
+  /**
+   * Highlights a set of nodes in the graph based on a keyword without altering the graph.
+   * @param keyword If the title of a paper contains this keyword (case-insensitive), it will be highlighted.
+   */
+  public highlightPapers(keyword: string) {
+    let pattern = new RegExp(keyword, 'i');
+
+    const canvas = d3.select(this.canvas.current);
+    const nodes = canvas.selectAll('.node').data(this.paperNodes);
+
+    nodes.attr('class', (p: PaperNode) => {
+      if (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id)
+        return 'node node-selected';
+      if (keyword !== '' && p.paper.title.match(pattern))
+        return 'node node-highlighted';
+      return 'node';
+    });
   }
 
   /**
@@ -167,7 +191,7 @@ export default class PaperGraph extends Component<IProps> {
       .data(papers)
       .enter()
       .append('g')
-      .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node-group node-selected' : 'node-group');
+      .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node node-selected' : 'node');
     nodes.append('circle')
       .attr('r', 20)
       .attr('class', 'node-circle')
