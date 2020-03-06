@@ -102,7 +102,7 @@ export default class PaperGraph extends Component<IProps> {
    * @param links The links/edges between nodes.
    */
   private drawGraph(papers: PaperNode[], links: CitationLink[]) {
-    const time_start = performance.now();
+    const timeStart = performance.now();
 
     const width = this.canvas.current!.clientWidth;
     const height = this.canvas.current!.clientHeight;
@@ -212,7 +212,7 @@ export default class PaperGraph extends Component<IProps> {
       .force('charge', d3.forceManyBody().strength(-5000)) // Nodes are attracted one each other of value is > 0
       // .force('collide', d3.forceCollide().strength(10).radius(32).iterations(1))
       .on('tick', ticked) // Force that avoids circle overlapping
-      .on('end', () => this.props.onGraphLayoutEnd(performance.now() - time_start));
+      .on('end', () => this.props.onGraphLayoutEnd(performance.now() - timeStart));
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
