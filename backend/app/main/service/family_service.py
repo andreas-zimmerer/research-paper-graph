@@ -31,7 +31,7 @@ def create_family_query(relative, distance, year, citations): # pylint:disable=u
             with recursive family(from_id, from_title, from_abstract, from_year, from_author, to_id, to_title, to_abstract, to_year, to_author, distance) as 
                 (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, ta.name as to_author, 1 as distance 
                 from paper fp, write fw, author fa, reference r, paper tp, write tw, author ta 
-                where {distance} > 0 and fp.title = '{title}' and fp.id = fw.paper and fw.author = fa.id and fp.id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id and tp.year >= {year}
+                where fp.title = '{title}' and fp.id = fw.paper and fw.author = fa.id and fp.id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id and tp.year >= {year}
             
                 union all 
             
