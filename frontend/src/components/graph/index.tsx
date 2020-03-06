@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import ReactTooltip from 'react-tooltip';
+import { Form } from 'react-bootstrap';
 import { IPaper } from '../../types/paper';
 import CitationLink from './CitationLink';
 import PaperNode from './PaperNode';
@@ -51,6 +52,15 @@ export default class PaperGraph extends Component<IProps> {
       <div className="graph">
         <svg ref={this.canvas} className="canvas" />
 
+        <Form className="search-form">
+          <Form.Label>Highlight Papers</Form.Label>
+          <Form.Control type="text"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.highlightPapers(e.target.value)} />
+          <Form.Text className="text-muted">
+              Search for papers inside the displayed graph.
+          </Form.Text>
+        </Form>
+
         <ReactTooltip clickable={true} getContent={(paperId) => {
           const paper = this.props.papers.find((p) => p.id === paperId);
           return <PaperTooltip paper={paper}/>;
@@ -86,17 +96,19 @@ export default class PaperGraph extends Component<IProps> {
    * Highlights a set of nodes in the graph based on a keyword without altering the graph.
    * @param keyword If the title of a paper contains this keyword (case-insensitive), it will be highlighted.
    */
-  public highlightPapers(keyword: string) {
-    let pattern = new RegExp(keyword, 'i');
+  private highlightPapers(keyword: string) {
+    const pattern = new RegExp(keyword, 'i');
 
     const canvas = d3.select(this.canvas.current);
     const nodes = canvas.selectAll('.node').data(this.paperNodes);
 
     nodes.attr('class', (p: PaperNode) => {
-      if (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id)
+      if (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) {
         return 'node node-selected';
-      if (keyword !== '' && p.paper.title.match(pattern))
+      }
+      if (keyword !== '' && p.paper.title.match(pattern)) {
         return 'node node-highlighted';
+      }
       return 'node';
     });
   }

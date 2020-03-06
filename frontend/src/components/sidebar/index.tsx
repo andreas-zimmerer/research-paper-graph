@@ -15,7 +15,6 @@ export interface IPaperFilter {
 interface IProps {
   onSelectedPaperChanged: ((paper: IPaper) => void);
   onPaperFilterChanged: ((filter: IPaperFilter) => void);
-  onHighlightKeywordchanged: ((keyword: string) => void);
 }
 
 interface IState {
@@ -139,14 +138,6 @@ export default class Sidebar extends Component<IProps, IState> {
             />
             <Form.Text className="text-muted">
               Does not work yet.
-            </Form.Text>
-          </Form.Group>
-
-          <Form.Group>
-          <Form.Label>Highlight Papers</Form.Label>
-            <Form.Control type="text" onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.props.onHighlightKeywordchanged(e.target.value)} />
-            <Form.Text className="text-muted">
-              Search for papers inside the displayed graph.
             </Form.Text>
           </Form.Group>
         </Form>
