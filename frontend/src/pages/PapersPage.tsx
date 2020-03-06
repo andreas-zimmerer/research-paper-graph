@@ -14,7 +14,7 @@ interface IState {
 export default class PapersPage extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-    
+
     this.state = {
       selectedPaper: undefined,
       allPapers: []
