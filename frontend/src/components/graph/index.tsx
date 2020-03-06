@@ -17,6 +17,8 @@ interface IProps {
   selectedPaper?: IPaper;
   // Callback when a user selects a paper in the graph.
   onSelectedPaperChanged: ((paper: IPaper) => void);
+  // Callback when graph layouting is finished.
+  onGraphLayoutEnd: ((duration: number) => void);
 }
 
 /**
@@ -77,12 +79,31 @@ export default class PaperGraph extends Component<IProps> {
     this.drawGraph(paperNodes, citationLinks);
   }
 
+  public shouldComponentUpdate(nextProps: IProps) {
+    // Prevents that the graph is re-drawn all the time.
+    if (nextProps.selectedPaper !== this.props.selectedPaper) {
+      return true;
+    }
+
+    if (nextProps.papers.length !== this.props.papers.length) {
+      return true;
+    }
+    for (let i = 0; i < this.props.papers.length; i++) {
+      if (this.props.papers[i] !== nextProps.papers[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Actually draws nodes and edges on the screen.
    * @param papers The nodes that should be drawn.
    * @param links The links/edges between nodes.
    */
   private drawGraph(papers: PaperNode[], links: CitationLink[]) {
+    const time_start = performance.now();
+
     const width = this.canvas.current!.clientWidth;
     const height = this.canvas.current!.clientHeight;
     const padding = 20;
@@ -190,7 +211,8 @@ export default class PaperGraph extends Component<IProps> {
       .force('center', d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
       .force('charge', d3.forceManyBody().strength(-5000)) // Nodes are attracted one each other of value is > 0
       // .force('collide', d3.forceCollide().strength(10).radius(32).iterations(1))
-      .on('tick', ticked); // Force that avoids circle overlapping
+      .on('tick', ticked) // Force that avoids circle overlapping
+      .on('end', () => this.props.onGraphLayoutEnd(performance.now() - time_start));
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
