@@ -9,6 +9,8 @@ For example, if paper C is based on papers A and B and paper B is based on paper
 [![Actions Status](https://github.com/Jibbow/research-paper-graph/workflows/CI%20Pipeline%20Backend/badge.svg)](https://github.com/Jibbow/research-paper-graph/actions?query=workflow%3A%22CI+Pipeline+Backend%22)
 [![Actions Status](https://github.com/Jibbow/research-paper-graph/workflows/CI%20Pipeline%20Frontend/badge.svg)](https://github.com/Jibbow/research-paper-graph/actions?query=workflow%3A%22CI+Pipeline+Frontend%22)
 
+A limited (and sometimes broken) demo can be found on [https://research-paper-graph-frontend.herokuapp.com/](https://research-paper-graph-frontend.herokuapp.com/).
+
 ## Motivation
 When we read a paper for our research and are interested in further work on our topic, 
 going through all cited papers to find out which one is important can be a tedious exercise. In our project, we want to facilitate the process by providing a citation graph which will easily give the opportunity to see which papers are similar and hence close to our paper and which are generally most important to the topic by identifying the most central papers in the topic cluster in the graph.
