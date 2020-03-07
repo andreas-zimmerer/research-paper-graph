@@ -1,7 +1,7 @@
 """Scrape research papers from the Semantic Scholar API and put them into the database."""
+import os
 import semanticscholar as ss
 import requests
-import os
 
 BACKEND_URL = os.getenv('BACKEND_URL', 'http://127.0.0.1:5000')
 
