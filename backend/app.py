@@ -22,7 +22,7 @@ port = os.getenv('PORT', 5000)
 
 @manager.command
 def run():
-    app.run(port=port)
+    app.run(host='localhost', port=port)
 
 @manager.command
 def test():
