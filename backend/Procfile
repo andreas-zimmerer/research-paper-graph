@@ -1,1 +1,2 @@
+release: python app.py db migrate
 web: python app.py run
