@@ -17,6 +17,8 @@ interface IProps {
   selectedPaper?: IPaper;
   // Callback when a user selects a paper in the graph.
   onSelectedPaperChanged: ((paper: IPaper) => void);
+
+  typegraph?: Number;
 }
 
 /**
@@ -63,18 +65,81 @@ export default class PaperGraph extends Component<IProps> {
 
     // Furthermore, we need to find out which links we want to display between 'PaperNodes'
     const citationLinks: CitationLink[] = [];
-    for (const p of paperNodes) {
-      for (const c of p.paper.citations) {
-        // Try to find the paper that is cited (this is super slow for large numbers of papers...)
-        const citedPaper = paperNodes.find((n) => n.paper.id === c);
-        if (citedPaper !== undefined) {
-          // If the cited paper is available to us, we add a link
-          citationLinks.push(new CitationLink(p, citedPaper));
-        }
-      }
+    // type = 0 ,plot all citation ,type = 1 plot preceding plot = 2 plot siceding
+    var type = 1;
+
+    if(type == 0){
+              for (const p of paperNodes) {
+                for (const c of p.paper.citations) {
+                  // Try to find the paper that is cited (this is super slow for large numbers of papers...)
+                  const citedPaper = paperNodes.find((n) => n.paper.id === c);
+                  if (citedPaper !== undefined) {
+                    // If the cited paper is available to us, we add a link
+                    citationLinks.push(new CitationLink(p, citedPaper));
+                  }
+                }
+              }
+              this.drawGraph( paperNodes, citationLinks);
     }
 
-    this.drawGraph(paperNodes, citationLinks);
+    var new_nodes: PaperNode[] = [];
+    var new_nodes_id: string[] = [];
+
+    //type == 1 showing preceding papers ,type==2 showing suceding papers
+    if(type == 1 || type == 2){
+                    if(paperNodes.length != 0 && this.props.selectedPaper != undefined){
+                              var p = this.props.selectedPaper ;
+                              var paper_added = [p];
+                              var paper_added_id = [p.id];
+                              var bol = 1;
+                              var idx_i = 0;
+                              var n_el = 1;
+
+                              var one = 1;
+                              while(1){
+                                    var exit = 1;
+                                    p = paper_added[idx_i];
+                                    const p_graph =  paperNodes.find((n) => n.paper.id === p.id);
+                                    if(p_graph == undefined){
+                                      break;
+                                    }
+                                    if(!(new_nodes_id.includes(p_graph.paper.id ))){
+                                      new_nodes.push(p_graph);
+                                      new_nodes_id.push(p_graph.paper.id);
+                                    }
+                                    for (const c of p_graph.paper.citations) {
+                                        const citedPaper = paperNodes.find((n) => n.paper.id === c);
+                                        if(citedPaper == undefined){
+                                            continue;
+                                        }
+                                        var cond =false;
+                                        if(type == 2){
+                                          cond = (citedPaper.paper.year > p_graph.paper.year );
+                                        }
+                                        if(type == 1){
+                                          cond = (citedPaper.paper.year < p_graph.paper.year );
+                                        }
+                                        if (cond) {
+                                              if(!(paper_added_id.includes(citedPaper.paper.id))){
+                                                paper_added_id.push(citedPaper.paper.id);
+                                                paper_added.push(citedPaper.paper);
+                                                n_el+=1;
+                                              }
+                                              citationLinks.push(new CitationLink(p_graph, citedPaper));
+                                        }
+                                    }
+                                    idx_i +=1;
+                                    if(idx_i == n_el){
+                                      break;
+                                    }
+
+                              }
+
+                              this.drawGraph(new_nodes, citationLinks);
+                    }
+              }
+    //console.log(citationLinks);
+
   }
 
   /**
@@ -209,7 +274,7 @@ export default class PaperGraph extends Component<IProps> {
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function zoomFit() {
-          console.log("zoom fit called");
+
           var cy = height/2;
           var cx = width/2;
 
@@ -234,10 +299,6 @@ export default class PaperGraph extends Component<IProps> {
           else{
             var scale = height/(Maxi-Mini);
             var translate = -Mini*scale;
-            console.log("scale is",scale);
-            console.log("max is:" ,Maxi);
-            console.log("min is:" ,Mini);
-
 
             background.call(zoom.translateBy,0,translate);
             background.call(zoom.scaleBy,scale*0.6);
