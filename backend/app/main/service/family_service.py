@@ -78,7 +78,7 @@ def get(relative, family_query):
 def create_default_query(relative):
     """Get the given paper."""
     query = """
-            select p.id as from_id, p.title as from_title, p.abstract as from_abstract, p.year as from_year, a.name as from_author
+            select p.id as from_id, p.title as from_title, p.abstract as from_abstract, p.year as from_year, p.citations as from_citations, a.name as from_author
             from paper p, write w, author a 
             where p.title = '{title}' and p.id = w.paper and w.author = a.id
             """.format(title=relative)
