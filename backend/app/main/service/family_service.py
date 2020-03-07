@@ -4,16 +4,12 @@ from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 from app.main import db
 
-def get(relative, distance, year, citations):
-    """List all relatives of a paper."""
+def get_preceding(relative, distance, year, citations):
+    """List all preceding relatives of a paper."""
     distance, year, citations = correct_filters(distance, year, citations)
-    family_query = create_family_query(relative, distance, year, citations)
-    default_query = create_default_query(relative)
-    paper_dictionary = create_papers(family_query, default_query)
-    paper_list = paper_dictionary_to_paper_list(paper_dictionary)
-    sorted_paper_list = sort_paper_list(paper_list)
-    sorted_paper_list = add_clusters(sorted_paper_list)
-    return sorted_paper_list
+    family_query = create_preceding_family_query(relative, distance, year, citations)
+    preceding_paper_list = get(relative, family_query)
+    return preceding_paper_list
 
 def correct_filters(distance, year, citations):
     """If a filter is too big or too small, set it to a default value."""
@@ -25,8 +21,8 @@ def correct_filters(distance, year, citations):
     citations = max(citations, 1)
     return distance, year, citations
 
-def create_family_query(relative, distance, year, citations): # pylint:disable=unused-argument
-    """Get the family of the given paper."""
+def create_preceding_family_query(relative, distance, year, citations): # pylint:disable=unused-argument
+    """Get the preceding family of the given paper."""
     query = """
             with recursive family(from_id, from_title, from_abstract, from_year, from_author, to_id, to_title, to_abstract, to_year, to_author, distance) as 
                 (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, ta.name as to_author, 1 as distance 
@@ -43,6 +39,15 @@ def create_family_query(relative, distance, year, citations): # pylint:disable=u
             from family
             """.format(title=relative, distance=distance, year=year)
     return query
+
+def get(relative, family_query):
+    """List all relatives of a paper."""
+    default_query = create_default_query(relative)
+    paper_dictionary = create_papers(family_query, default_query)
+    paper_list = paper_dictionary_to_paper_list(paper_dictionary)
+    sorted_paper_list = sort_paper_list(paper_list)
+    sorted_paper_list = add_clusters(sorted_paper_list)
+    return sorted_paper_list
 
 def create_default_query(relative):
     """Get the given paper."""
