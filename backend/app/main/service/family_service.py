@@ -11,6 +11,13 @@ def get_preceding(relative, distance, year, citations):
     preceding_paper_list = get(relative, family_query)
     return preceding_paper_list
 
+def get_succeeding(relative, distance, year, citations):
+    """List all succeeding relatives of a paper."""
+    distance, year, citations = correct_filters(distance, year, citations)
+    family_query = create_succeeding_family_query(relative, distance, year, citations)
+    succeeding_paper_list = get(relative, family_query)
+    return succeeding_paper_list
+
 def correct_filters(distance, year, citations):
     """If a filter is too big or too small, set it to a default value."""
     distance = int(distance)
@@ -34,6 +41,25 @@ def create_preceding_family_query(relative, distance, year, citations): # pylint
                 select f.to_id as from_id, f.to_title as from_title, f.to_abstract as from_abstract, f.to_year as from_year, f.to_author as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, ta.name as to_author, f.distance + 1 as distance 
                 from family f, reference r, paper tp, write tw, author ta 
                 where f.distance < {distance} and tp.year >= {year} and f.to_id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id) 
+            
+            select * 
+            from family
+            """.format(title=relative, distance=distance, year=year)
+    return query
+
+def create_succeeding_family_query(relative, distance, year, citations): # pylint:disable=unused-argument
+    """Get the succeeding family of the given paper."""
+    query = """
+            with recursive family(from_id, from_title, from_abstract, from_year, from_author, to_id, to_title, to_abstract, to_year, to_author, distance) as 
+                (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, ta.name as to_author, 1 as distance 
+                from paper fp, write fw, author fa, reference r, paper tp, write tw, author ta 
+                where tp.title = '{title}' and fp.id = fw.paper and fw.author = fa.id and fp.id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id and fp.year >= {year}
+            
+                union all 
+            
+                select f.from_id as to_id, f.from_title as to_title, f.from_abstract as to_abstract, f.from_year as to_year, f.from_author as to_author, fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, fa.name as from_author, f.distance + 1 as distance 
+                from family f, reference r, paper fp, write fw, author fa 
+                where f.distance < {distance} and fp.year >= {year} and f.from_id = r.to_paper and r.from_paper = fp.id and fp.id = fw.paper and fw.author = fa.id) 
             
             select * 
             from family
