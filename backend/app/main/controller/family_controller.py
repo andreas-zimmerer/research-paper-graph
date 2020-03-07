@@ -8,7 +8,7 @@ from ..service.family_service import get
 api = RelativeDto.api
 _relative = RelativeDto.relative
 
-@api.route('/')
+@api.route('/preceding/')
 class Family(Resource):
     """Handle a paper family."""
     @api.response(200, 'The family of the paper has been listed.')

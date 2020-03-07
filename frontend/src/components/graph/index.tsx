@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import ReactTooltip from 'react-tooltip';
+import { Form } from 'react-bootstrap';
 import { IPaper } from '../../types/paper';
 import CitationLink from './CitationLink';
 import PaperNode from './PaperNode';
@@ -42,11 +43,23 @@ const truncateString = (s: string, length: number, useWordBoundary: boolean) => 
 export default class PaperGraph extends Component<IProps> {
   private canvas = React.createRef<SVGSVGElement>();
 
+  private paperNodes: PaperNode[] = [];
+  private citationLinks: CitationLink[] = [];
+
   public render() {
     // We will paint on this SVG canvas
     return (
       <div className="graph">
         <svg ref={this.canvas} className="canvas" />
+
+        <Form className="search-form">
+          <Form.Label>Highlight Papers</Form.Label>
+          <Form.Control type="text"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.highlightPapers(e.target.value)} />
+          <Form.Text className="text-muted">
+              Search for papers inside the displayed graph.
+          </Form.Text>
+        </Form>
 
         <ReactTooltip clickable={true} getContent={(paperId) => {
           const paper = this.props.papers.find((p) => p.id === paperId);
@@ -64,9 +77,9 @@ export default class PaperGraph extends Component<IProps> {
     // Furthermore, we need to find out which links we want to display between 'PaperNodes'
     const citationLinks: CitationLink[] = [];
     for (const p of paperNodes) {
-      for (const c of p.paper.citations) {
+      for (const r of p.paper.references) {
         // Try to find the paper that is cited (this is super slow for large numbers of papers...)
-        const citedPaper = paperNodes.find((n) => n.paper.id === c);
+        const citedPaper = paperNodes.find((n) => n.paper.id === r);
         if (citedPaper !== undefined) {
           // If the cited paper is available to us, we add a link
           citationLinks.push(new CitationLink(p, citedPaper));
@@ -74,7 +87,30 @@ export default class PaperGraph extends Component<IProps> {
       }
     }
 
+    this.paperNodes = paperNodes;
+    this.citationLinks = citationLinks;
     this.drawGraph(paperNodes, citationLinks);
+  }
+
+  /**
+   * Highlights a set of nodes in the graph based on a keyword without altering the graph.
+   * @param keyword If the title of a paper contains this keyword (case-insensitive), it will be highlighted.
+   */
+  private highlightPapers(keyword: string) {
+    const pattern = new RegExp(keyword, 'i');
+
+    const canvas = d3.select(this.canvas.current);
+    const nodes = canvas.selectAll('.node').data(this.paperNodes);
+
+    nodes.attr('class', (p: PaperNode) => {
+      if (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) {
+        return 'node node-selected';
+      }
+      if (keyword !== '' && p.paper.title.match(pattern)) {
+        return 'node node-highlighted';
+      }
+      return 'node';
+    });
   }
 
   /**
@@ -182,7 +218,7 @@ export default class PaperGraph extends Component<IProps> {
       .data(papers)
       .enter()
       .append('g')
-      .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node-group node-selected' : 'node-group');
+      .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node node-selected' : 'node');
     nodes.append('circle')
       .attr('r', 20)
       .attr('class', 'node-circle')
@@ -201,10 +237,10 @@ export default class PaperGraph extends Component<IProps> {
           .links(links) // and this the list of links
       )
       .force('y', d3.forceY<PaperNode>().strength(5).y( (d) => d.paper.cluster * 500 ))
-      // .force('x', d3.forceY().strength(0.1).y( height / 2 ))
       .force('center', d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
       .force('charge', d3.forceManyBody().strength(-5000)) // Nodes are attracted one each other of value is > 0
-      // .force('collide', d3.forceCollide().strength(10).radius(32).iterations(1))
+      .force('collide', d3.forceCollide().strength(5).radius(32).iterations(1))
+      .alphaDecay(0.1) // make the simulation converge faster, but less accurate
       .on('tick', ticked); // Force that avoids circle overlapping
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
