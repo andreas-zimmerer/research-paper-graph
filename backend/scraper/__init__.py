@@ -2,7 +2,7 @@
 import semanticscholar as ss
 import requests
 
-def scrape():
+def scrape(): # pylint:disable=too-many-locals
     """Scrape research papers from the Semantic Scholar API"""
     # Determine the ids of all relevant research papers.
     papers = get_all_papers()
