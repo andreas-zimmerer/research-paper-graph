@@ -92,7 +92,7 @@ export default class Sidebar extends Component<IProps, IState> {
             <Form.Label>Limit the distance inside the graph:</Form.Label>
             <Range
               step={1}
-              min={0}
+              min={1}
               max={5}
               values={this.state.distanceSliderValues}
               onChange={(values: number[]) => this.setState({distanceSliderValues: values})}
