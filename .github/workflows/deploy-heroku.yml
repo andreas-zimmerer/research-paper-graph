@@ -1,7 +1,11 @@
 name: "Heroku Deployment"
 
 # deploy on pull-requests - just for us so we can easily check what we are doing; not for production
-on: [pull_request]
+on:
+  push:
+  pull_request:
+    branches:
+      - master
 
 jobs:
   deploy:
