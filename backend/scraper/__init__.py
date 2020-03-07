@@ -12,8 +12,10 @@ def scrape():
         paperTitle = paper['title']
         paperAbstract = paper['abstract']
         paperYear = paper['year']
+        citations = paper['citations']
+        paperCitations = len(citations)
         # Put the given paper into the database.
-        post_paper(paperId, paperTitle, paperAbstract, paperYear)
+        post_paper(paperId, paperTitle, paperAbstract, paperYear, paperCitations)
 
         # Get all relevant information for the author: id, name
         authors = paper['authors']
@@ -33,7 +35,6 @@ def scrape():
 
         # Get all citations.
         # A citation is a paper that cites/uses the given paper.
-        citations = paper['citations']
         for citation in citations:
             citationId = citation['paperId']
             post_reference(citationId, paperId)
@@ -57,12 +58,13 @@ def get_all_papers():
             paperIds.append(paperId)
     return paperIds
 
-def post_paper(paper_id, paper_title, paper_abstract, paper_year):
+def post_paper(paper_id, paper_title, paper_abstract, paper_year, paper_citations):
     """Put the given paper into the database."""
     data = {'id':paper_id,
             'title':paper_title,
             'abstract':paper_abstract,
-            'year':paper_year
+            'year':paper_year,
+            'citations':paper_citations
             }
     r = requests.post(url='http://127.0.0.1:5000/paper/', json=data)
     print(r.status_code)
