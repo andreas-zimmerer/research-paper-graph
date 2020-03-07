@@ -6,22 +6,18 @@ on: [push]
 #      - master
 
 jobs:
-  deploy-backend:
-    name: Deploy Backend
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - env:
+    - name: Deploy Backend
+      env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_APP_NAME: "research-paper-graph-backend"
       run: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git +HEAD:refs/heads/master
-
-  deploy-frontend:
-    name: Deploy Frontend
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - env:
+    - name: Deploy Frontend
+      env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_APP_NAME: "research-paper-graph-frontend"
       run: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git +HEAD:refs/heads/master
