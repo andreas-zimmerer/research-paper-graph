@@ -7,12 +7,9 @@ from app.main import db
 def get(relative, distance, year, citations):
     """List all relatives of a paper."""
     distance, year, citations = correct_filters(distance, year, citations)
-    paper_query = create_paper_query(relative, distance, year, citations)
-    citations_query = create_citations_query(relative, distance, year, citations)
-    author_query = create_author_query(relative, distance, year, citations)
-    paper_dictionary = create_papers(paper_query)
-    paper_dictionary = add_citations(citations_query, paper_dictionary)
-    paper_dictionary = add_authors(author_query, paper_dictionary)
+    family_query = create_family_query(relative, distance, year, citations)
+    default_query = create_default_query(relative)
+    paper_dictionary = create_papers(family_query, default_query)
     paper_list = paper_dictionary_to_paper_list(paper_dictionary)
     sorted_paper_list = sort_paper_list(paper_list)
     sorted_paper_list = add_clusters(sorted_paper_list)
@@ -21,112 +18,95 @@ def get(relative, distance, year, citations):
 def correct_filters(distance, year, citations):
     """If a filter is too big or too small, set it to a default value."""
     distance = int(distance)
-    distance = min(distance, 3)
-    distance = max(distance, 1)
+    distance = min(distance, 5)
+    distance = max(distance, 0)
     year = int(year)
     citations = int(citations)
     citations = max(citations, 1)
     return distance, year, citations
 
-def create_paper_query(relative, distance, year, citations):
-    """Get all papers from the requested family."""
-    paper_query = "" \
-                  "select distinct from_paper as paper, from_title as title, " \
-                  "from_abstract as abstract, from_year as year " \
-                  "from basics " \
-                  "" \
-                  "UNION " \
-                  "" \
-                  "select distinct to_paper as paper, to_title as title, " \
-                  "to_abstract as abstract, to_year as year " \
-                  "from basics "
-    query = create_query(relative, distance, year, citations) + paper_query
-    return query
-
-def create_citations_query(relative, distance, year, citations):
-    """Get all the citations from the requested family."""
-    citations_query = "" \
-                      "select distinct from_paper, to_paper " \
-                      "from basics "
-    query = create_query(relative, distance, year, citations) + citations_query
-    return query
-
-def create_author_query(relative, distance, year, citations):
-    """Get all the writing relations from the respective family."""
-    author_query = "" \
-                   "select distinct from_paper as paper, from_author as author " \
-                   "from basics " \
-                   "" \
-                   "UNION " \
-                   "" \
-                   "select distinct to_paper as paper, to_author as author " \
-                   "from basics "
-    query = create_query(relative, distance, year, citations) + author_query
-    return query
-
-def create_query(relative, distance, year, citations):
+def create_family_query(relative, distance, year, citations): # pylint:disable=unused-argument
     """Get the family of the given paper."""
-    query = "with recursive family(from_paper, from_title, from_abstract, from_year, to_paper, " \
-            "to_title, to_abstract, to_year, to_distance) as (" \
-            "select distinct pf.id, pf.title, pf.abstract, pf.year, pt.id, pt.title, " \
-            "pt.abstract, pt.year, 1 " \
-            "from paper pf, reference r, paper pt " \
-            "where pf.id = r.from_paper and pf.title like '" + relative + \
-            "' and pt.id = r.to_paper and pt.year > " + str(year) + " " \
-            "" \
-            "UNION ALL " \
-            "" \
-            "select f.to_paper as from_paper, f.to_title as from_title, f.to_abstract as " \
-            "from_abstract, f.to_year as from_year, pt.id as to_paper, pt.title as " \
-            "to_title, pt.abstract as to_abstract, pt.year as to_year, f.to_distance + 1 " \
-            "from family f, reference r, paper pt " \
-            "where f.to_distance < " + str(distance) + " and f.to_paper = r.from_paper and " \
-            "pt.id = r.to_paper and pt.year > " + str(year) + "), " \
-            "" \
-            "basics(from_paper, from_title, from_abstract, from_year, to_paper, to_title, " \
-            "to_abstract, to_year, to_distance, relevance, from_author, to_author) as ( " \
-            "select distinct f.*, r.relevance, fa.name as from_author, ta.name as to_author " \
-            "from family f inner join " \
-            "(select to_paper, count(to_paper) as relevance " \
-            "from family " \
-            "group by to_paper) r " \
-            "on f.to_paper = r.to_paper, author fa, write fw, author ta, write tw " \
-            "where r.relevance > " + str(citations) + " and fw.author = fa.id and " \
-            "fw.paper = f.from_paper and tw.author = ta.id and tw.paper = f.to_paper) "
+    query = """
+            with recursive family(from_id, from_title, from_abstract, from_year, from_author, to_id, to_title, to_abstract, to_year, to_author, distance) as 
+                (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, ta.name as to_author, 1 as distance 
+                from paper fp, write fw, author fa, reference r, paper tp, write tw, author ta 
+                where fp.title = '{title}' and fp.id = fw.paper and fw.author = fa.id and fp.id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id and tp.year >= {year}
+            
+                union all 
+            
+                select f.to_id as from_id, f.to_title as from_title, f.to_abstract as from_abstract, f.to_year as from_year, f.to_author as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, ta.name as to_author, f.distance + 1 as distance 
+                from family f, reference r, paper tp, write tw, author ta 
+                where f.distance < {distance} and tp.year >= {year} and f.to_id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id) 
+            
+            select * 
+            from family
+            """.format(title=relative, distance=distance, year=year)
     return query
 
-def create_papers(paper_query):
+def create_default_query(relative):
+    """Get the given paper."""
+    query = """
+            select p.id as from_id, p.title as from_title, p.abstract as from_abstract, p.year as from_year, a.name as from_author
+            from paper p, write w, author a 
+            where p.title = '{title}' and p.id = w.paper and w.author = a.id
+            """.format(title=relative)
+    return query
+
+def create_papers(family_query, default_query):
     """Transform the query format to a dictionary format."""
-    papers = db.engine.execute(paper_query)
     paper_dictionary = defaultdict(list)
+    papers = db.engine.execute(family_query)
+    paper_dictionary = add_family(paper_dictionary, papers)
+    if len(paper_dictionary) == 0:
+        papers = db.engine.execute(default_query)
+        paper_dictionary = add_default_paper(paper_dictionary, papers)
+    return paper_dictionary
+
+def add_family(paper_dictionary, papers):
+    """Add a family to the dictionary."""
     for paper in papers:
-        from_paper = paper['paper']
-        paper_dictionary[from_paper] = {
-            "id": from_paper,
-            "title": paper['title'],
-            "abstract": paper['abstract'],
-            "year": paper['year'],
-            "cluster": 0,
-            "citations": [],
-            "authors": [],
-        }
+        paper_dictionary = add_paper(paper_dictionary, paper, 'from')
+        paper_dictionary = add_paper(paper_dictionary, paper, 'to')
+        from_id = paper['from_id']
+        to_id = paper['to_id']
+        references = paper_dictionary[from_id]['references']
+        if to_id not in references:
+            references.append(to_id)
     return paper_dictionary
 
-def add_citations(citations_query, paper_dictionary):
-    """Fill the citation field of every paper in the dictionary."""
-    citations = db.engine.execute(citations_query)
-    for citation in citations:
-        from_paper = citation['from_paper']
-        paper_dictionary[from_paper]['citations'].append(citation['to_paper'])
+def add_default_paper(paper_dictionary, papers):
+    """Add the given paper to the dictionary."""
+    for paper in papers:
+        paper_dictionary = add_paper(paper_dictionary, paper, 'from')
     return paper_dictionary
 
-def add_authors(author_query, paper_dictionary):
-    """Fill the author field of every paper in the dictionary."""
-    writes = db.engine.execute(author_query)
-    for write in writes:
-        from_paper = write['paper']
-        paper_dictionary[from_paper]['authors'].append(write['author'])
+def add_paper(paper_dictionary, paper, direction):
+    """Add a paper to the dictionary."""
+    paper_id = paper[direction + '_id']
+    paper_title = paper[direction + '_title']
+    paper_abstract = paper[direction + '_abstract']
+    paper_year = paper[direction + '_year']
+    paper_author = paper[direction + '_author']
+    paper = create_paper(paper_id, paper_title, paper_abstract, paper_year)
+    paper_dictionary.setdefault(paper_id, paper)
+    authors = paper_dictionary[paper_id]['authors']
+    if paper_author not in authors:
+        authors.append(paper_author)
     return paper_dictionary
+
+def create_paper(paper_id, paper_title, paper_abstract, paper_year):
+    """Initialize a paper."""
+    paper = {
+        "id": paper_id,
+        "title": paper_title,
+        "abstract": paper_abstract,
+        "year": paper_year,
+        "cluster": 0,
+        "references": [],
+        "authors": []
+    }
+    return paper
 
 def paper_dictionary_to_paper_list(paper_dictionary):
     """Transform the paper dictionary into a data list."""
@@ -145,7 +125,6 @@ def add_clusters(sorted_paper_list):
     """Cluster the papers by abstract keywords. Assign each paper its cluster."""
     if len(sorted_paper_list) == 0:
         return sorted_paper_list
-
     abstract_list = extract_abstracts(sorted_paper_list)
     vectorizer, model = train_clusters(abstract_list)
     sorted_paper_list = predict_clusters(sorted_paper_list, vectorizer, model)
