@@ -10,6 +10,7 @@ jobs:
     name: Deploy Backend
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v1
     - env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_BACKEND_NAME: "research-paper-graph-backend"
@@ -20,6 +21,7 @@ jobs:
     name: Deploy Frontend
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v1
     - env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_FRONTEND_NAME: "research-paper-graph-frontend"
