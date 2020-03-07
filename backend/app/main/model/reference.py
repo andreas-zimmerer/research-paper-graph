@@ -8,3 +8,4 @@ class Reference(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     from_paper = db.Column(db.String(42))
     to_paper = db.Column(db.String(42))
+    is_influential = db.Column(db.Boolean)

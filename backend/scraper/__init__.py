@@ -31,13 +31,15 @@ def scrape(): # pylint:disable=too-many-locals
         references = paper['references']
         for reference in references:
             referenceId = reference['paperId']
-            post_reference(paperId, referenceId)
+            referenceIsInfluential = reference['isInfluential']
+            post_reference(paperId, referenceId, referenceIsInfluential)
 
         # Get all citations.
         # A citation is a paper that cites/uses the given paper.
         for citation in citations:
             citationId = citation['paperId']
-            post_reference(citationId, paperId)
+            citationIsInfluential = citation['isInfluential']
+            post_reference(citationId, paperId, citationIsInfluential)
 
 def get_all_papers():
     """Determine the ids of all relevant research papers."""
@@ -85,10 +87,11 @@ def post_write(paper, author):
     r = requests.post(url='http://127.0.0.1:5000/write/', json=data)
     print(r.status_code)
 
-def post_reference(source, sink):
+def post_reference(source, sink, isInfluential):
     """Post the given reference into the database."""
     data = {'from_paper':source,
             'to_paper':sink,
+            'is_influential': isInfluential,
             }
     r = requests.post(url='http://127.0.0.1:5000/reference/', json=data)
     print(r.status_code)

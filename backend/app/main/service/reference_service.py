@@ -6,6 +6,7 @@ def post(data):
     """Create a new reference."""
     source = data['from_paper']
     sink = data['to_paper']
+    is_influential = data['is_influential']
     reference = Reference.query.filter_by(from_paper=source).filter_by(to_paper=sink).first()
     if reference:
         response = {
@@ -14,7 +15,7 @@ def post(data):
         }
         return response, 409
 
-    reference = Reference(from_paper=source, to_paper=sink)
+    reference = Reference(from_paper=source, to_paper=sink, is_influential=is_influential)
     save_changes(reference)
     response = {
         'status': 'Success',
