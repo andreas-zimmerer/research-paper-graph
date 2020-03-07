@@ -64,9 +64,9 @@ export default class PaperGraph extends Component<IProps> {
     // Furthermore, we need to find out which links we want to display between 'PaperNodes'
     const citationLinks: CitationLink[] = [];
     for (const p of paperNodes) {
-      for (const c of p.paper.citations) {
+      for (const r of p.paper.references) {
         // Try to find the paper that is cited (this is super slow for large numbers of papers...)
-        const citedPaper = paperNodes.find((n) => n.paper.id === c);
+        const citedPaper = paperNodes.find((n) => n.paper.id === r);
         if (citedPaper !== undefined) {
           // If the cited paper is available to us, we add a link
           citationLinks.push(new CitationLink(p, citedPaper));

@@ -28,13 +28,10 @@ def scrape():
             post_write(paperId, authorId)
 
         # Get all references
-        citations = paper['citations']
-        if citations == []:
-            citations = paper['references']
-        for citation in citations:
-            citationId = citation['paperId']
-            post_reference(paperId, citationId)
-
+        references = paper['references']
+        for reference in references:
+            referenceId = reference['paperId']
+            post_reference(paperId, referenceId)
 
 def get_all_papers():
     """Determine the ids of all relevant research papers."""
