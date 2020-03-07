@@ -14,7 +14,6 @@ jobs:
     - env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_APP_NAME: "research-paper-graph-backend"
-      #if: github.ref == 'refs/heads/master' && job.status == 'success'
       run: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git +HEAD:refs/heads/master
 
   deploy-frontend:
@@ -25,5 +24,4 @@ jobs:
     - env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_APP_NAME: "research-paper-graph-frontend"
-      #if: github.ref == 'refs/heads/master' && job.status == 'success'
       run: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git +HEAD:refs/heads/master
