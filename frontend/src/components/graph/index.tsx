@@ -245,7 +245,7 @@ export default class PaperGraph extends Component<IProps> {
         }
       });
       if (!(maxYdist === -999999 || minYdist === 999999)) {
-        const scale = width / ((maxYdist - minYdist) * currentZoom);
+        const scale = height / ((maxYdist - minYdist) * currentZoom);
         background.call(zoom.scaleTo, Math.max(0.5, currentZoom * scale * 0.9));
       }
     }
