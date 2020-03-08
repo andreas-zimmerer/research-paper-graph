@@ -11,7 +11,14 @@ def post(data):
             'message': 'The paper already exists.'
         }
         return response, 409
-    paper = Paper(id=data['id'], title=data['title'], year=data['year'], abstract=data['abstract'])
+
+    data_id = data['id']
+    title = data['title']
+    year = data['year']
+    abstract = data['abstract']
+    citations = data['citations']
+    paper = Paper(id=data_id, title=title, year=year, abstract=abstract, citations=citations)
+
     save_changes(paper)
     response = {
         'status': 'Success',
