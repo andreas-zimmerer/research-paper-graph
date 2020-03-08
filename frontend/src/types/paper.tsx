@@ -5,5 +5,5 @@ export interface IPaper {
   abstract: string;
   cluster: number;
   year: number;
-  citations: string[];
+  references: string[];
 }
