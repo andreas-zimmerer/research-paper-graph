@@ -6,4 +6,6 @@ export interface IPaper {
   cluster: number;
   year: number;
   references: string[];
+  citations: number;
+  is_influential: boolean;
 }

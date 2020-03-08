@@ -28,6 +28,11 @@
     stroke: #bbb;
 }
 
+.line.influential {
+    stroke-width: 2px;
+    stroke: rgb(55, 55, 55);
+}
+
 .node-circle {
     fill: #64a0c8;
     stroke: #555;
@@ -74,6 +79,10 @@
 }
 
 .paper-tooltip .authors {
+    color: #bbb;
+}
+
+.paper-tooltip .citations {
     color: #bbb;
 }
 

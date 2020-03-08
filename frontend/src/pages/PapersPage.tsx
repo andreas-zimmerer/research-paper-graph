@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PaperGraph from '../components/graph';
-import Sidebar, { IPaperFilter } from '../components/sidebar';
+import Sidebar, { IPaperFilter, GraphContent } from '../components/sidebar';
 import { IPaper } from '../types/paper';
 
 interface IProps {}
@@ -9,6 +9,7 @@ interface IState {
   selectedPaper?: IPaper;
   currentFilter?: IPaperFilter;
   allPapers: IPaper[];
+  graphContent: GraphContent;
 }
 
 export default class PapersPage extends Component<IProps, IState> {
@@ -17,7 +18,8 @@ export default class PapersPage extends Component<IProps, IState> {
 
     this.state = {
       selectedPaper: undefined,
-      allPapers: []
+      allPapers: [],
+      graphContent: GraphContent.PRECEDING
     };
   }
 
@@ -25,7 +27,8 @@ export default class PapersPage extends Component<IProps, IState> {
     return (
       <div className="page">
         <Sidebar onSelectedPaperChanged={this.handlePaperChanged}
-                 onPaperFilterChanged={this.handlePaperFilterChanged} />
+                 onPaperFilterChanged={this.handlePaperFilterChanged}
+                 onGraphContentChanged={this.handleGraphContentChanged} />
         <PaperGraph papers={this.state.allPapers}
                     selectedPaper={this.state.selectedPaper}
                     onSelectedPaperChanged={this.handlePaperChanged} />
@@ -51,8 +54,15 @@ export default class PapersPage extends Component<IProps, IState> {
     });
   }
 
+  private handleGraphContentChanged = (content: GraphContent) => {
+    this.setState({graphContent: content}, () => {
+      this.fetchNewPaper();
+    });
+  }
+
   private fetchNewPaper = () => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/family/preceding/?paper=${encodeURIComponent(this.state.selectedPaper?.title || '')}&distance=${this.state.currentFilter?.maxDistance || 3}&year=${this.state.currentFilter?.minYear || 0}&citations=${this.state.currentFilter?.minCitations || 1}`)
+    const graphContent = this.state.graphContent.toLowerCase();
+    fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/family/${graphContent}/?paper=${encodeURIComponent(this.state.selectedPaper?.title || '')}&distance=${this.state.currentFilter?.maxDistance || 3}&year=${this.state.currentFilter?.minYear || 0}&citations=${this.state.currentFilter?.minCitations || 1}`)
       .then((response) => response.json())
       .then((p: IPaper[]) => this.setState({allPapers: p}));
   }

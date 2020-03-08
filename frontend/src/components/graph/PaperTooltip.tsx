@@ -19,6 +19,9 @@ export default class PaperTooltip extends Component<IProps> {
         <div className="authors">
           {this.props.paper.authors.join(', ') + ` (${this.props.paper.year})`}
         </div>
+        <div className="citations">
+          Citations: {this.props.paper.citations}
+        </div>
         <div className="abstract">
           <div className="subtitle">Abstract:</div>
           {this.props.paper.abstract}
