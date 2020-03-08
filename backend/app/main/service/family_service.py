@@ -1,9 +1,9 @@
 """Family Service"""
 from collections import defaultdict
 from sklearn.cluster import KMeans
+from sklearn.feature_extraction.text import TfidfVectorizer
 import nltk
 from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
 from app.main import db
 
 def get_preceding(relative, distance, year, citations):
