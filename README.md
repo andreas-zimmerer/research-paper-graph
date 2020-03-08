@@ -80,12 +80,22 @@ Link: [https://d3js.org](https://d3js.org)
 5. [Recommended] Install virtualenv.
 6. [Recommended] If you are using IntelliJ, install the [PyLint Plugin](https://plugins.jetbrains.com/plugin/11084-pylint/).
 
-#### Step 2: Create the database
+#### Step 2: Initialize the database
 1. Start PostgreSQL.
 
 2. Create a database called research:
 ```
 createdb research
+```
+
+3. Navigate to the backend directory: 
+```
+cd backend
+```
+
+4. Initialize database migrations:
+```
+python app.py db init
 ```
 
 #### Step 3: Start the backend
