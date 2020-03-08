@@ -60,7 +60,7 @@ class EntireFamily(Resource):
                      'citations': 'Citations'})
     @api.marshal_with(_relative)
     def get(self):
-        """List all relatives of a paper."""
+        """List all preceding relatives of a paper."""
         relative = request.args.get('paper')
         distance = request.args.get('distance')
         year = request.args.get('year')
