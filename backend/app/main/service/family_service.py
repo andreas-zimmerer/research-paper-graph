@@ -38,14 +38,14 @@ def correct_filters(distance, year, citations):
 def create_preceding_family_query(relative, distance, year, citations):
     """Get the preceding family of the given paper."""
     query = """
-            with recursive family(from_id, from_title, from_abstract, from_year, from_citations, from_author, to_id, to_title, to_abstract, to_year, to_citations, to_author, distance) as 
-                (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, fp.citations as from_citations, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, tp.citations as to_citations, ta.name as to_author, 1 as distance 
+            with recursive family(from_id, from_title, from_abstract, from_year, from_is_influential, from_citations, from_author, to_id, to_title, to_abstract, to_year, to_is_influential, to_citations, to_author, distance) as 
+                (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, false as from_is_influential, fp.citations as from_citations, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, r.is_influential as to_is_influential, tp.citations as to_citations, ta.name as to_author, 1 as distance 
                 from paper fp, write fw, author fa, reference r, paper tp, write tw, author ta 
                 where fp.title = '{title}' and fp.id = fw.paper and fw.author = fa.id and fp.id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id and tp.year >= {year} and tp.citations >= {citations}
             
                 union all 
             
-                select f.to_id as from_id, f.to_title as from_title, f.to_abstract as from_abstract, f.to_year as from_year, f.to_citations as from_citations, f.to_author as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, tp.citations as to_citations, ta.name as to_author, f.distance + 1 as distance 
+                select f.to_id as from_id, f.to_title as from_title, f.to_abstract as from_abstract, f.to_year as from_year, f.from_is_influential as from_is_influential, f.to_citations as from_citations, f.to_author as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, false as to_is_influential, tp.citations as to_citations, ta.name as to_author, f.distance + 1 as distance 
                 from family f, reference r, paper tp, write tw, author ta 
                 where f.distance < {distance} and tp.year >= {year} and tp.citations >= {citations} and f.to_id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id) 
             
@@ -57,14 +57,14 @@ def create_preceding_family_query(relative, distance, year, citations):
 def create_succeeding_family_query(relative, distance, year, citations):
     """Get the succeeding family of the given paper."""
     query = """
-            with recursive family(from_id, from_title, from_abstract, from_year, from_citations, from_author, to_id, to_title, to_abstract, to_year, to_citations, to_author, distance) as 
-                (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, fp.citations as from_citations, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, tp.citations as to_citations, ta.name as to_author, 1 as distance 
+            with recursive family(from_id, from_title, from_abstract, from_year, from_is_influential, from_citations, from_author, to_id, to_title, to_abstract, to_year, to_is_influential, to_citations, to_author, distance) as 
+                (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, r.is_influential as from_is_influential, fp.citations as from_citations, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, false as to_is_influential, tp.citations as to_citations, ta.name as to_author, 1 as distance 
                 from paper fp, write fw, author fa, reference r, paper tp, write tw, author ta 
                 where tp.title = '{title}' and fp.id = fw.paper and fw.author = fa.id and fp.id = r.from_paper and r.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id and fp.year >= {year} and fp.citations >= {citations}
             
                 union all 
             
-                select f.from_id as to_id, f.from_title as to_title, f.from_abstract as to_abstract, f.from_year as to_year, f.from_citations as to_citations, f.from_author as to_author, fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, fp.citations as from_citations, fa.name as from_author, f.distance + 1 as distance 
+                select f.from_id as to_id, f.from_title as to_title, f.from_abstract as to_abstract, f.from_year as to_year, f.from_is_influential as to_is_influential, f.from_citations as to_citations, f.from_author as to_author, fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, false as from_is_influential, fp.citations as from_citations, fa.name as from_author, f.distance + 1 as distance 
                 from family f, reference r, paper fp, write fw, author fa 
                 where f.distance < {distance} and fp.year >= {year} and fp.citations >= {citations} and f.from_id = r.to_paper and r.from_paper = fp.id and fp.id = fw.paper and fw.author = fa.id) 
             
@@ -76,23 +76,23 @@ def create_succeeding_family_query(relative, distance, year, citations):
 def create_entire_family_query(relative, distance, year, citations):
     """Get the entire family of the given paper."""
     query = """
-            with recursive duplicates(from_paper, to_paper) as 
-                (select from_paper as from_paper, to_paper as to_paper
+            with recursive duplicates(from_paper, to_paper, is_influential) as 
+                (select from_paper as from_paper, to_paper as to_paper, is_influential as is_influential
                 from reference 
                 
                 union all 
                 
-                select to_paper as from_paper, from_paper as to_paper
+                select to_paper as from_paper, from_paper as to_paper, is_influential as is_influential
                 from reference),
                 
-            family(from_id, from_title, from_abstract, from_year, from_citations, from_author, to_id, to_title, to_abstract, to_year, to_citations, to_author, distance) as 
-                (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, fp.citations as from_citations, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, tp.citations as to_citations, ta.name as to_author, 1 as distance 
+            family(from_id, from_title, from_abstract, from_year, from_is_influential, from_citations, from_author, to_id, to_title, to_abstract, to_year, to_is_influential, to_citations, to_author, distance) as 
+                (select fp.id as from_id, fp.title as from_title, fp.abstract as from_abstract, fp.year as from_year, false as from_is_influential, fp.citations as from_citations, fa.name as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, d.is_influential as to_is_influential, tp.citations as to_citations, ta.name as to_author, 1 as distance 
                 from paper fp, write fw, author fa, duplicates d, paper tp, write tw, author ta 
                 where fp.title = '{title}' and fp.id = fw.paper and fw.author = fa.id and fp.id = d.from_paper and d.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id and tp.year >= {year} and tp.citations >= {citations}
             
                 union all 
             
-                select f.to_id as from_id, f.to_title as from_title, f.to_abstract as from_abstract, f.to_year as from_year, f.to_citations as from_citations, f.to_author as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, tp.citations as to_citations, ta.name as to_author, f.distance + 1 as distance 
+                select f.to_id as from_id, f.to_title as from_title, f.to_abstract as from_abstract, f.to_year as from_year, f.from_is_influential as from_is_influential, f.to_citations as from_citations, f.to_author as from_author, tp.id as to_id, tp.title as to_title, tp.abstract as to_abstract, tp.year as to_year, false as to_is_influential, tp.citations as to_citations, ta.name as to_author, f.distance + 1 as distance 
                 from family f, duplicates d, paper tp, write tw, author ta 
                 where f.distance < {distance} and tp.year >= {year} and tp.citations >= {citations} and f.to_id = d.from_paper and d.to_paper = tp.id and tp.id = tw.paper and tw.author = ta.id) 
             
@@ -113,7 +113,7 @@ def get(relative, family_query):
 def create_default_query(relative):
     """Get the given paper."""
     query = """
-            select p.id as from_id, p.title as from_title, p.abstract as from_abstract, p.year as from_year, p.citations as from_citations, a.name as from_author
+            select p.id as from_id, p.title as from_title, p.abstract as from_abstract, p.year as from_year, false as from_is_influential, p.citations as from_citations, a.name as from_author
             from paper p, write w, author a 
             where p.title = '{title}' and p.id = w.paper and w.author = a.id
             """.format(title=relative)
@@ -153,10 +153,14 @@ def add_paper(paper_dictionary, paper, direction):
     paper_title = paper[direction + '_title']
     paper_abstract = paper[direction + '_abstract']
     paper_year = paper[direction + '_year']
+    paper_is_influential = paper[direction + '_is_influential']
     paper_citations = paper[direction + '_citations']
     paper_author = paper[direction + '_author']
     paper = create_paper(paper_id, paper_title, paper_abstract, paper_year, paper_citations)
     paper_dictionary.setdefault(paper_id, paper)
+    is_influential = paper_dictionary[paper_id]['is_influential']
+    if not is_influential:
+        paper_dictionary[paper_id]['is_influential'] = paper_is_influential
     authors = paper_dictionary[paper_id]['authors']
     if paper_author not in authors:
         authors.append(paper_author)
@@ -169,6 +173,7 @@ def create_paper(paper_id, paper_title, paper_abstract, paper_year, paper_citati
         "title": paper_title,
         "abstract": paper_abstract,
         "year": paper_year,
+        "is_influential": False,
         "citations": paper_citations,
         "cluster": 0,
         "references": [],
