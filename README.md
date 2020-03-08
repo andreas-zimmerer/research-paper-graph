@@ -93,9 +93,9 @@ createdb research
 cd backend
 ```
 
-4. Initialize database migrations:
+4. Upgrade database migrations:
 ```
-python app.py db init
+python app.py db upgrade
 ```
 
 #### Step 3: Start the backend
