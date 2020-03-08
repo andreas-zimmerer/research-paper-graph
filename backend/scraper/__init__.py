@@ -41,12 +41,6 @@ def scrape(): # pylint:disable=too-many-locals
             citationIsInfluential = citation['isInfluential']
             post_reference(citationId, paperId, citationIsInfluential)
 
-        # Get all citations.
-        # A citation is a paper that cites/uses the given paper.
-        for citation in citations:
-            citationId = citation['paperId']
-            post_reference(citationId, paperId)
-
 def get_all_papers():
     """Determine the ids of all relevant research papers."""
     neumann = 143993045
