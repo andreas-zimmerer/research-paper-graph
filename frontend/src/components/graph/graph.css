@@ -29,7 +29,8 @@
 }
 
 .line.influential {
-    stroke: rgb(255, 118, 118);
+    stroke-width: 2px;
+    stroke: rgb(55, 55, 55);
 }
 
 .node-circle {
