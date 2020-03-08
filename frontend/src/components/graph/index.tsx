@@ -181,7 +181,7 @@ export default class PaperGraph extends Component<IProps> {
 
     // Create an x-axis with years
     const xAxis = d3.axisBottom(xAxisScale)
-      .tickValues(Array.from({length: maxYear - minYear + 1 + 20}, (v, k) => k + minYear - 10))
+      .tickValues(Array.from({length: maxYear - minYear + 1 + 40}, (v, k) => k + minYear - 20))
       .tickFormat(d3.format('d'));
     const xAxisGroup = canvas.append('g')
       .attr('class', 'axis')
@@ -234,19 +234,19 @@ export default class PaperGraph extends Component<IProps> {
     // Fits the graph onto the display pane according to its expansion on x-axis.
     function zoomFit() {
       const currentZoom = d3.zoomTransform(background.node() as Element).k;
-      let maxXdist =  -999999;
-      let minXdist =   999999;
+      let maxYdist =  -999999;
+      let minYdist =   999999;
       nodes.each((n) => {
-        if (n.x > maxXdist) {
-          maxXdist = n.x;
+        if (n.y > maxYdist) {
+          maxYdist = n.y;
         }
-        if (n.x < minXdist) {
-          minXdist = n.x;
+        if (n.y < minYdist) {
+          minYdist = n.y;
         }
       });
-      if (!(maxXdist === -999999 || minXdist === 999999)) {
-        const scale = width / ((maxXdist - minXdist) * currentZoom);
-        background.call(zoom.scaleBy, scale * 0.9);
+      if (!(maxYdist === -999999 || minYdist === 999999)) {
+        const scale = width / ((maxYdist - minYdist) * currentZoom);
+        background.call(zoom.scaleTo, Math.max(0.5, currentZoom * scale * 0.9));
       }
     }
 
