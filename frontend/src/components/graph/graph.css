@@ -76,6 +76,10 @@
     color: #bbb;
 }
 
+.paper-tooltip .citations {
+    color: #bbb;
+}
+
 .paper-tooltip .abstract {
     margin-top: 1em;
 }
