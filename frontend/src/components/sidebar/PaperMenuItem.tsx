@@ -21,8 +21,8 @@ export default class PaperMenuItem extends Component<IProps> {
             <Highlighter key="subtitle" search={this.props.searchText}>
                 {
                   this.props.paper.year +
-                  ((this.props.paper.authors) ? ' - ' + this.props.paper.authors.join(', ') : '') + "; " +
-                  "Citations: " + this.props.paper.citations
+                  ((this.props.paper.authors) ? ' - ' + this.props.paper.authors.join(', ') : '') + '; ' +
+                  'Citations: ' + this.props.paper.citations
                 }
             </Highlighter>
           </div>
