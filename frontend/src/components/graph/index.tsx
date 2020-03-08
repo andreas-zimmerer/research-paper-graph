@@ -121,7 +121,6 @@ export default class PaperGraph extends Component<IProps> {
   private drawGraph(papers: PaperNode[], links: CitationLink[]) {
     const width = this.canvas.current!.clientWidth;
     const height = this.canvas.current!.clientHeight;
-    const padding = 20;
 
     // Compute the max and min years so we can adjust the scale
     let minYear = Number.MAX_VALUE;
@@ -147,7 +146,7 @@ export default class PaperGraph extends Component<IProps> {
     // Define a scale for the x-axis and the grid lines.
     const xAxisScale = d3.scaleLinear()
       .domain([minYear, maxYear])
-      .range([padding, width - padding]);
+      .range([0, width]);
 
     // The background of the plot.
     // NOTE: because we only grab the pan&zoom event on the background,
@@ -182,6 +181,7 @@ export default class PaperGraph extends Component<IProps> {
 
     // Create an x-axis with years
     const xAxis = d3.axisBottom(xAxisScale)
+      .tickValues(Array.from({length: maxYear - minYear + 1 + 40}, (v, k) => k + minYear - 20))
       .tickFormat(d3.format('d'));
     const xAxisGroup = canvas.append('g')
       .attr('class', 'axis')
@@ -208,13 +208,13 @@ export default class PaperGraph extends Component<IProps> {
       .append('g')
       .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node node-selected' : 'node');
     nodes.append('circle')
-      .attr('r', 20)
+      .attr('r', 18)
       .attr('class', 'node-circle')
       .attr('data-tip', (d) => d.paper.id)
       .on('click', (d) => this.props.onSelectedPaperChanged(d.paper));
     nodes.append('text')
       .attr('dx', 20)
-      .attr('dy', -10)
+      .attr('dy', -4)
       .attr('class', 'node-text')
       .text((d) => truncateString(d.paper.title, 20, true));
 
@@ -234,29 +234,26 @@ export default class PaperGraph extends Component<IProps> {
     // Fits the graph onto the display pane according to its expansion on x-axis.
     function zoomFit() {
       const currentZoom = d3.zoomTransform(background.node() as Element).k;
-      let maxXdist =  -999999;
-      let minXdist =   999999;
+      let maxYdist =  -999999;
+      let minYdist =   999999;
       nodes.each((n) => {
-        if (n.x > maxXdist) {
-          maxXdist = n.x;
+        if (n.y > maxYdist) {
+          maxYdist = n.y;
         }
-        if (n.x < minXdist) {
-          minXdist = n.x;
+        if (n.y < minYdist) {
+          minYdist = n.y;
         }
       });
-      if (!(maxXdist === -999999 || minXdist === 999999)) {
-        const scale = width / ((maxXdist - minXdist) * currentZoom);
-        background.call(zoom.scaleBy, scale * 0.9);
+      if (!(maxYdist === -999999 || minYdist === 999999)) {
+        const scale = height / ((maxYdist - minYdist) * currentZoom);
+        background.call(zoom.scaleTo, Math.max(0.5, currentZoom * scale * 0.9));
       }
     }
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
       // Constrains/fixes x-position
-      nodes.each((d) => {
-        d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding;
-        // d.y = (d.paper.cluster) * height / 3;
-      });
+      nodes.each((d) => { d.x = xAxisScale(d.paper.year); });
 
       edges
         .attr('x1', (d) => d.source.x)
