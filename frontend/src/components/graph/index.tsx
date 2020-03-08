@@ -168,7 +168,7 @@ export default class PaperGraph extends Component<IProps> {
         .attr('height', height)
         .call(zoom);
 
-        // Create vertical grid lines
+    // Create vertical grid lines
     const gridLines = d3.axisBottom(xAxisScale)
       .tickFormat(() => '')
       .tickSize(-height);
