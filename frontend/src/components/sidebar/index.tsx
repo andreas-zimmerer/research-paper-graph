@@ -5,6 +5,13 @@ import { Range } from 'react-range';
 import PaperMenuItem from './PaperMenuItem';
 import { IPaper } from '../../types/paper';
 import './sidebar.css';
+import { runInThisContext } from 'vm';
+
+export enum GraphContent {
+  PRECEDING = 'PRECEDING',
+  SUCCEEDING = 'SUCCEEDING',
+  ENTIRE = 'ENTIRE'
+}
 
 export interface IPaperFilter {
   minYear: number;
@@ -15,6 +22,7 @@ export interface IPaperFilter {
 interface IProps {
   onSelectedPaperChanged: ((paper: IPaper) => void);
   onPaperFilterChanged: ((filter: IPaperFilter) => void);
+  onGraphContentChanged: ((content: GraphContent) => void);
 }
 
 interface IState {
@@ -26,6 +34,8 @@ interface IState {
   citationSliderValues: number[];
 
   currentFilter?: IPaperFilter;
+
+  currentGraphContent: GraphContent;
 }
 
 export default class Sidebar extends Component<IProps, IState> {
@@ -40,7 +50,9 @@ export default class Sidebar extends Component<IProps, IState> {
       distanceSliderValues: [3],
       citationSliderValues: [1],
 
-      currentFilter: undefined
+      currentFilter: undefined,
+
+      currentGraphContent: GraphContent.PRECEDING,
     };
 
     this.handleFitlerUpdate();
@@ -71,7 +83,7 @@ export default class Sidebar extends Component<IProps, IState> {
           </Form.Group>
 
           <Form.Group controlId="displayOptionsDate">
-            <Form.Label>Show only papers recent papers:</Form.Label>
+            <Form.Label>Show only recent papers:</Form.Label>
             <Range
               step={1}
               min={1900}
@@ -127,18 +139,44 @@ export default class Sidebar extends Component<IProps, IState> {
           <Form.Group controlId="displayOptionsPreSucc">
             <Form.Label>Which papers should be displayed:</Form.Label>
             <Form.Check
-              type="checkbox"
-              id="checkbox-display-preceding-papers"
+              type="radio"
+              custom={true}
+              id="radio-display-preceding-papers"
               label="Preceding papers"
+              name="graphContent"
+              value={GraphContent.PRECEDING}
+              checked={this.state.currentGraphContent === GraphContent.PRECEDING}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                this.setState({currentGraphContent: GraphContent.PRECEDING});
+                this.props.onGraphContentChanged(GraphContent[e.currentTarget.value as keyof typeof GraphContent]);
+              }}
             />
             <Form.Check
-              type="checkbox"
-              id="checkbox-display-succeeding-papers"
+              type="radio"
+              custom={true}
+              id="radio-display-succeeding-papers"
               label="Succeeding papers"
+              name="graphContent"
+              value={GraphContent.SUCCEEDING}
+              checked={this.state.currentGraphContent === GraphContent.SUCCEEDING}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                this.setState({currentGraphContent: GraphContent.SUCCEEDING});
+                this.props.onGraphContentChanged(GraphContent[e.currentTarget.value as keyof typeof GraphContent]);
+              }}
             />
-            <Form.Text className="text-muted">
-              Does not work yet.
-            </Form.Text>
+            <Form.Check
+              type="radio"
+              custom={true}
+              id="radio-display-preceding-succeeding-papers"
+              label="Preceding and succeeding papers"
+              name="graphContent"
+              value={GraphContent.ENTIRE}
+              checked={this.state.currentGraphContent === GraphContent.ENTIRE}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                this.setState({currentGraphContent: GraphContent.ENTIRE});
+                this.props.onGraphContentChanged(GraphContent[e.currentTarget.value as keyof typeof GraphContent]);
+              }}
+            />
           </Form.Group>
         </Form>
       </div>

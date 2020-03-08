@@ -197,7 +197,7 @@ export default class PaperGraph extends Component<IProps> {
       .data(links)
       .enter()
       .append('line')
-      .attr('class', 'line');
+      .attr('class', (l) => (l.source.paper.is_influential || l.target.paper.is_influential) ? 'line influential' : 'line');
 
     // Initialize the nodes.
     // A node is a "group" (g) consisting of a circle and text.
