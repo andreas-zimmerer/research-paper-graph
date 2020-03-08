@@ -167,7 +167,7 @@ export default class PaperGraph extends Component<IProps> {
         .attr('width', width)
         .attr('height', height)
         .call(zoom);
-    
+
         // Create vertical grid lines
     const gridLines = d3.axisBottom(xAxisScale)
       .tickFormat(() => '')
@@ -249,7 +249,7 @@ export default class PaperGraph extends Component<IProps> {
         background.call(zoom.scaleBy, scale * 0.9);
       }
     }
-    
+
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
       // Constrains/fixes x-position
