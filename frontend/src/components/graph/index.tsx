@@ -154,19 +154,21 @@ export default class PaperGraph extends Component<IProps> {
     //       it is NOT possible to pan&zoom on the individual nodes!
     const zoom = d3.zoom<SVGRectElement, unknown>()
       .on('zoom', () => {
-            // Pan&Zoom for nodes and edges:
-            plot.attr('transform', d3.event.transform);
-            // Pan&Zoom for axis and grid:
-            const newXScale = d3.event.transform.rescaleX(xAxisScale);
-            xAxisGroup.call(xAxis.scale(newXScale));
-            gridLinesGroup.call(gridLines.scale(newXScale));
-          })
-      .scaleExtent([0.1, 10]);
+        // Pan&Zoom for nodes and edges:
+        plot.attr('transform', d3.event.transform);
+        // Pan&Zoom for axis and grid:
+        const newXScale = d3.event.transform.rescaleX(xAxisScale);
+        xAxisGroup.call(xAxis.scale(newXScale));
+        gridLinesGroup.call(gridLines.scale(newXScale));
+      })
+      .scaleExtent([0.2, 3]);  // Limit zoom
     const background = canvas.append('rect')
         .attr('class', 'background')
         .attr('width', width)
         .attr('height', height)
-        .call(zoom);    // Create vertical grid lines
+        .call(zoom);
+    
+        // Create vertical grid lines
     const gridLines = d3.axisBottom(xAxisScale)
       .tickFormat(() => '')
       .tickSize(-height);
@@ -229,32 +231,27 @@ export default class PaperGraph extends Component<IProps> {
       .alphaDecay(0.1) // make the simulation converge faster, but less accurate
       .on('tick', ticked); // Force that avoids circle overlapping
 
+    // Fits the graph onto the display pane according to its expansion on x-axis.
     function zoomFit() {
-            let Maxi =  -999999;
-            let Mini =   999999;
-            nodes.each((d) => {
-              const dis = d.x;
-              if (dis > Maxi) {
-                Maxi = dis;
-              }
-              if (dis < Mini) {
-                Mini = dis;
-              }
-            });
-            if (!(Maxi === -999999 || Mini === 999999)) {
-              const scale = height / ( Maxi - Mini);
-              const translate = -Mini * scale;
-              background.call(zoom.translateBy, 0, translate);
-              background.call(zoom.scaleBy, scale * 0.6);
-            }
+      const currentZoom = d3.zoomTransform(background.node() as Element).k;
+      let maxXdist =  -999999;
+      let minXdist =   999999;
+      nodes.each((n) => {
+        if (n.x > maxXdist) {
+          maxXdist = n.x;
+        }
+        if (n.x < minXdist) {
+          minXdist = n.x;
+        }
+      });
+      if (!(maxXdist === -999999 || minXdist === 999999)) {
+        const scale = width / ((maxXdist - minXdist) * currentZoom);
+        background.call(zoom.scaleBy, scale * 0.9);
+      }
     }
-    let iterationuntilfit = 0;
+    
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
-      iterationuntilfit += 1;
-      if (iterationuntilfit === 20) {
-        zoomFit();
-      }
       // Constrains/fixes x-position
       nodes.each((d) => {
         d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding;
@@ -269,6 +266,8 @@ export default class PaperGraph extends Component<IProps> {
 
       nodes
         .attr('transform', (d) => 'translate(' + d.x + ', ' + d.y + ')');
+
+      zoomFit();
     }
 
     // Make sure to register the new targets for tooltips after graph has been rebuilt.
