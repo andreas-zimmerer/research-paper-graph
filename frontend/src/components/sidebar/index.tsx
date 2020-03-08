@@ -8,9 +8,9 @@ import './sidebar.css';
 import { runInThisContext } from 'vm';
 
 export enum GraphContent {
-  PRECEDING = "PRECEDING",
-  SUCCEEDING = "SUCCEEDING",
-  ENTIRE = "ENTIRE"
+  PRECEDING = 'PRECEDING',
+  SUCCEEDING = 'SUCCEEDING',
+  ENTIRE = 'ENTIRE'
 }
 
 export interface IPaperFilter {
