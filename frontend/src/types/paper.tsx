@@ -7,4 +7,5 @@ export interface IPaper {
   year: number;
   references: string[];
   citations: number;
+  is_influential: boolean;
 }

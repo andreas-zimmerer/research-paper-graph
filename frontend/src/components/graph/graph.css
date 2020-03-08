@@ -28,6 +28,10 @@
     stroke: #aaa;
 }
 
+.line.influential {
+    stroke: rgb(255, 118, 118);
+}
+
 .node-circle {
     fill: #69b3a2;
     stroke: #555;
