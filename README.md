@@ -23,8 +23,8 @@ We therefore need an instrument that assigns families of research work to their 
 When our government discusses a problem, it often involves external professors and asks them for advice. 
 We want to make sure that our government has the best information in order to decide which experts to invite concerning a special topic by seeing how central the professor's papers are within the field of interest. The same holds for universities calling a professor to a chair. Our graph provides multiple additional information which can support their decision making. It also helps to easily identify members of the appointment commission, which have been publishing with a candidate and which are therefore biased. 
 
-## Mockup
-![./doc/img/mockup.gif](./doc/img/mockup.gif)
+## Screenshot
+![Screenshot of the application](./doc/img/Screenshot.png)
 
 ## Technologies
 - As our database we use PostgreSQL.
