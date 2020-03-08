@@ -2,7 +2,7 @@
 import semanticscholar as ss
 import requests
 
-def scrape():
+def scrape(): # pylint:disable=too-many-locals
     """Scrape research papers from the Semantic Scholar API"""
     # Determine the ids of all relevant research papers.
     papers = get_all_papers()
@@ -24,11 +24,19 @@ def scrape():
             post_author(authorId, authorName)
             post_write(paperId, authorId)
 
-        # Get all references
+        # Get all references.
+        # A reference is a paper that the current paper cites/uses.
         references = paper['references']
         for reference in references:
             referenceId = reference['paperId']
             post_reference(paperId, referenceId)
+
+        # Get all citations.
+        # A citation is a paper that cites/uses the given paper.
+        citations = paper['citations']
+        for citation in citations:
+            citationId = citation['paperId']
+            post_reference(citationId, paperId)
 
 def get_all_papers():
     """Determine the ids of all relevant research papers."""
