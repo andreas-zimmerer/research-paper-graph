@@ -7,4 +7,5 @@ class PaperDto:
         'title': fields.String(required=True, description='paper title'),
         'abstract': fields.String(required=True, description='paper title'),
         'year': fields.Integer(required=True, description='paper year'),
+        'citations': fields.Integer(required=True, description='paper citations')
     })

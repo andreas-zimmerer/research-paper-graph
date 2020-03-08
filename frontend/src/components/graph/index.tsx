@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import ReactTooltip from 'react-tooltip';
+import { Form } from 'react-bootstrap';
 import { IPaper } from '../../types/paper';
 import CitationLink from './CitationLink';
 import PaperNode from './PaperNode';
@@ -44,11 +45,23 @@ const truncateString = (s: string, length: number, useWordBoundary: boolean) => 
 export default class PaperGraph extends Component<IProps> {
   private canvas = React.createRef<SVGSVGElement>();
 
+  private paperNodes: PaperNode[] = [];
+  private citationLinks: CitationLink[] = [];
+
   public render() {
     // We will paint on this SVG canvas
     return (
       <div className="graph">
         <svg ref={this.canvas} className="canvas" />
+
+        <Form className="search-form">
+          <Form.Label>Highlight Papers</Form.Label>
+          <Form.Control type="text"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.highlightPapers(e.target.value)} />
+          <Form.Text className="text-muted">
+              Search for papers inside the displayed graph.
+          </Form.Text>
+        </Form>
 
         <ReactTooltip clickable={true} getContent={(paperId) => {
           const paper = this.props.papers.find((p) => p.id === paperId);
@@ -139,7 +152,27 @@ export default class PaperGraph extends Component<IProps> {
                     }
               }
     //console.log(citationLinks);
+  }
 
+  /**
+   * Highlights a set of nodes in the graph based on a keyword without altering the graph.
+   * @param keyword If the title of a paper contains this keyword (case-insensitive), it will be highlighted.
+   */
+  private highlightPapers(keyword: string) {
+    const pattern = new RegExp(keyword, 'i');
+
+    const canvas = d3.select(this.canvas.current);
+    const nodes = canvas.selectAll('.node').data(this.paperNodes);
+
+    nodes.attr('class', (p: PaperNode) => {
+      if (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) {
+        return 'node node-selected';
+      }
+      if (keyword !== '' && p.paper.title.match(pattern)) {
+        return 'node node-highlighted';
+      }
+      return 'node';
+    });
   }
 
   /**
@@ -150,7 +183,6 @@ export default class PaperGraph extends Component<IProps> {
   private drawGraph(papers: PaperNode[], links: CitationLink[]) {
     const width = this.canvas.current!.clientWidth;
     const height = this.canvas.current!.clientHeight;
-    const padding = 20;
 
     // Compute the max and min years so we can adjust the scale
     let minYear = Number.MAX_VALUE;
@@ -176,7 +208,7 @@ export default class PaperGraph extends Component<IProps> {
     // Define a scale for the x-axis and the grid lines.
     const xAxisScale = d3.scaleLinear()
       .domain([minYear, maxYear])
-      .range([padding, width - padding]);
+      .range([0, width]);
 
     // The background of the plot.
     // NOTE: because we only grab the pan&zoom event on the background,
@@ -209,6 +241,7 @@ export default class PaperGraph extends Component<IProps> {
 //trying to adapt code from http://bl.ocks.org/TWiStErRob/b1c62730e01fe33baa2dea0d0aa29359 ,failing
 
 
+
     // Create vertical grid lines
     const gridLines = d3.axisBottom(xAxisScale)
       .tickFormat(() => '')
@@ -223,6 +256,7 @@ export default class PaperGraph extends Component<IProps> {
 
     // Create an x-axis with years
     const xAxis = d3.axisBottom(xAxisScale)
+      .tickValues(Array.from({length: maxYear - minYear + 1 + 40}, (v, k) => k + minYear - 20))
       .tickFormat(d3.format('d'));
     const xAxisGroup = canvas.append('g')
       .attr('class', 'axis')
@@ -247,15 +281,15 @@ export default class PaperGraph extends Component<IProps> {
       .data(papers)
       .enter()
       .append('g')
-      .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node-group node-selected' : 'node-group');
+      .attr('class', (p) => (this.props.selectedPaper && p.paper.id === this.props.selectedPaper.id) ? 'node node-selected' : 'node');
     nodes.append('circle')
-      .attr('r', 20)
+      .attr('r', 18)
       .attr('class', 'node-circle')
       .attr('data-tip', (d) => d.paper.id)
       .on('click', (d) => this.props.onSelectedPaperChanged(d.paper));
     nodes.append('text')
       .attr('dx', 20)
-      .attr('dy', -10)
+      .attr('dy', -4)
       .attr('class', 'node-text')
       .text((d) => truncateString(d.paper.title, 20, true));
 
@@ -266,11 +300,30 @@ export default class PaperGraph extends Component<IProps> {
           .links(links) // and this the list of links
       )
       .force('y', d3.forceY<PaperNode>().strength(5).y( (d) => d.paper.cluster * 500 ))
-      // .force('x', d3.forceY().strength(0.1).y( height / 2 ))
       .force('center', d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
       .force('charge', d3.forceManyBody().strength(-5000)) // Nodes are attracted one each other of value is > 0
-      // .force('collide', d3.forceCollide().strength(10).radius(32).iterations(1))
+      .force('collide', d3.forceCollide().strength(5).radius(32).iterations(1))
+      .alphaDecay(0.1) // make the simulation converge faster, but less accurate
       .on('tick', ticked); // Force that avoids circle overlapping
+
+    // Fits the graph onto the display pane according to its expansion on x-axis.
+    function zoomFit() {
+      const currentZoom = d3.zoomTransform(background.node() as Element).k;
+      let maxYdist =  -999999;
+      let minYdist =   999999;
+      nodes.each((n) => {
+        if (n.y > maxYdist) {
+          maxYdist = n.y;
+        }
+        if (n.y < minYdist) {
+          minYdist = n.y;
+        }
+      });
+      if (!(maxYdist === -999999 || minYdist === 999999)) {
+        const scale = height / ((maxYdist - minYdist) * currentZoom);
+        background.call(zoom.scaleTo, Math.max(0.5, currentZoom * scale * 0.9));
+      }
+    }
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function zoomFit() {
@@ -317,10 +370,7 @@ export default class PaperGraph extends Component<IProps> {
         zoomFit();
       }
       // Constrains/fixes x-position
-      nodes.each((d) => {
-        d.x = (d.paper.year - minYear) * (width - 2 * padding) / (maxYear - minYear) + padding;
-        // d.y = (d.paper.cluster) * height / 3;
-      });
+      nodes.each((d) => { d.x = xAxisScale(d.paper.year); });
 
       edges
         .attr('x1', (d) => d.source.x)
@@ -330,6 +380,8 @@ export default class PaperGraph extends Component<IProps> {
 
       nodes
         .attr('transform', (d) => 'translate(' + d.x + ', ' + d.y + ')');
+
+      zoomFit();
     }
 
     // Make sure to register the new targets for tooltips after graph has been rebuilt.

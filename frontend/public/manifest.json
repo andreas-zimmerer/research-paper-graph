@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Research Paper Graph",
+  "name": "Explore the vast space of research papers with a nice visualization.",
   "icons": [
     {
       "src": "favicon.ico",

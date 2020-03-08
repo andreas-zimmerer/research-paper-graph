@@ -9,3 +9,4 @@ class Paper(db.Model):
     title = db.Column(db.String(255), nullable=False)
     year = db.Column(db.Integer)
     abstract = db.Column(db.Text, nullable=False)
+    citations = db.Column(db.Integer)

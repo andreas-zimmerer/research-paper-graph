@@ -2,7 +2,7 @@
 import semanticscholar as ss
 import requests
 
-def scrape():
+def scrape(): # pylint:disable=too-many-locals
     """Scrape research papers from the Semantic Scholar API"""
     # Determine the ids of all relevant research papers.
     papers = get_all_papers()
@@ -12,8 +12,10 @@ def scrape():
         paperTitle = paper['title']
         paperAbstract = paper['abstract']
         paperYear = paper['year']
+        citations = paper['citations']
+        paperCitations = len(citations)
         # Put the given paper into the database.
-        post_paper(paperId, paperTitle, paperAbstract, paperYear)
+        post_paper(paperId, paperTitle, paperAbstract, paperYear, paperCitations)
 
         # Get all relevant information for the author: id, name
         authors = paper['authors']
@@ -24,14 +26,20 @@ def scrape():
             post_author(authorId, authorName)
             post_write(paperId, authorId)
 
-        # Get all references
-        citations = paper['citations']
-        if citations == []:
-            citations = paper['references']
+        # Get all references.
+        # A reference is a paper that the current paper cites/uses.
+        references = paper['references']
+        for reference in references:
+            referenceId = reference['paperId']
+            referenceIsInfluential = reference['isInfluential']
+            post_reference(paperId, referenceId, referenceIsInfluential)
+
+        # Get all citations.
+        # A citation is a paper that cites/uses the given paper.
         for citation in citations:
             citationId = citation['paperId']
-            post_reference(paperId, citationId)
-
+            citationIsInfluential = citation['isInfluential']
+            post_reference(citationId, paperId, citationIsInfluential)
 
 def get_all_papers():
     """Determine the ids of all relevant research papers."""
@@ -52,12 +60,13 @@ def get_all_papers():
             paperIds.append(paperId)
     return paperIds
 
-def post_paper(paper_id, paper_title, paper_abstract, paper_year):
+def post_paper(paper_id, paper_title, paper_abstract, paper_year, paper_citations):
     """Put the given paper into the database."""
     data = {'id':paper_id,
             'title':paper_title,
             'abstract':paper_abstract,
-            'year':paper_year
+            'year':paper_year,
+            'citations':paper_citations
             }
     r = requests.post(url='http://127.0.0.1:5000/paper/', json=data)
     print(r.status_code)
@@ -78,10 +87,11 @@ def post_write(paper, author):
     r = requests.post(url='http://127.0.0.1:5000/write/', json=data)
     print(r.status_code)
 
-def post_reference(source, sink):
+def post_reference(source, sink, isInfluential):
     """Post the given reference into the database."""
     data = {'from_paper':source,
             'to_paper':sink,
+            'is_influential': isInfluential,
             }
     r = requests.post(url='http://127.0.0.1:5000/reference/', json=data)
     print(r.status_code)

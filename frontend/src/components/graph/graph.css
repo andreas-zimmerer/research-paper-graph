@@ -3,11 +3,20 @@
     height: 100%;
 }
 
+.search-form {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #f8f9faea;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 .canvas {
-    margin-left: 350px;
-    margin-right: 50px;
+    margin-left: 300px;
+    margin-right: 0px;
     height: 100%;
-    width: calc(100% - 400px);
+    width: calc(100% - 300px);
 }
 
 .background {
@@ -16,17 +25,21 @@
 }
 
 .line {
-    stroke: #aaa;
+    stroke: #bbb;
 }
 
 .node-circle {
-    fill: #69b3a2;
+    fill: #64a0c8;
     stroke: #555;
     cursor: pointer;
 }
 
 .node-selected > .node-circle {
-    fill: #FFBE96;
+    fill: #e37222;
+}
+
+.node-highlighted > .node-circle {
+    fill: rgb(255, 230, 150);
 }
 
 .node-circle:hover {
@@ -35,6 +48,7 @@
 
 .node-text {
     fill: #555;
+    font-size: 1.3em;
 }
 
 .grid line {
@@ -65,4 +79,9 @@
 
 .paper-tooltip .abstract {
     margin-top: 1em;
+    max-height: 200px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    padding-right: 5px;
+    margin-right: -11px;
 }
