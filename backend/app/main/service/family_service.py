@@ -2,6 +2,8 @@
 from collections import defaultdict
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
+import nltk
+from nltk.corpus import stopwords
 from app.main import db
 
 def get_preceding(relative, distance, year, citations):
@@ -212,7 +214,11 @@ def extract_abstracts(papers):
 
 def train_clusters(abstract_list):
     """Train the clustering algorithm."""
-    vectorizer = TfidfVectorizer(stop_words='english')
+    nltk.download('stopwords')
+    stop_words_english = set(stopwords.words('english'))
+    stop_words_german = set(stopwords.words('german'))
+    stop_words = stop_words_english.union(stop_words_german)
+    vectorizer = TfidfVectorizer(stop_words=stop_words)
     X = vectorizer.fit_transform(abstract_list)
     true_k = min(4, len(abstract_list))
     model = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1)
