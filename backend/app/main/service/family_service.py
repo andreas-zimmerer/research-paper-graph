@@ -2,6 +2,7 @@
 from collections import defaultdict
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
+import ntlk
 from nltk.corpus import stopwords
 from app.main import db
 
@@ -213,6 +214,7 @@ def extract_abstracts(papers):
 
 def train_clusters(abstract_list):
     """Train the clustering algorithm."""
+    nltk.download('stopwords')
     stop_words_english = set(stopwords.words('english'))
     stop_words_german = set(stopwords.words('german'))
     stop_words = stop_words_english.union(stop_words_german)
