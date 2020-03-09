@@ -11,7 +11,6 @@ chardet==3.0.4
 Click==7.0
 cycler==0.10.0
 cymem==2.0.3
-en-core-web-md==2.2.5
 Flask==1.1.1
 Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.8
