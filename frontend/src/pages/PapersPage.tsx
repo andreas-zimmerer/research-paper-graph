@@ -62,7 +62,7 @@ export default class PapersPage extends Component<IProps, IState> {
 
   private fetchNewPaper = () => {
     const graphContent = this.state.graphContent.toLowerCase();
-    fetch(`http://localhost:5000/family/${graphContent}/?paper=${encodeURIComponent(this.state.selectedPaper?.title || '')}&distance=${this.state.currentFilter?.maxDistance || 3}&year=${this.state.currentFilter?.minYear || 0}&citations=${this.state.currentFilter?.minCitations || 1}`)
+    fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/family/${graphContent}/?paper=${encodeURIComponent(this.state.selectedPaper?.title || '')}&distance=${this.state.currentFilter?.maxDistance || 3}&year=${this.state.currentFilter?.minYear || 0}&citations=${this.state.currentFilter?.minCitations || 1}`)
       .then((response) => response.json())
       .then((p: IPaper[]) => this.setState({allPapers: p}));
   }

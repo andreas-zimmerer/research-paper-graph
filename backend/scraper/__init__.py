@@ -1,6 +1,9 @@
 """Scrape research papers from the Semantic Scholar API and put them into the database."""
+import os
 import semanticscholar as ss
 import requests
+
+BACKEND_URL = os.getenv('BACKEND_URL', 'http://127.0.0.1:5000')
 
 def scrape(): # pylint:disable=too-many-locals
     """Scrape research papers from the Semantic Scholar API"""
@@ -68,7 +71,7 @@ def post_paper(paper_id, paper_title, paper_abstract, paper_year, paper_citation
             'year':paper_year,
             'citations':paper_citations
             }
-    r = requests.post(url='http://127.0.0.1:5000/paper/', json=data)
+    r = requests.post(url=BACKEND_URL + '/paper/', json=data)
     print(r.status_code)
 
 def post_author(author_id, author_name):
@@ -76,7 +79,7 @@ def post_author(author_id, author_name):
     data = {'id':author_id,
             'name':author_name,
             }
-    r = requests.post(url='http://127.0.0.1:5000/author/', json=data)
+    r = requests.post(url=BACKEND_URL + '/author/', json=data)
     print(r.status_code)
 
 def post_write(paper, author):
@@ -84,7 +87,7 @@ def post_write(paper, author):
     data = {'paper':paper,
             'author':author,
             }
-    r = requests.post(url='http://127.0.0.1:5000/write/', json=data)
+    r = requests.post(url=BACKEND_URL + '/write/', json=data)
     print(r.status_code)
 
 def post_reference(source, sink, isInfluential):
@@ -93,7 +96,7 @@ def post_reference(source, sink, isInfluential):
             'to_paper':sink,
             'is_influential': isInfluential,
             }
-    r = requests.post(url='http://127.0.0.1:5000/reference/', json=data)
+    r = requests.post(url=BACKEND_URL + '/reference/', json=data)
     print(r.status_code)
 
 scrape()

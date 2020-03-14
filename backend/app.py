@@ -18,9 +18,11 @@ migrate = Migrate(app, db)
 
 manager.add_command('db', MigrateCommand)
 
+port = os.getenv('PORT', 5000)
+
 @manager.command
 def run():
-    app.run()
+    app.run(host='0.0.0.0', port=port)
 
 @manager.command
 def test():

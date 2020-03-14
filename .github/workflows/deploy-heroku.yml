@@ -1,0 +1,21 @@
+name: "Heroku Deployment"
+
+# deploy on pull-requests - just for us so we can easily check what we are doing; not for production
+on: pull_request
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Deploy Backend
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        HEROKU_APP_NAME: "research-paper-graph-backend"
+      run: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git +HEAD:refs/heads/master
+    - name: Deploy Frontend
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        HEROKU_APP_NAME: "research-paper-graph-frontend"
+      run: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git +HEAD:refs/heads/master

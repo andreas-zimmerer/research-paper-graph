@@ -1,0 +1,2 @@
+release: python app.py db upgrade
+web: python app.py run
